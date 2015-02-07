@@ -8,3 +8,4 @@ This repository is the Unity3D project for 600.355's game in the spring semester
 * `Assets/Code` contains all the code of the game (each subfolder should correspond to a namespace)
 * `Assets/Prefabs` contains all the prefabs of the game
 * `Assets/Scenes` contains all the scenes of the game
+* `Other` contains any other files that do not have a proper location. 
