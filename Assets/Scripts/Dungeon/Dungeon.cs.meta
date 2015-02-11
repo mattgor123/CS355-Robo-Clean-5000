@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 2da66659a4e3b5f40ae6dc527fd3b192
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - Hallway_Straight: {fileID: 417504, guid: 5389820ba7b487e4b8443e490b1892f6, type: 2}
+  - Hallway_Bend: {instanceID: 0}
+  - Hallway_Fork: {instanceID: 0}
+  - Hallway_T: {instanceID: 0}
+  - Hallway_Cross: {instanceID: 0}
+  - Room_1: {instanceID: 0}
+  - Room_2: {instanceID: 0}
+  - Room_3: {instanceID: 0}
+  - Room_4: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
