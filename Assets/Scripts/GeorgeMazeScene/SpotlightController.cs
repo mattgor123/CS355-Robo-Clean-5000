@@ -13,6 +13,6 @@ public class SpotlightController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        light.spotAngle = player.getHP();
+        light.spotAngle = player.getHP(); //size of spotlight is player hp
 	}
 }

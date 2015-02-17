@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* Generic Enemy Class
+ *  
+ */
+
 public class EnemyController : MonoBehaviour {
     [SerializeField]
     private PlayerController player;
@@ -11,6 +15,21 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float speed;
 
+    [SerializeField]
+    private string Type;
+
+    // Internal Variables
+    // Positional variables
+    private Vector3 PrevPos;    //previous position
+    private Vector3 PrevMvt;    //distance moved in previous movement step
+    private float PrevTime;     //the previous time interval
+    private bool WallHit;       //whether it is hitting a wall
+    private float WallHitTimer; //timer for keeping wall hit status
+
+    // Combat variables
+    [SerializeField]
+    private float OptimalRange;     //optimal firing range
+
 	// Use this for initialization
 	void Start () {
 	
@@ -18,16 +37,65 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        float dist = Vector3.Distance(player.transform.position, transform.position);
-        if (dist <= AggroRadius)
-        {
-            float x = player.transform.position.x - transform.position.x;
-            float z = player.transform.position.z - transform.position.z;
+        Vector3 mvt = EnemyLogic.Move(this, player, Type);
+        PrevTime = Time.deltaTime;
+        mvt = mvt * speed * PrevTime;
+        rigidbody.AddForce(mvt);
 
-            Vector3 mvt = new Vector3(x, 0.0f, z);
-            mvt.Normalize();
-            rigidbody.AddForce(mvt * speed * Time.deltaTime);
+        PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
+        PrevPos = transform.position;
+        
+        WallHitTimer -= PrevTime;
+        if (WallHitTimer < 0)
+        {
+            WallHitTimer = 0;
+            WallHit = false;
         }
 
 	}
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.tag == "Obstacle")
+        {
+            WallHit = true;
+            WallHitTimer = 1.5f;
+        }
+    }
+
+
+    // Get Functions
+    public bool GetWallHit()
+    {
+        return WallHit;
+    }
+
+    public float GetWallHitTimer()
+    {
+        return WallHitTimer;
+    }
+
+    public float GetAggroRadius()
+    {
+        return AggroRadius;
+    }
+
+    public Vector3 GetPrevMvt()
+    {
+        return PrevMvt;
+    }
+
+    public float GetPrevTime() {
+        return PrevTime;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
+    public float GetOptimalRange()
+    {
+        return OptimalRange;
+    }
 }
