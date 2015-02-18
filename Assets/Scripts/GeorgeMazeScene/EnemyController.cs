@@ -10,16 +10,13 @@ public class EnemyController : MonoBehaviour {
     private PlayerController player;
 
     [SerializeField]
-    private float AggroRadius;
-
-    [SerializeField]
-    private float speed;
-
-    [SerializeField]
     private string Type;
 
     // Internal Variables
-    // Positional variables
+    // Positional/Movement variables
+    [SerializeField]
+    private float speed;
+
     private Vector3 PrevPos;    //previous position
     private Vector3 PrevMvt;    //distance moved in previous movement step
     private float PrevTime;     //the previous time interval
@@ -30,14 +27,17 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float OptimalRange;     //optimal firing range
 
+    [SerializeField]
+    private float AggroRadius;
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
+	// Update 
 	void LateUpdate () {
-        Vector3 mvt = EnemyLogic.Move(this, player, Type);
+        Vector3 mvt = EnemyLogic.Move(this, player, Type);  //Call generic Move command with "type"
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
         rigidbody.AddForce(mvt);
@@ -64,6 +64,7 @@ public class EnemyController : MonoBehaviour {
     }
 
 
+    #region Get Functions
     // Get Functions
     public bool GetWallHit()
     {
@@ -98,4 +99,5 @@ public class EnemyController : MonoBehaviour {
     {
         return OptimalRange;
     }
+    #endregion
 }

@@ -5,7 +5,8 @@
  *          -flags are of the form "<type>-<subtype>"
  *           where <type> denotes the type of action (such as movement)
  *           and <subtype> denotes the specific form of that action (such as basic chase)
- *      
+ *      -To use, call a high-level command with relevant input (such as Move() )
+ *          -specific low-level commands will be used based on the input "Type"
  * 
  * 
  *  ==Movement==
@@ -18,22 +19,7 @@
  *  "m-c"     Basic Chase:  Moves directly towards the target and attempts to go as close as possible
  *  "m-d"     Detour Chase: If direct path is unsuccessful, attempts to take a detour. Otherwise acts as Basic Chase
  *  "m-r"     Basic Maintain Range: Moves such that a specific distance is maintained between target and self.   
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
- *  
+ *  "m-f"     Basic Flee: Runs away from the target. 
  *  
  *  
  *  
@@ -63,7 +49,8 @@ public class EnemyLogic {
         init = 1;
     }
 
-    // Movement action
+    #region Movement
+    // Movement
     // returns normalized direction of movement
     public static Vector3 Move(EnemyController enemy, PlayerController player, string type)
     {
@@ -73,6 +60,8 @@ public class EnemyLogic {
             return DetourChase(enemy, player);
         else if (type.Contains("m-r"))
             return BasicRange(enemy, player);
+        else if (type.Contains("m-f"))
+            return BasicFlee(enemy, player);
         else
             return ZERO;
     }
@@ -143,8 +132,6 @@ public class EnemyLogic {
         float optrng = enemy.GetOptimalRange();
         float delta = dist - optrng;
 
-        Debug.Log(delta/optrng);
-
         // If outside of optimal range band (optimal += 25%), move towards optimal range
         if (Mathf.Abs(delta) / optrng >= 0.20)
         {
@@ -154,4 +141,14 @@ public class EnemyLogic {
         }
         return ZERO;
     }
+    
+    // Basic Flee
+    private static Vector3 BasicFlee(EnemyController enemy, PlayerController player)
+    {
+        return -1 * BasicChase(enemy, player);
+    }
+    
+    
+    #endregion
+
 }
