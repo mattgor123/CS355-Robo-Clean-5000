@@ -2,13 +2,16 @@
 using System.Collections;
 
 public class Dungeon : MonoBehaviour {
-    public Transform player;
+   // public Transform player;
     public Transform hall_straight;
     public Transform hall_bend;
+    public Transform hall_bend_right;
+
     //public Transform Hallway_Fork;
     //public Transform Hallway_T;
     //public Transform Hallway_Cross;
     //public Transform Hallway_Deadend;
+    public Transform final_room;
     public Transform Room_1;
     public Transform Room_2_Across;
     public Transform Room_2_Adjacent;
@@ -69,96 +72,94 @@ public class Dungeon : MonoBehaviour {
 
     void Awake() {
         prefabs = new Prefab[25];
-        prefabs[0] = new Prefab(hall_straight,   new Vector3(0, 0, 5), new Vector3(0, 0, 5),  1, Quaternion.Euler(0, 0, 0),   new Quaternion[] { Quaternion.identity});
-        for (int i = 1; i < 15; i++)
+        prefabs[0] = new Prefab(hall_straight,   new Vector3(0, 0, 5), new Vector3(0, 0, 5),  1, Quaternion.Euler(0, 0, 0),   new Quaternion[] { Quaternion.Euler(0,0,0)});
+        for (int i = 1; i < 10; i++)
         {
             prefabs[i] = prefabs[0];
         }
+        prefabs[10] = new Prefab(hall_bend_right, new Vector3(5, 0, 0), new Vector3(0, 0, 5), 1, Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 90, 0) });
+        for (int i = 11; i < 15; i++)
+        {
+            prefabs[i] = prefabs[10];
+        }
 
-        prefabs[15] = new Prefab(hall_bend, new Vector3(0, 0, -5), new Vector3(0, 0, -5), 1, Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, -90, 0) });
-        for (int i = 16; i < 20; i++)
+        prefabs[15] = new Prefab(hall_bend, new Vector3(-5, 0, 0), new Vector3(0, 0, 5), 1, Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, -90, 0) });
+        for (int i = 15; i < 20; i++)
         {
             prefabs[i] = prefabs[15];
         }
-        prefabs[20] = new Prefab(Room_1,          new Vector3(0, 0, 15), new Vector3(0, 0, 5), 0, Quaternion.Euler(0, 90, 0),  new Quaternion[] { Quaternion.identity });
-        prefabs[21] = new Prefab(Room_2_Across,   new Vector3(0, 0, 5), new Vector3(0, 0, 5), 1, Quaternion.Euler(0, 90, 0),  new Quaternion[] { Quaternion.identity });
-        prefabs[22] = new Prefab(Room_2_Adjacent, new Vector3(0, 0, 5), new Vector3(0, 0, 5), 1, Quaternion.Euler(0, 90, 0),  new Quaternion[] { Quaternion.Euler(0, 0, 0) });
-        prefabs[23] = new Prefab(Room_3,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), 2, Quaternion.Euler(0, 90, 0),  new Quaternion[] { Quaternion.identity, Quaternion.Euler(0, 0, 0) });
-        prefabs[24] = new Prefab(Room_4,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), 3, Quaternion.Euler(0, 0, 0),   new Quaternion[] { Quaternion.identity, Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, -90, 0) });
-
+        prefabs[24] = new Prefab(Room_1,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), 0, Quaternion.Euler(0, 0, 0),  new Quaternion[] { Quaternion.Euler(0, -90, 0) });
+        prefabs[21] = new Prefab(Room_2_Across,   new Vector3(0, 0, 5), new Vector3(0, 0, 5), 1, Quaternion.Euler(0, 0, 0),  new Quaternion[] { Quaternion.identity });
+        prefabs[22] = new Prefab(Room_2_Adjacent, new Vector3(0, 0, 5), new Vector3(0, 0, 5), 1, Quaternion.Euler(0, 90, 0),  new Quaternion[] { Quaternion.Euler(0, -90, 0) });
+       // prefabs[23] = new Prefab(Room_3,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), 2, Quaternion.Euler(0, 90, 0),  new Quaternion[] { Quaternion.identity, Quaternion.Euler(0, 90, 0) });
+        prefabs[20] = new Prefab(Room_4,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), 3, Quaternion.Euler(0, 0, 0),   new Quaternion[] { Quaternion.identity, Quaternion.Euler(0, 90, 0), Quaternion.Euler(0, -90, 0) });
+        prefabs[21] = prefabs[20];
+        prefabs[22] = prefabs[20];
+        prefabs[23] = new Prefab(final_room,      new Vector3(0, 0, 5), new Vector3(0, 0, 5), 0, Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 180, 0) });
 
 
     }
 
 	void Start () {
-     
+
         
+        /*
         //Room1
-        Debug.Log(origin.ToString());
         Instantiate(prefabs[20].getTransform(), origin, prefabs[20].getRotation());
         origin += prefabs[20].getDistanceTo();
-        Debug.Log(origin.ToString());
         Quaternion rotation = prefabs[20].getExit(0);
         //Hall_Bend
         origin += prefabs[15].getDistanceFrom();
-        Debug.Log(origin.ToString());
         Instantiate(prefabs[15].getTransform(), origin, rotation);
         origin += Vector3.RotateTowards(prefabs[15].getDistanceTo(), Vector3.left * prefabs[15].getDistanceTo().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         rotation = rotation * prefabs[15].getExit(0);
         //Hall_Straight
         origin += Vector3.RotateTowards(prefabs[1].getDistanceFrom(), Vector3.left * prefabs[1].getDistanceFrom().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         Instantiate(prefabs[1].getTransform(), origin, rotation);
         origin += Vector3.RotateTowards(prefabs[1].getDistanceTo(), Vector3.left * prefabs[1].getDistanceTo().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         rotation = rotation * prefabs[1].getExit(0);
         //Hall_Bend
         origin += Vector3.RotateTowards(prefabs[15].getDistanceFrom(), Vector3.left * prefabs[15].getDistanceFrom().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         Instantiate(prefabs[15].getTransform(), origin, rotation);
         origin += Vector3.RotateTowards(prefabs[15].getDistanceTo(), Vector3.back * prefabs[15].getDistanceTo().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         rotation = rotation * prefabs[15].getExit(0);
         //Hall_Bend
         origin += Vector3.RotateTowards(prefabs[15].getDistanceFrom(), Vector3.back * prefabs[15].getDistanceFrom().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         Instantiate(prefabs[15].getTransform(), origin, rotation);
         origin += Vector3.RotateTowards(prefabs[15].getDistanceTo(), Vector3.right * prefabs[15].getDistanceTo().magnitude, Mathf.PI / 2, 10);
         rotation = rotation * prefabs[15].getExit(0);
         //Hall_Straight
         origin += Vector3.RotateTowards(prefabs[1].getDistanceFrom(), Vector3.right * prefabs[1].getDistanceFrom().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         Instantiate(prefabs[1].getTransform(), origin, rotation);
         origin += Vector3.RotateTowards(prefabs[1].getDistanceTo(), Vector3.right * prefabs[1].getDistanceTo().magnitude, Mathf.PI / 2, 10);
-        Debug.Log(origin.ToString());
         rotation = rotation * prefabs[1].getExit(0);
-
-       /* for (int i = 0; i < 10; i++)
+        */
+        
+         //set up the starting room
+        Vector3 facingAngle = new Vector3(0, 0, 1);
+        Instantiate(prefabs[24].getTransform(), origin, prefabs[24].getRotation());
+        facingAngle = prefabs[24].getExit(0) * facingAngle;
+        origin += Quaternion.FromToRotation(prefabs[24].getDistanceTo(), facingAngle) * prefabs[24].getDistanceTo();
+        Quaternion rotation = prefabs[24].getExit(0);
+        //for loop to generate set number of space
+        for (int i = 0; i < 10; i++)
         {
-            int next = (int)Random.Range(0, 25);
-            origin += prefabs[next].getDistanceFrom();
+
+            int next = (int)Random.Range(0, 23); //generate next random prefab
+            origin += Quaternion.FromToRotation(prefabs[next].getDistanceFrom(), facingAngle) * prefabs[next].getDistanceFrom(); //move spawn point from edge of last object to center of next object
             Instantiate(prefabs[next].getTransform(), origin, rotation);
-            origin += prefabs[next].getDistanceTo();
+            facingAngle = prefabs[next].getExit(0) * facingAngle;
+            origin += Quaternion.FromToRotation(prefabs[next].getDistanceTo(), facingAngle) * prefabs[next].getDistanceTo(); 
+
             rotation = rotation * prefabs[next].getExit(0);
 
         }
-        * /
-        //Instantiate(prefabs[next], origin, Quaternion.identity);
-      /*  origin.y -= 0.7f;
-        Instantiate(Room_1, origin, Quaternion.Euler(0, 90, 0));
-        origin.z = +15; //Radius of room = 5, then +10 for the hallway
-        Instantiate(hall_straight, origin, Quaternion.identity);
-        origin.z += 10; 
-        Instantiate(hall_straight, origin, Quaternion.identity);
-        origin.z += 10;
-        Instantiate(hall_straight, origin, Quaternion.identity);
-        origin.z += 5;
-        Instantiate(Room_2_Across, origin, Quaternion.Euler(0, 90, 0));
-        origin.z += 10;
-        Instantiate(Room_2_Adjacent, origin, Quaternion.Euler(0, 90, 0));
-        */
-        Instantiate(player, Vector3.zero, Quaternion.identity);
+         //setting finishing room
+        origin += Quaternion.FromToRotation(prefabs[23].getDistanceFrom(), facingAngle) * prefabs[23].getDistanceFrom(); //move spawn point from edge of last object to center of next object
+        Instantiate(prefabs[23].getTransform(), origin, rotation);
+
+
+        //Instantiate(player, Vector3.zero, Quaternion.identity);
 
 
 
