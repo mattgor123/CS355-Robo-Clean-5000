@@ -21,13 +21,9 @@ public class WeaponController : MonoBehaviour {
 
 	private void Fire () {
 		var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
-
 		instantiated_bullet.rigidbody.velocity = muzzle.TransformDirection(Vector3.forward * speed);
-
 		var bullet_controller = instantiated_bullet.GetComponent<BulletController>();
-
 		bullet_controller.SetCleanupDelay(cleanup_delay);
-
 		last_fired = Time.time;
 	}
 

@@ -24,7 +24,6 @@ public class BulletController : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 		var victim_health = collision.gameObject.GetComponent<HealthController>();
-
 		if(victim_health != null) {
 			victim_health.ChangeHealth(-damage);
 		}
