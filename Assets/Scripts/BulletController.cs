@@ -6,15 +6,16 @@ public class BulletController : MonoBehaviour {
 	[SerializeField] private float damage;
 
 	private float cleanup_delay;
+	private float creation_time;
 
-	void Update () {
-		if(!IsInvoking("SelfDestruct")) {
-			Invoke("SelfDestruct", cleanup_delay);
-		}
+	private void Start () {
+		creation_time = Time.time;
 	}
 
-	void SelfDestruct () {
-		Destroy(gameObject);
+	private void Update () {
+		if(Time.time - creation_time > cleanup_delay) {
+			Destroy(gameObject);
+		}
 	}
 
 	public void SetCleanupDelay (float delay) {

@@ -11,16 +11,15 @@ public class WeaponController : MonoBehaviour {
 
 	private bool firing = false;
 	private Quaternion bullet_rotation = new Quaternion(0.7f, 0, 0, 0.7f);
+	private float last_fired = 0;
 	
-	void Update () {
-		if(firing) {
-			StartCoroutine("Fire");
+	private void Update () {
+		if(firing && Time.time - last_fired > delay) {
+			Fire();
 		}
 	}
 
-	IEnumerator Fire () {
-		yield return new WaitForSeconds(delay);
-
+	private void Fire () {
 		var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
 
 		instantiated_bullet.rigidbody.velocity = muzzle.TransformDirection(Vector3.forward * speed);
@@ -29,7 +28,7 @@ public class WeaponController : MonoBehaviour {
 
 		bullet_controller.SetCleanupDelay(cleanup_delay);
 
-		StopCoroutine("Fire");
+		last_fired = Time.time;
 	}
 
 	public void StartFiring () {
