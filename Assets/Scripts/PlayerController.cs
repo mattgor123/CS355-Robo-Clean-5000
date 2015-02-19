@@ -4,16 +4,27 @@ using System.Collections;
 [RequireComponent(typeof (MovementController))]
 public class PlayerController : MonoBehaviour {
 
-	[SerializeField] private new Camera camera;
+	[SerializeField] private Camera camera;
 
 	private MovementController movement_controller;
+	private WeaponController weapon_controller;
 
 
 	private void Start () {
 		movement_controller = GetComponent<MovementController>();
+		weapon_controller = GetComponent<WeaponController>();
 	}
 
-	void FixedUpdate () {
+	private void Update () {
+		if(Input.GetMouseButtonDown(0)) {
+			weapon_controller.StartFiring();
+		}
+		else if(Input.GetMouseButtonUp(0)) {
+			weapon_controller.StopFiring();
+		}
+	}
+
+	private void FixedUpdate () {
 		UpdateMovement();
 		UpdateRotation();
 	}
