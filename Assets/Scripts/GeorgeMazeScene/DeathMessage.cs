@@ -5,7 +5,7 @@ using System.Collections;
 public class DeathMessage : MonoBehaviour {
 
     [SerializeField]
-    private PlayerController player;
+    private GeorgePlayerController player;
 
     Text text;
 

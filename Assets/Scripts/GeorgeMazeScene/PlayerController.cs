@@ -1,12 +1,12 @@
 ﻿    using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class GeorgePlayerController : MonoBehaviour {
 	[SerializeField]
 	private float speed;
 
     [SerializeField]
-    private CameraController cam;
+    private GeorgeCameraController cam;
 
     private float HP;
 

@@ -4,7 +4,7 @@ using System.Collections;
 public class SpotlightController : MonoBehaviour {
 
     [SerializeField]
-    private PlayerController player;
+    private GeorgePlayerController player;
 
 	// Use this for initialization
 	void Start () {
