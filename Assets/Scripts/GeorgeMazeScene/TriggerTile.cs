@@ -36,6 +36,12 @@ public class TriggerTile : MonoBehaviour {
         }   
     }
 
+    //Sets the size of the trigger tile
+    public void SetTileSize(Vector3 size)
+    {
+        transform.localScale = size;
+    }
+
     //Gets the trigger status
     public bool GetTriggerStatus()
     {

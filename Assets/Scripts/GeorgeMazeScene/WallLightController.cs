@@ -11,6 +11,12 @@ public class WallLightController : MonoBehaviour {
 	
 	}
 	
+    // Link a trigger tile
+    public void LinkTile(Transform tile)
+    {
+        TTile = tile.GetComponent<TriggerTile>();
+    }
+
 	// Update is called once per frame
 	void LateUpdate () {
         if (TTile.GetTriggerStatus())
