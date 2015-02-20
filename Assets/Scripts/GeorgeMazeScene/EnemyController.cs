@@ -29,7 +29,8 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        //Automatically attach the player
+        player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update 
