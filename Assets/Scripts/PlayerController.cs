@@ -2,6 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof (MovementController))]
+[RequireComponent(typeof (WeaponController))]
 public class PlayerController : MonoBehaviour {
 
 	[SerializeField] private new Camera camera;
