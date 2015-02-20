@@ -4,6 +4,8 @@ using System.Collections;
 public class WallLightController : MonoBehaviour {
     [SerializeField]
     private TriggerTile TTile;
+    [SerializeField]
+    private float strength;
 
 
 	// Use this for initialization
@@ -21,7 +23,7 @@ public class WallLightController : MonoBehaviour {
 	void LateUpdate () {
         if (TTile.GetTriggerStatus())
         {
-            light.intensity = 1;
+            light.intensity = strength;
         }
         else
         {

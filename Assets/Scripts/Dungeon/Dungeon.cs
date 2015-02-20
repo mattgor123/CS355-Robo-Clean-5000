@@ -20,12 +20,14 @@ public class Dungeon : MonoBehaviour {
     public Transform Room_3;
     public Transform Room_4;
     public Transform roomLight;
+    public Transform trigger;
     public Vector3 origin;
     public int maxRooms;
     public int maxHalls;
     private Queue unusedDoors;
     private Vector4 spawnable; //
     private Prefab[] prefabs;
+    private Vector3 CELL_SIZE;
 
 
     private class Prefab
@@ -224,13 +226,17 @@ public class Dungeon : MonoBehaviour {
         return (Physics.Raycast(ray, out hit));
     }
 
+    //Place light and associated trigger tile
     private void placeLight(Vector3 location)
     {
-        Instantiate(roomLight, location + (Vector3.up * 4), Quaternion.Euler(90, 0, 0));
+        Transform light = Instantiate(roomLight, location + (Vector3.up * 4), Quaternion.Euler(90, 0, 0)) as Transform;
+        Transform tile = Instantiate(trigger, location, Quaternion.identity) as Transform;
+        light.GetComponent<WallLightController>().LinkTile(tile);
+        
     }
 
     private void spawnStart(Prefab room)
-    {
+    { 
         Instantiate(prefabs[3].getTransform(), origin, prefabs[3].getRotation());
         placeLight(origin);
         Door door = new Door(origin, prefabs[3].getDoor(0), maxRooms);
