@@ -12,6 +12,7 @@ public class GeorgePlayerController : MonoBehaviour {
 
 	void Start() {
         HP = 25;
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GeorgeCameraController>();
 	}
 
 	//Physics Code

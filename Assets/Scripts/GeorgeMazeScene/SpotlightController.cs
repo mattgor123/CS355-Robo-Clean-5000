@@ -8,6 +8,7 @@ public class SpotlightController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<GeorgePlayerController>();
 	
 	}
 	

@@ -20,6 +20,7 @@ public class GeorgeCameraController : MonoBehaviour {
 		offset = transform.position;
         height = transform.position.y;
         angle = 0;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<GeorgePlayerController>();
 	}
 
     void Update()
