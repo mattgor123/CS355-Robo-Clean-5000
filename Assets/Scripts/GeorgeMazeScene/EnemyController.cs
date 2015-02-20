@@ -6,11 +6,8 @@ using System.Collections;
  */
 
 public class EnemyController : MonoBehaviour {
-    [SerializeField]
-    private PlayerController player;
-
-    [SerializeField]
-    private string Type;
+    [SerializeField] 
+    private GameObject player;
 
     // Internal Variables
     // Positional/Movement variables
@@ -37,7 +34,11 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update 
 	void LateUpdate () {
-        Vector3 mvt = EnemyLogic.Move(this, player, Type);  //Call generic Move command with "type"
+        //Vector3 mvt = EnemyLogic.Move(this, player, Type);  //Call generic Move command with "type"
+        //LMMove thing = (LMMove) GetComponent<LMMove>();
+        Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
+        Debug.Log(mvt);
+        
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
         rigidbody.AddForce(mvt);

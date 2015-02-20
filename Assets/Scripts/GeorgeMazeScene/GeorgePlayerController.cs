@@ -1,4 +1,4 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class GeorgePlayerController : MonoBehaviour {
@@ -16,9 +16,9 @@ public class GeorgePlayerController : MonoBehaviour {
 
 	//Physics Code
 	void FixedUpdate () {
+
         if (HP > 0)
         {
-
             float moveVertical = Input.GetAxis("Vertical");    //forward movement; turning linked to camera
 
             float angle = cam.getAngle() * Mathf.PI / 180;
