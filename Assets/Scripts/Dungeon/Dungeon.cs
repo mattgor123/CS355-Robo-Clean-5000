@@ -123,6 +123,9 @@ public class Dungeon : MonoBehaviour {
         {
             return this.numRooms;
         }
+        public void addNum(int num) {
+            this.numRooms += num;
+        }
         public void decrement() {
             this.numRooms--;
         }
@@ -136,7 +139,7 @@ public class Dungeon : MonoBehaviour {
 
         branches = new Dictionary<Prefab, int>();
         deadends = new Dictionary<Prefab, int>();
-        branches.Add( new Prefab(hall_straight,     new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 180, 0) }), 5);
+        branches.Add( new Prefab(hall_straight,     new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 180, 0) }), 8);
         branches.Add(new Prefab(Hallway_Cross,      new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 90, 0), Quaternion.Euler(0, 180, 0), Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 270, 0) }), 5);
         branches.Add(new Prefab(hall_bend,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 270, 0), Quaternion.Euler(0, 180, 0) }), 5);
         branches.Add(new Prefab(Hallway_T,          new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 270, 0), Quaternion.Euler(0, 180, 0), Quaternion.Euler(0, 90, 0) }), 5);
@@ -145,7 +148,7 @@ public class Dungeon : MonoBehaviour {
         branches.Add(new Prefab(Room_3,             new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 270, 0), Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 90, 0) }), 2);
         branches.Add(new Prefab(Room_4,             new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 90, 0), Quaternion.Euler(0, 180, 0), Quaternion.Euler(0, 270, 0) }), 2);
 
-        deadends.Add(new Prefab(final_room,         new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 180, 0) }), 1);
+        deadends.Add(new Prefab(final_room,         new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 270, 0) }), 1);
         deadends.Add(new Prefab(Room_1,             new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 270, 0) }), 1);
         deadends.Add(new Prefab(Hallway_Deadend,    new Vector3(0, 0, 5), new Vector3(0, 0, 5), Quaternion.Euler(0, 0, 0), new Quaternion[] { Quaternion.Euler(0, 180, 0) }), 1);
 
@@ -188,42 +191,42 @@ public class Dungeon : MonoBehaviour {
     private void placeMultiDoorRoom(Prefab room, Door door)
     {
 
-        //TODO Implement split function with Unused Doors queue
-        //Place room;
-        //foreach door in room, place door in queue;
-        //call split function to assign each door number of rooms;
-        //grab top of queue
-        //repeat 
         door.decrement(); //door has been consumed now
         int numDoors = room.numDoors(); //number of doors IN THIS ROOM ONLY
-        int queueRooms = numDoors - 1; //number of open doors
+        int doorsToQueue = numDoors - 1; //number of open doors         
+        int entInt = (int)Random.Range(0, numDoors - 1); //pick an entrance from room
+        Quaternion[] exits = new Quaternion[doorsToQueue];
+        int[] distribute = split(door.getNum(), doorsToQueue);
+       
 
 
         Vector3 center = door.getPos() + (CELL_SIZE * door.getFace()); //move spawn point from door to center of next room
         Transform placedRoom = Instantiate(room.getTransform(), center, Quaternion.identity) as Transform; //spawn the room in normal orientation
-
-        int entInt = (int)Random.Range(0, numDoors - 1); //pick an entrance from room
         Vector3 entrance = room.getDoor(entInt) * placedRoom.forward; //get vector pointing at the door we want to connect with the connecting door
-        if (Vector3.Dot(entrance, -door.getFace()) != -1)
-        {
-            placedRoom.rotation = Quaternion.FromToRotation(entrance, -door.getFace()); //rotate transform so that proper door is lined up.
-        }
+        placedRoom.forward = Quaternion.FromToRotation(entrance, -door.getFace()) * placedRoom.forward; //rotate transform so that proper door is lined up.
+        placeLight();
+
         Debug.Log("Center for this room will be " + center);
             if (placedRoom.up != Vector3.up) //ensures everything is upright (some bug somewhere is flipping random rooms upsidedown)
             {
                 placedRoom.up = Quaternion.FromToRotation(placedRoom.up, Vector3.up) * placedRoom.up;
             }
-        placeLight();
 
-        int[] distribute = split(door.getNum(), queueRooms);
-        Debug.Log("There are " + (numDoors - 1) + " doors to add");
-        for (int i = 1; i < numDoors; i++) {
-            int index = mod(entInt + i, numDoors);
-            Vector3 facing =  room.getDoor(index) * placedRoom.forward ; //gets a door that is NOT the entrance
+
+
+        Debug.Log("There are " + (doorsToQueue) + " doors to add");
+        for (int i = 1; i < numDoors; i++)
+        {
+            exits[mod(i, doorsToQueue)] = room.getDoor(mod(entInt + i, numDoors));
+        }
+        for (int i = 0; i < doorsToQueue; i++)
+        {
+            int doorSplit = distribute[0]; //this door's share of the rooms
+            Vector3 facing = exits[i] * placedRoom.forward; //gets a door that is NOT the entrance
             Vector3 position = center + (facing * CELL_SIZE);
-            unusedDoors.Enqueue(new Door(position, facing, distribute[mod(i, queueRooms)]));
+            unusedDoors.Enqueue(new Door(position, facing, doorSplit));
             Debug.Log("Added door at position " + position + " that is facing " + facing + " to queue");
-        
+
         }
     
 
@@ -263,7 +266,7 @@ public class Dungeon : MonoBehaviour {
         Vector3 center = door.getPos() + CELL_SIZE * door.getFace(); 
         Transform placedRoom = Instantiate(room.getTransform(), center, Quaternion.identity) as Transform; //spawn the room
         Vector3 entrance = room.getDoor(0) * placedRoom.forward;
-        placedRoom.rotation = Quaternion.FromToRotation(entrance, -door.getFace());
+        placedRoom.forward = Quaternion.FromToRotation(entrance, -door.getFace()) * placedRoom.forward;
 
 
 
@@ -283,7 +286,7 @@ public class Dungeon : MonoBehaviour {
      */
     private bool willCollide(Vector3 spawnpoint) {
         RaycastHit hit; //stores reference to whatever was hit 
-        spawnpoint.y += 10; //to make sure Ray ray will have room to point down
+        spawnpoint.y += 15; //to make sure Ray ray will have room to point down
         Ray ray = new Ray(spawnpoint, Vector3.down);
         return (Physics.Raycast(ray, out hit));
     }
@@ -314,34 +317,46 @@ public class Dungeon : MonoBehaviour {
     {
         int lostRooms = 0;
         spawnStart();
-        int limit = 0;
+        int countdown = maxRooms;
         //TODO
         //replace for loop with while queue not empty
         Debug.Log("There are " + unusedDoors.Count + " doors left in queue");
 
         while (unusedDoors.Count != 0) {
-            limit++;
+            Debug.Log(countdown +  " overall doors remaining");
             Door door = (Door) unusedDoors.Dequeue();
+            door.addNum(lostRooms);
+            lostRooms = 0;
             Debug.Log("Currently working on door at " + door.getPos() + " facing " + door.getFace());
             Debug.Log(door.getNum() + " rooms in this path");
             Vector3 position = door.getPos() + (door.getFace() * CELL_SIZE);
-            Debug.Log("checking for collision at " + position);
+            Debug.Log("Checking for collision at " + position);
             if (!willCollide(position))  //if the next prefab would clip inside an already existing thing, then it stops.
             {
                 Debug.Log("No collision!");
-                  if (door.getNum() == 1)
-                  {
-                      Prefab room = WeightedRandomizer.From(deadends).TakeOne();
-                      placeDeadEndRoom(room, door);
-                  }
-            
-                 else {
+                if (door.getNum() <= 1)
+                {
+                    Debug.Log("Should close the path at " + door.getPos());
+                    Prefab room = WeightedRandomizer.From(deadends).TakeOne();
+                    placeDeadEndRoom(room, door);
+                    countdown--;
+
+                }
+
+                else
+                {
                     Prefab room = WeightedRandomizer.From(branches).TakeOne();
                     placeMultiDoorRoom(room, door);
-                  }
+                    countdown--;
+
+                }
             }
             else
             {
+
+                door.decrement();
+                countdown--;
+                lostRooms += door.getNum();
                 Debug.Log("Collision detected at " + position);
                 Transform placedRoom = Instantiate(closed_door, door.getPos(), Quaternion.identity) as Transform;
                 placedRoom.rotation = Quaternion.FromToRotation(placedRoom.forward, door.getFace());
@@ -349,6 +364,7 @@ public class Dungeon : MonoBehaviour {
                 {
                     placedRoom.up = Quaternion.FromToRotation(placedRoom.up, Vector3.up) * placedRoom.up;
                 }
+
             }
 
         }
@@ -366,6 +382,7 @@ public class Dungeon : MonoBehaviour {
         Transform player = Instantiate(Player, new Vector3(0f, 0.5f, 0f), Quaternion.identity) as Transform;
         //Physics.OverlapSphere(player.position, spawnRadius);
         Instantiate(Camera, Camera.position, Camera.rotation);
+        player.Translate(Vector3.zero);
 
     }
 
