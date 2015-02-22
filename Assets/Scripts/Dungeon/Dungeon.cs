@@ -369,7 +369,8 @@ public class Dungeon : MonoBehaviour {
 
     private void spawnEnemies()
     {
-        Collider[] closeRooms = Physics.OverlapSphere(Player.position, spawnRadius * scale, LayerMask.NameToLayer("Room")); ;
+        LayerMask EnemySpawnable = 1 << 8;
+        Collider[] closeRooms = Physics.OverlapSphere(Player.position, spawnRadius * scale, EnemySpawnable); 
         Debug.Log(closeRooms.Length + " collided objects");
 
         for (int i = numEnemies; i < maxEnemies; i++)

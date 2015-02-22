@@ -38,7 +38,7 @@ public class EnemyController : MonoBehaviour {
         //Vector3 mvt = EnemyLogic.Move(this, player, Type);  //Call generic Move command with "type"
         //LMMove thing = (LMMove) GetComponent<LMMove>();
         Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
-        Debug.Log(mvt);
+        //Debug.Log(mvt);
         
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
