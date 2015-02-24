@@ -4,6 +4,7 @@ using System.Collections;
 public class WeaponController : MonoBehaviour {
 
 	[SerializeField] private float speed;         // The speed of the bullets exiting the gun
+	[SerializeField] private float damage;        // The damage of each bullet
 	[SerializeField] private float delay;		  // The delay between shots
 	[SerializeField] private float cleanup_delay; // The amount of time to wait before deleting bullets
 	[SerializeField] private Transform muzzle;    // The location of the muzzle
@@ -22,7 +23,8 @@ public class WeaponController : MonoBehaviour {
 	private void Fire () {
 		var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
 		instantiated_bullet.rigidbody.velocity = muzzle.TransformDirection(Vector3.forward * speed);
-		var bullet_controller = instantiated_bullet.GetComponent<BulletController>();
+		var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
+		bullet_controller.SetDamage(damage);
 		bullet_controller.SetCleanupDelay(cleanup_delay);
 		last_fired = Time.time;
 	}
@@ -33,5 +35,9 @@ public class WeaponController : MonoBehaviour {
 
 	public void StopFiring () {
 		firing = false;
+	}
+
+	public bool IsFiring() {
+		return firing;
 	}
 }

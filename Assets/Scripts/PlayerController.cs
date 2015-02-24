@@ -2,27 +2,35 @@
 using System.Collections;
 
 [RequireComponent(typeof (MovementController))]
-[RequireComponent(typeof (WeaponController))]
+[RequireComponent(typeof (WeaponBackpackController))]
 public class PlayerController : MonoBehaviour {
 
 	[SerializeField] private new Camera camera;
 
 	private MovementController movement_controller;
-	private WeaponController weapon_controller;
+	private WeaponBackpackController weapon_backpack_controller;
 
 
 	private void Start () {
 		movement_controller = GetComponent<MovementController>();
-		weapon_controller = GetComponent<WeaponController>();
+		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 	}
 
 	private void Update () {
 		if(Input.GetMouseButtonDown(0)) {
-			weapon_controller.StartFiring();
+			weapon_backpack_controller.StartFiring();
 		}
 		else if(Input.GetMouseButtonUp(0)) {
-			weapon_controller.StopFiring();
+			weapon_backpack_controller.StopFiring();
 		}
+
+		if(Input.GetKeyDown("r")) {
+			weapon_backpack_controller.NextWeapon();
+		}
+	}
+
+	public void AddWeapon (GameObject weapon) {
+		weapon_backpack_controller.AddWeapon(weapon);
 	}
 
 	private void FixedUpdate () {

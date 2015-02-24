@@ -3,8 +3,7 @@ using System.Collections;
 
 public class BulletController : MonoBehaviour {
 
-	[SerializeField] private float damage;
-
+	private float damage;
 	private float cleanup_delay;
 	private float creation_time;
 
@@ -16,6 +15,10 @@ public class BulletController : MonoBehaviour {
 		if(Time.time - creation_time > cleanup_delay) {
 			Destroy(gameObject);
 		}
+	}
+
+	public void SetDamage (float new_damage) {
+		damage = new_damage;
 	}
 
 	public void SetCleanupDelay (float delay) {
