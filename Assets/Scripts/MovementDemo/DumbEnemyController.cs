@@ -3,6 +3,7 @@ using System.Collections;
 
 public class DumbEnemyController : MonoBehaviour {
 
+	private GameObject explosion;
 	private Transform player_transform;
 	private EnemySpawner enemy_spawner;
 	private MovementController movement_controller;
@@ -11,6 +12,10 @@ public class DumbEnemyController : MonoBehaviour {
 	private void Start () {
 		movement_controller = GetComponent<MovementController>();
 		health_controller = GetComponent<HealthController>();
+	}
+
+	public void SetExplosion (GameObject new_explosion) {
+		explosion = new_explosion;
 	}
 
 	public void SetPlayerTransform (Transform transform) {
@@ -28,6 +33,7 @@ public class DumbEnemyController : MonoBehaviour {
 
 	private void Update () {
 		if(health_controller.GetCurrentHealth() == 0) {
+			var explosion_instantiation = (GameObject) Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
 			Destroy(gameObject);
 			enemy_spawner.DecrementCurrentEnemies();
 		}

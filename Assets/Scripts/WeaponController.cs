@@ -14,7 +14,7 @@ public class WeaponController : MonoBehaviour {
 	private Quaternion bullet_rotation = new Quaternion(0.7f, 0, 0, 0.7f);
 	private float last_fired = 0;
 	
-	private void Update () {
+	private void LateUpdate () {
 		if(firing && Time.time - last_fired > delay) {
 			Fire();
 		}

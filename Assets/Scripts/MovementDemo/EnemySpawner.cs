@@ -5,6 +5,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	[SerializeField] private Transform player_transform;
 	[SerializeField] private GameObject enemy;
+	[SerializeField] private GameObject explosion;
 	[SerializeField] private int enemy_count;
 
 	private int current_enemy_count;
@@ -25,6 +26,7 @@ public class EnemySpawner : MonoBehaviour {
 		var position = new Vector3(x, 1.0f, z);
 		var enemy_instantiation = (GameObject) Instantiate(enemy, position, new Quaternion());
 		var dumb_enemy_controller = enemy_instantiation.GetComponent<DumbEnemyController>();
+		dumb_enemy_controller.SetExplosion(explosion);
 		dumb_enemy_controller.SetPlayerTransform(player_transform);
 		dumb_enemy_controller.SetEnemySpawner(this);
 	}
