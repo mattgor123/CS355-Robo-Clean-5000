@@ -13,12 +13,14 @@ public class LMHoldRange : MonoBehaviour, LMMove {
         float delta = dist - optrng;
 
         // If outside of optimal range band (optimal += 25%), move towards optimal range
-        if (Mathf.Abs(delta) / optrng >= 0.20)
+        if (dist <= enemy.GetAggroRadius() && Mathf.Abs(delta) / optrng >= 0.20)
         {
+            enemy.SetAggroState(true);
             Vector3 mvt = MoveLogic(enemy, player);
             mvt *= delta / (1.5f * optrng);
             return mvt;
         }
+        enemy.SetAggroState(false);
         return new Vector3(0f, 0f, 0f);
     }
 }

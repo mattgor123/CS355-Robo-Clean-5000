@@ -3,13 +3,15 @@ using System.Collections;
 
 // Logic Module: Detour
 // chases target if in aggro range, and tries to go around walls
-public class LMDetour : MonoBehaviour, LMMove {
+public class LMDetour : MonoBehaviour, LMMove {      
 
     public Vector3 MoveLogic(EnemyController enemy, GameObject player)
     {
+
         float dist = Vector3.Distance(player.transform.position, enemy.transform.position);
         if (dist <= enemy.GetAggroRadius())
         {
+            enemy.SetAggroState(true);  //aggroed if within aggro range
             float pm = enemy.GetPrevMvt().magnitude;
             Vector3 mvt;
 
@@ -20,7 +22,7 @@ public class LMDetour : MonoBehaviour, LMMove {
                 Vector3 direct = LMHelper.BaseMoveLogic(enemy, player);              //first get direct approach
                 mvt = Vector3.Cross(direct, new Vector3(0f, 1f, 0f));                  //cross with vertical to get left perpendicular
 
-                if (Time.time % 4 == 0)
+                if (Time.time % 4 <= 0.02)
                 {
                     mvt *= -1;                                      //flip direction every 5 seconds
                 }
@@ -35,6 +37,7 @@ public class LMDetour : MonoBehaviour, LMMove {
             }
             return mvt;
         }
+        enemy.SetAggroState(false);
         return new Vector3(0f, 0f, 0f);
     }
 }

@@ -25,20 +25,27 @@ public class EnemyController : MonoBehaviour {
     private float OptimalRange;     //optimal firing range
 
     [SerializeField]
-    private float AggroRadius;
+    private float AggroRadius;      //Distance mob will keep following
+
+    private bool AggroState;        //Whether enemy is aggroed and chasing player
 
 	// Use this for initialization
 	void Start () {
         //Automatically attach the player
         player = GameObject.FindGameObjectWithTag("Player");
+        AggroState = false;
 	}
 	
 	// Update 
 	void LateUpdate () {
-        //Vector3 mvt = EnemyLogic.Move(this, player, Type);  //Call generic Move command with "type"
-        //LMMove thing = (LMMove) GetComponent<LMMove>();
         Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
-        //Debug.Log(mvt);
+
+        // If primary movement is zero, run auxiliary movement pattern
+        if (mvt.magnitude == 0)
+        {
+            mvt = ((LMAuxMove)GetComponent("LMAuxMove")).AuxMoveLogic(this, player);
+        }
+
         
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
@@ -101,5 +108,13 @@ public class EnemyController : MonoBehaviour {
     {
         return OptimalRange;
     }
+    #endregion
+
+    #region Set Functions
+    public void SetAggroState(bool state)
+    {
+        AggroState = state;
+    }
+
     #endregion
 }

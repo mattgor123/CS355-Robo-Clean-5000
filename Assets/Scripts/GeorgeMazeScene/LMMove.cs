@@ -2,16 +2,13 @@
 using System.Collections;
 
 
-//Parent Logic Module: Move
-// inherited by all movement Logic Modules
+/*Parent Logic Module: Move (Primary)
+ * Inherited by all movement Logic Modules
+ * These movements take priority over auxiliary movements
+ * and are things like chasing the player
+ */ 
 public interface LMMove {
 
-    //[SerializeField] protected EnemyController Enemy;
-
-    //[SerializeField] protected GameObject Player;
-
-    Vector3 MoveLogic(EnemyController enemy, GameObject player);/* {
-        return new Vector3(0f, 0f, 0f);
-    }*/
+    Vector3 MoveLogic(EnemyController enemy, GameObject player);
     
 }
