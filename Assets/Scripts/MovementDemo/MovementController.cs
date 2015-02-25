@@ -11,6 +11,14 @@ public class MovementController : MonoBehaviour {
 
 	private float last_force;
 	private float last_rotation;
+	private float speedDampTime = 0.1f;
+	[SerializeField] private float HP;
+
+	private Animator anim;
+
+	private void Awake() {
+		anim = GetComponent<Animator>();
+	}
 
 	private void Start () {
 		// The rotation is not handled by physics
@@ -20,13 +28,17 @@ public class MovementController : MonoBehaviour {
 	}
 
 	public void UpdateMovement (float z_axis, float x_axis) {
-		if(Time.time - last_force > force_delay) {
-			var is_walking = Mathf.Abs(z_axis) < 0.5f && Mathf.Abs(x_axis) < 0.5f;
-			var force = is_walking ? walk_force : run_force;
+
+		if(z_axis != 0f) {
+			var force = 20;
 			var z_force = transform.forward * z_axis * force;
-			var y_force = transform.right * x_axis * force;
-			rigidbody.AddForce(z_force + y_force);
+			var x_force = transform.right * x_axis * force;
+			anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
+			Debug.Log("Total Force: " + (z_force + x_force));
+			rigidbody.AddForce(z_force + x_force);
 			last_force = Time.time;
+		} else {
+			anim.SetFloat("Speed", 0f);
 		}
 	}
 
