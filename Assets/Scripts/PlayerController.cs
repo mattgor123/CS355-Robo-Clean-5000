@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
 
 
 	private void Start () {
+        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 	}
