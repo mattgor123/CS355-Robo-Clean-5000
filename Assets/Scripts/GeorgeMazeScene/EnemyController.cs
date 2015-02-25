@@ -13,7 +13,9 @@ public class EnemyController : MonoBehaviour {
     // Positional/Movement variables
     [SerializeField]
     private float speed;
+    public GameObject explosion;
 
+    private HealthController health_controller;
     private Vector3 PrevPos;    //previous position
     private Vector3 PrevMvt;    //distance moved in previous movement step
     private float PrevTime;     //the previous time interval
@@ -29,15 +31,30 @@ public class EnemyController : MonoBehaviour {
 
     private bool AggroState;        //Whether enemy is aggroed and chasing player
 
+    public void SetExplosion(GameObject new_explosion)
+    {
+        explosion = new_explosion;
+    }
+
+
+
 	// Use this for initialization
 	void Start () {
         //Automatically attach the player
         player = GameObject.FindGameObjectWithTag("Player");
+        health_controller = GetComponent<HealthController>();
+        //SetExplosion(explosion);
         AggroState = false;
 	}
 	
 	// Update 
 	void LateUpdate () {
+        if (health_controller.GetCurrentHealth() == 0)
+        {
+            var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+            Destroy(gameObject);
+        }
+
         Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
 
         // If primary movement is zero, run auxiliary movement pattern
