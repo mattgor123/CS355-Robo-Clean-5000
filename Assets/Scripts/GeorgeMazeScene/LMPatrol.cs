@@ -23,7 +23,7 @@ public class LMPatrol : MonoBehaviour, LMAuxMove {
             float z = (Random.value - 0.5f);
             dir = new Vector3(x, 0f, z);
         }
-        Debug.Log(dir);
+        //Debug.Log(dir);
         return dir;
         
     }
