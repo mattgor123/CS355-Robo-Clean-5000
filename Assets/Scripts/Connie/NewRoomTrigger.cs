@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerEnterRoom : MonoBehaviour {
+public class NewRoomTrigger : MonoBehaviour {
     [SerializeField]
     int level;
 

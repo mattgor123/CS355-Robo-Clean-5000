@@ -28,6 +28,8 @@ public class Dungeon : MonoBehaviour {
     public Transform final_room;
     public Transform Room_1;
     public Transform closed_door;
+    public Transform Stairway; 
+
 
     //Room miscellany
     public Transform roomLight;
