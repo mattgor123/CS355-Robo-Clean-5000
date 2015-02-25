@@ -6,6 +6,7 @@ using System.Collections;
 public class Dungeon : MonoBehaviour {
     //Entity Prefabs {
     public Transform Player;
+    public Transform WeaponCanvas;
     public Transform Camera;
     public Transform enemy_dumb;
     public Transform enemy_smart;
@@ -406,6 +407,7 @@ public class Dungeon : MonoBehaviour {
     private void spawnPlayer()
     {
         Transform player = Instantiate(Player, new Vector3(0f, 0.5f, 0f), Quaternion.identity) as Transform;
+        Instantiate(WeaponCanvas);
         Instantiate(Camera, Camera.position, Camera.rotation);
         player.Translate(Vector3.zero);
     }

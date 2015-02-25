@@ -20,7 +20,7 @@ public class LoadOnClick : MonoBehaviour {
         playMenuScreen.SetActive(false);
     }
 
-    public void LoadScene(int level)
+    public void LoadScene(string level)
     {
         Application.LoadLevel(level);
     }

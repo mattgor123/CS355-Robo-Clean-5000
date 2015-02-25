@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NewRoomTrigger : MonoBehaviour {
     [SerializeField]
-    int level;
+    string level;
 
     void OnTriggerEnter(Collider other)
     {
