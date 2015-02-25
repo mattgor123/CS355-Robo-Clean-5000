@@ -98,11 +98,13 @@ public class Dungeon : MonoBehaviour {
         {
             return this.doors[index];
         }
-
-
-        internal int numDoors()
+        public int numDoors()
         {
             return this.doors.Length;
+        }
+        public string toString()
+        {
+            return this.type.ToString();
         }
     }
     private class Door
@@ -136,6 +138,7 @@ public class Dungeon : MonoBehaviour {
         public void decrement() {
             this.numRooms--;
         }
+
     }
 
     //TODO Refactor prefabs into deadends and branches
@@ -214,7 +217,7 @@ public class Dungeon : MonoBehaviour {
         placedRoom.transform.localScale = new Vector3(scale, 1, scale);
         placeLight(center);
 
-        Debug.Log("Center for this room will be " + center);
+        //Debug.Log("Center for this room will be " + center);
         if (placedRoom.up != Vector3.up) //ensures everything is upright (some bug somewhere is flipping random rooms upsidedown)
         {
             placedRoom.up = Quaternion.FromToRotation(placedRoom.up, Vector3.up) * placedRoom.up;
@@ -222,7 +225,7 @@ public class Dungeon : MonoBehaviour {
 
 
 
-        Debug.Log("There are " + (doorsToQueue) + " doors to add");
+        //Debug.Log("There are " + (doorsToQueue) + " doors to add");
         for (int i = 1; i < numDoors; i++)
         {
             exits[mod(i, doorsToQueue)] = room.getDoor(mod(entInt + i, numDoors));
@@ -233,7 +236,7 @@ public class Dungeon : MonoBehaviour {
             Vector3 facing = exits[i] * placedRoom.forward; //gets a door that is NOT the entrance
             Vector3 position = center + (facing * CELL_SIZE);
             unusedDoors.Enqueue(new Door(position, facing, doorSplit));
-            Debug.Log("Added door at position " + position + " that is facing " + facing + " to queue");
+           // Debug.Log("Added door at position " + position + " that is facing " + facing + " to queue");
 
         }
 
@@ -301,6 +304,7 @@ public class Dungeon : MonoBehaviour {
 
     private void spawnDungeon()
     {
+        bool stairwayPlaced = false;
         int lostRooms = 0; //when a door path collides, the number of rooms on that path are stored and put onto another branch
         spawnStart();
         int countdown = maxRooms;
@@ -309,7 +313,7 @@ public class Dungeon : MonoBehaviour {
         //Debug.Log("There are " + unusedDoors.Count + " doors left in queue");
 
         while (unusedDoors.Count != 0) {
-            Debug.Log(currentRoomsPlaced);
+            //Debug.Log(currentRoomsPlaced);
             Door door = (Door) unusedDoors.Dequeue();
             door.addNum(lostRooms);
             lostRooms = 0;
@@ -330,6 +334,7 @@ public class Dungeon : MonoBehaviour {
                 }
                 else if (door.getNum() < 1) //just seal with door so we stay true to the actual room limit
                 {
+
                     Transform placedRoom = Instantiate(closed_door, door.getPos(), Quaternion.identity) as Transform;
                     placedRoom.transform.localScale = new Vector3(scale, 1, scale);
                     placedRoom.rotation = Quaternion.FromToRotation(placedRoom.forward, door.getFace());
@@ -351,10 +356,21 @@ public class Dungeon : MonoBehaviour {
             {
 
                 door.decrement();
+
                 
                 lostRooms += door.getNum();
                 //Debug.Log("Collision detected at " + position);
-                Transform placedRoom = Instantiate(closed_door, door.getPos(), Quaternion.identity) as Transform;
+                Transform placedRoom = null;
+                if (stairwayPlaced || currentRoomsPlaced < maxRooms/2)
+                {
+                    placedRoom = Instantiate(closed_door, door.getPos(), Quaternion.identity) as Transform;
+                }
+                else
+                {
+                    placedRoom = Instantiate(Stairway, door.getPos(), Quaternion.identity) as Transform;
+                    stairwayPlaced = true;
+
+                }
                 placedRoom.transform.localScale = new Vector3(scale, 1, scale);
                 placedRoom.rotation = Quaternion.FromToRotation(placedRoom.forward, door.getFace());
                 if (placedRoom.up != Vector3.up) //ensures everything is upright (some bug somewhere is flipping random rooms upsidedown)
@@ -373,14 +389,14 @@ public class Dungeon : MonoBehaviour {
     {
         LayerMask EnemySpawnable = 1 << 8;
         Collider[] closeRooms = Physics.OverlapSphere(Player.position, spawnRadius * scale, EnemySpawnable); 
-        Debug.Log(closeRooms.Length + " collided objects");
+        //Debug.Log(closeRooms.Length + " collided objects");
 
         for (int i = numEnemies; i < maxEnemies; i++)
         {
             if (closeRooms.Length > 0)
             {
                 Vector3 randomRoom = closeRooms[Random.Range(0, closeRooms.Length - 1)].transform.position;
-                Debug.Log(randomRoom);
+                //Debug.Log(randomRoom);
                 Instantiate(enemy_aggressive, randomRoom + Vector3.up, Quaternion.identity);
 
             }   
