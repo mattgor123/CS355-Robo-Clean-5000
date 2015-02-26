@@ -30,7 +30,7 @@ public class MovementController : MonoBehaviour {
 	public void UpdateMovement (float z_axis, float x_axis) {
 
 		if(z_axis != 0f) {
-			var force = 20;
+			var force = walk_force;
 			var z_force = transform.forward * z_axis * force;
 			var x_force = transform.right * x_axis * force;
 			anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
