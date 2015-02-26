@@ -404,14 +404,21 @@ public class Dungeon : MonoBehaviour {
         }
     }
 
+    
     private void spawnPlayer()
     {
         Transform player = Instantiate(Player, new Vector3(0f, 0.5f, 0f), Quaternion.identity) as Transform;
-        Instantiate(WeaponCanvas);
-        Instantiate(Camera, Camera.position, Camera.rotation);
-        player.Translate(Vector3.zero);
-    }
+        Transform weaponCanvasInstance = Instantiate(WeaponCanvas) as Transform;
+        Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
+        //player.Translate(Vector3.zero);
+        player.position = Vector3.zero;
 
+        DontDestroyOnLoad(player);
+        DontDestroyOnLoad(weaponCanvasInstance);
+        DontDestroyOnLoad(cameraInstance);
+    }
+    
+     
     void Awake()
     {
         CELL_SIZE = 5.0f * scale;
@@ -427,7 +434,14 @@ public class Dungeon : MonoBehaviour {
 
     void Start()
     {
-        spawnPlayer();
+        
+        //add if statement if player returned is null?
+        if (GameObject.FindWithTag("Player") == null) {
+            spawnPlayer();
+        }
+        Player = GameObject.FindWithTag("Player").transform;
+        
+        
         spawnEnemies();
         lastSpawn = Time.time;
 

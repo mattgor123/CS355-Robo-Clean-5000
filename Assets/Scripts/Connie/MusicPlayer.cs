@@ -10,4 +10,9 @@ public class MusicPlayer : MonoBehaviour {
 	
 	}
 
+    void LateUpdate()
+    {
+        Transform camera = GameObject.FindWithTag("MainCamera").transform;
+        gameObject.transform.position = camera.position;
+    }
 }

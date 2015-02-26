@@ -40,6 +40,12 @@ public class PauseController : MonoBehaviour {
 
     public void LoadScene(string level)
     {
+        if (level.Equals("Main", System.StringComparison.OrdinalIgnoreCase))
+        {
+            Destroy(GameObject.FindGameObjectWithTag("Player"));
+            Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
+            Destroy(GameObject.FindGameObjectWithTag("WeaponCanvas"));
+        }
         Time.timeScale = 1;
         //pauseScreen.SetActive(false);
         
