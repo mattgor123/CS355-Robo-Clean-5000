@@ -31,8 +31,8 @@ public class MovementController : MonoBehaviour {
 
 		if(z_axis != 0f) {
 			var force = walk_force;
-			var z_force = transform.forward * z_axis * force;
-			var x_force = transform.right * x_axis * force;
+			var z_force = transform.forward * z_axis * force * Time.deltaTime;
+            var x_force = transform.right * x_axis * force * Time.deltaTime;
 			anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
 			Debug.Log("Total Force: " + (z_force + x_force));
 			rigidbody.AddForce(z_force + x_force);
