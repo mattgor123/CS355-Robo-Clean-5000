@@ -37,7 +37,7 @@ public class WeaponBackpackController : MonoBehaviour {
 			}
 		}
 	}
-
+        
 	public int NumberOfWeapons () {
 		return weapons.Count;
 	}

@@ -29,6 +29,13 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float AggroRadius;      //Distance mob will keep following
 
+    [SerializeField]
+    private float AttackCooldown;   //Time interval between attacks
+
+    [SerializeField]
+    private GameObject Projectile;  //The projectile this enemy fires
+
+    private float AttackTimer;      //Time since last attack
     private bool AggroState;        //Whether enemy is aggroed and chasing player
 
     public void SetExplosion(GameObject new_explosion)
@@ -60,9 +67,11 @@ public class EnemyController : MonoBehaviour {
         // If primary movement is zero, run auxiliary movement pattern
         if (mvt.magnitude == 0)
         {
-            mvt = ((LMAuxMove)GetComponent("LMAuxMove")).AuxMoveLogic(this, player);
+            var aux = (LMAuxMove)GetComponent("LMAuxMove");
+            if (aux != null) {
+                mvt = aux.AuxMoveLogic(this, player);
+            }
         }
-
         
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
@@ -78,7 +87,19 @@ public class EnemyController : MonoBehaviour {
             WallHit = false;
         }
 
+        //Perform attack
+        ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
+
+        UpdateRotation();
+
 	}
+
+    private void UpdateRotation()
+    {
+        var forward = transform.forward;
+        var angle = 90 - Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);    
+    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -90,8 +111,24 @@ public class EnemyController : MonoBehaviour {
     }
 
 
+
     #region Get Functions
     // Get Functions
+    public GameObject GetProjectile()
+    {
+        return Projectile;
+    }
+
+    public float GetAttackTimer()
+    {
+        return AttackTimer;
+    }
+
+    public float GetAttackCD()
+    {
+        return AttackCooldown;
+    }
+
     public bool GetWallHit()
     {
         return WallHit;
@@ -128,6 +165,11 @@ public class EnemyController : MonoBehaviour {
     #endregion
 
     #region Set Functions
+    public void SetAttackTimer(float timer)
+    {
+        AttackTimer = timer;
+    }
+
     public void SetAggroState(bool state)
     {
         AggroState = state;

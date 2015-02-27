@@ -16,16 +16,24 @@ public class WeaponController : MonoBehaviour {
 	
 	private void LateUpdate () {
 		if(firing && Time.time - last_fired > delay) {
-			Fire();
+            // Find the source of the bullet (true for player, false for enemy)
+            bool source;            
+            if (gameObject.tag == "Player")            
+                source = true;        
+            else
+                source = false;
+            Debug.Log(gameObject);
+			Fire(source);
 		}
 	}
 
-	private void Fire () {
+	private void Fire (bool source) {
 		var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
 		instantiated_bullet.rigidbody.velocity = muzzle.TransformDirection(Vector3.forward * speed);
 		var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
 		bullet_controller.SetDamage(damage);
 		bullet_controller.SetCleanupDelay(cleanup_delay);
+        instantiated_bullet.GetComponent<BulletController>().SetSource(source);
 		last_fired = Time.time;
 	}
 
