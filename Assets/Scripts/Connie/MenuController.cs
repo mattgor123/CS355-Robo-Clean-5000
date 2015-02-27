@@ -2,7 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class LoadOnClick : MonoBehaviour {
+public class MenuController : MonoBehaviour {
+
+    public GameObject musicSource;
 
     [SerializeField]
     private GameObject menuScreen;
@@ -27,6 +29,11 @@ public class LoadOnClick : MonoBehaviour {
         optionsScreen.SetActive(false);
         menuScreen.SetActive(true);
         playMenuScreen.SetActive(false);
+
+        if (GameObject.FindWithTag("Music") == null)
+        {
+            Instantiate(musicSource);
+        }
     }
 
     public void LoadScene(string level)

@@ -40,6 +40,7 @@ public class PauseController : MonoBehaviour {
 
     public void LoadScene(string level)
     {
+        //TODO not hard code "Main"?
         if (level.Equals("Main", System.StringComparison.OrdinalIgnoreCase))
         {
             Destroy(GameObject.FindGameObjectWithTag("Player"));
