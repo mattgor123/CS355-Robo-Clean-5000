@@ -98,7 +98,6 @@ public class EnemyController : MonoBehaviour {
         transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);       
 
         //Apply animations
-        Debug.Log(rigidbody.velocity.magnitude);
         if(rigidbody.velocity.magnitude > 0.5) {
 			anim.SetFloat("Speed", 5.5f, 0.1f, Time.deltaTime);
 		} else {
