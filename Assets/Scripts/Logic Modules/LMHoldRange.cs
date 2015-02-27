@@ -5,7 +5,6 @@ using System.Collections;
 // tries to stay within some optimal range band with respect to target
 public class LMHoldRange : MonoBehaviour, LMMove {
 
-
     public Vector3 MoveLogic(EnemyController enemy, GameObject player)
     {       
         float dist = Vector3.Distance(player.transform.position, enemy.transform.position);
@@ -16,7 +15,7 @@ public class LMHoldRange : MonoBehaviour, LMMove {
         if (dist <= enemy.GetAggroRadius() && Mathf.Abs(delta) / optrng >= 0.20)
         {
             enemy.SetAggroState(true);
-            Vector3 mvt = MoveLogic(enemy, player);
+            Vector3 mvt = LMHelper.BaseMoveLogic(enemy, player);
             mvt *= delta / (1.5f * optrng);
             return mvt;
         }

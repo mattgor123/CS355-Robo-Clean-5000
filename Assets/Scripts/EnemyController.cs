@@ -38,6 +38,9 @@ public class EnemyController : MonoBehaviour {
     private float AttackTimer;      //Time since last attack
     private bool AggroState;        //Whether enemy is aggroed and chasing player
 
+    //Animations
+    private Animator anim;
+
     public void SetExplosion(GameObject new_explosion)
     {
         explosion = new_explosion;
@@ -45,21 +48,24 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //Automatically attach the player
+        //Automatically attach the player & various components
         player = GameObject.FindGameObjectWithTag("Player");
         health_controller = GetComponent<HealthController>();
-        //SetExplosion(explosion);
+        anim = GetComponent<Animator>();
         AggroState = false;
 	}
 	
 	// Update 
 	void LateUpdate () {
+        //Die if at zero hp
         if (health_controller.GetCurrentHealth() == 0)
         {
             var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             Destroy(gameObject);
         }
 
+        //Movement
+        //call primary movement logic to get movement direction
         Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
 
         // If primary movement is zero, run auxiliary movement pattern
@@ -71,13 +77,16 @@ public class EnemyController : MonoBehaviour {
             }
         }
         
+        //apply the movement
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
         rigidbody.AddForce(mvt);
 
         PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
         PrevPos = transform.position;
-        
+        transform.forward = mvt; 
+
+        //decrement wall hit timer
         WallHitTimer -= PrevTime;
         if (WallHitTimer < 0)
         {
@@ -85,16 +94,19 @@ public class EnemyController : MonoBehaviour {
             WallHit = false;
         }
 
-        //Perform attack
-        ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
+        //Perform attack & apply proper facing 
+        transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);       
 
-        UpdateRotation(mvt);
+        //Apply animations
+        Debug.Log(rigidbody.velocity.magnitude);
+        if(rigidbody.velocity.magnitude > 0.5) {
+			anim.SetFloat("Speed", 5.5f, 0.1f, Time.deltaTime);
+		} else {
+			anim.SetFloat("Speed", 0f);
+		}
+
 	}
-
-    private void UpdateRotation(Vector3 mvt)
-    {
-        transform.forward = mvt;     
-    }
+  
 
     void OnCollisionEnter(Collision collision)
     {

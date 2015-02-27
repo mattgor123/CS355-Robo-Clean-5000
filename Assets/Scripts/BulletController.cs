@@ -33,8 +33,6 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision) {
-
-        
         //Player-fired bullets do not hit the player
         if (source_player && collision.gameObject.tag == "Player")        
             return;        
@@ -43,10 +41,10 @@ public class BulletController : MonoBehaviour {
         if (!source_player && collision.gameObject.tag != "Player")
             return;
 
-        
 		var victim_health = collision.gameObject.GetComponent<HealthController>();
 		if(victim_health != null) {
 			victim_health.ChangeHealth(-damage);
 		}
+        Destroy(gameObject);
 	}
 }

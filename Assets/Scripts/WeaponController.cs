@@ -28,7 +28,6 @@ public class WeaponController : MonoBehaviour {
                 source = true;        
             else
                 source = false;
-            Debug.Log(owner);
 			Fire(source);
 		}
 	}
