@@ -90,15 +90,12 @@ public class EnemyController : MonoBehaviour {
         //Perform attack
         ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
 
-        UpdateRotation();
-
+        UpdateRotation(mvt);
 	}
 
-    private void UpdateRotation()
+    private void UpdateRotation(Vector3 mvt)
     {
-        var forward = transform.forward;
-        var angle = 90 - Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);    
+        transform.forward = mvt;     
     }
 
     void OnCollisionEnter(Collision collision)
