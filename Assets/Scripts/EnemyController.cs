@@ -43,8 +43,6 @@ public class EnemyController : MonoBehaviour {
         explosion = new_explosion;
     }
 
-
-
 	// Use this for initialization
 	void Start () {
         //Automatically attach the player

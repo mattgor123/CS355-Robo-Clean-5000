@@ -13,16 +13,22 @@ public class WeaponController : MonoBehaviour {
 	private bool firing = false;
 	private Quaternion bullet_rotation = new Quaternion(0.7f, 0, 0, 0.7f);
 	private float last_fired = 0;
-	
+    private Transform owner;                        //The owner of the gun
+
+    private void Start()
+    {
+        owner = transform.parent.parent;
+    }
+
 	private void LateUpdate () {
 		if(firing && Time.time - last_fired > delay) {
             // Find the source of the bullet (true for player, false for enemy)
             bool source;            
-            if (gameObject.tag == "Player")            
+            if (owner.tag == "Player")            
                 source = true;        
             else
                 source = false;
-            Debug.Log(gameObject);
+            Debug.Log(owner);
 			Fire(source);
 		}
 	}
