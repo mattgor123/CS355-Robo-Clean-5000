@@ -34,7 +34,7 @@ public class MovementController : MonoBehaviour {
 			var z_force = transform.forward * z_axis * force * Time.deltaTime;
             var x_force = transform.right * x_axis * force * Time.deltaTime;
 			anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
-			rigidbody.AddForce(z_force + x_force);
+			rigidbody.AddForce(z_force + x_force, ForceMode.Impulse);
 			last_force = Time.time;
 		} else {
 			anim.SetFloat("Speed", 0f);
