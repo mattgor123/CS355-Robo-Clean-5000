@@ -4,7 +4,7 @@ using System.Collections;
 // Logic Module: Basic Shot
 // fires a shot if cooldown has elapsed
 public class LMBasicShot : MonoBehaviour, LMAttack {
-    public void AttackLogic(EnemyController enemy, GameObject player)
+    public Vector3 AttackLogic(EnemyController enemy, GameObject player)
     {
         // Start firing if timer has elapsed
         if(LMHelper.CheckAttackTimer(enemy)) {
@@ -14,5 +14,8 @@ public class LMBasicShot : MonoBehaviour, LMAttack {
         {
             enemy.GetComponent<WeaponBackpackController>().StopFiring();
         }
+
+        //Face the player
+        return LMHelper.BaseMoveLogic(enemy, player);
     }
 }

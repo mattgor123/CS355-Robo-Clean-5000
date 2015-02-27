@@ -5,5 +5,6 @@ using System.Collections;
  * Inherited by all attack Logic Modules
  */
 public interface LMAttack {
-    void AttackLogic(EnemyController enemy, GameObject player);
+    //Returns the facing during the attack
+    Vector3 AttackLogic(EnemyController enemy, GameObject player);
 }
