@@ -8,6 +8,7 @@ public class Dungeon : MonoBehaviour {
     public Transform Player;
     public Transform WeaponCanvas;
     public Transform Camera;
+    public Transform Gun;
     public Transform enemy_dumb;
     public Transform enemy_smart;
     public Transform enemy_aggressive;
