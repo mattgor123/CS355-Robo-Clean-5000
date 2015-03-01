@@ -12,14 +12,13 @@ public class MovementController : MonoBehaviour {
 	private float last_force;
 	private float last_rotation;
 	private float speedDampTime = 0.1f;
-	//[SerializeField] 
-	private float HP;
 
 	private Animator anim;
+	private HealthController healthController;
 
 	private void Awake() {
 		anim = GetComponent<Animator>();
-		HP = 100;
+		healthController = GetComponent<HealthController>();
 	}
 
 	private void Start () {
@@ -30,7 +29,10 @@ public class MovementController : MonoBehaviour {
 	}
 
 	public void UpdateMovement (float z_axis, float x_axis) {
-		if (HP > 0) {
+		Debug.Log("Current Health: " + healthController.GetCurrentHealth());
+		// if the player is still alive, apply movement logic
+		if (healthController.GetCurrentHealth() > 0) {
+			// if the object is not standing still, move object
 			if(z_axis != 0f || x_axis != 0f) {
 				var force = walk_force;
 				var z_force = transform.forward * z_axis * force * Time.deltaTime;
@@ -42,10 +44,10 @@ public class MovementController : MonoBehaviour {
 				anim.SetFloat("Speed", 0f);
 			}
 
-        	if (z_axis == 0 && x_axis == 0)
+        	/*if (z_axis == 0 && x_axis == 0)
         	{
             	rigidbody.velocity *= 0.5f;
-        	}
+        	}*/
         } else {
         	anim.SetBool("Dead", true);
         }	

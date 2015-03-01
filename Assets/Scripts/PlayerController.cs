@@ -4,17 +4,19 @@ using System.Collections;
 [RequireComponent(typeof (MovementController))]
 [RequireComponent(typeof (WeaponBackpackController))]
 public class PlayerController : MonoBehaviour {
-
-	[SerializeField] private new Camera camera;
+ 
+	private new Camera camera;
 
 	private MovementController movement_controller;
 	private WeaponBackpackController weapon_backpack_controller;
+	private HealthController healthController;
 
 
 	private void Start () {
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
+		healthController = GetComponent<HealthController>();
 	}
 
 	private void Update () {
@@ -36,7 +38,9 @@ public class PlayerController : MonoBehaviour {
 
 	private void FixedUpdate () {
 		UpdateMovement();
-		UpdateRotation();
+		if (healthController.GetCurrentHealth() > 0) {
+			UpdateRotation();
+		}	
 	}
 
 	private void UpdateMovement () {

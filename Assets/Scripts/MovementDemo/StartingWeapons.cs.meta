@@ -2,7 +2,12 @@ fileFormatVersion: 2
 guid: 3ec62a394613741c28a219a1d6184a59
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - weapon_backpack_controller: {fileID: 11472372, guid: 23edf762a003f2f40a5927fc61849363,
+      type: 2}
+  - weapon1: {fileID: 155710, guid: 5f072b20da44933499d493e67199b916, type: 2}
+  - weapon2: {fileID: 177614, guid: 0bf7cdbf9d5a92249bbeeaa4f909d168, type: 2}
+  - weapon3: {fileID: 186004, guid: 3056e3fe1b9bb2e4bb6a1f7abb97ffbc, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -2,7 +2,8 @@ fileFormatVersion: 2
 guid: 0c6bb410d19d747ef9d80c86b1e4c61b
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - weapon_spawn: {fileID: 422670, guid: 23edf762a003f2f40a5927fc61849363, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

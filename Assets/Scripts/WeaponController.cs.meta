@@ -2,7 +2,9 @@ fileFormatVersion: 2
 guid: d0ceafd239b46438d946af07db169f57
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - muzzle: {fileID: 455712, guid: 5f072b20da44933499d493e67199b916, type: 2}
+  - bullet: {fileID: 189422, guid: d970819a51c56904d93670ba1df1002d, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

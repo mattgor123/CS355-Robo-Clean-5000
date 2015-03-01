@@ -8,7 +8,7 @@ public class HealthController : MonoBehaviour {
 
 	private float current_health;
 
-	void Start () {
+	void Awake() {
 		current_health = max_health;
 	}
 	
