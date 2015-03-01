@@ -414,6 +414,7 @@ public class Dungeon : MonoBehaviour {
         //player.Translate(Vector3.zero);
         player.position = Vector3.zero;
 
+        //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
         DontDestroyOnLoad(weaponCanvasInstance);
         DontDestroyOnLoad(cameraInstance);
@@ -436,7 +437,7 @@ public class Dungeon : MonoBehaviour {
     void Start()
     {
         
-        //add if statement if player returned is null?
+        //if player hasn't been created, make one
         if (GameObject.FindWithTag("Player") == null) {
             spawnPlayer();
         }

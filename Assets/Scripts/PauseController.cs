@@ -6,34 +6,30 @@ public class PauseController : MonoBehaviour {
     [SerializeField]
     private GameObject pauseScreen;
 
-	// Use this for initialization
 	void Start () {
-        //gameObject.SetActive(false);
-        //gameObject.renderer.enabled = false;
-        //DontDestroyOnLoad(gameObject);
-        //DontDestroyOnLoad(pauseScreen);
         pauseScreen.SetActive(false);
-        //pauseScreen.transform.position = transform.position + new Vector3(0, 0, -50); //to make it lower than other canvas
-        //transform.position = transform.position + new Vector3(0, 0, -50);
 	}
 	
-	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            //currently paused
             if (Time.timeScale == 0)
             {
+                //unpause and deactivate pause screen
                 Time.timeScale = 1;
-                //gameObject.SetActive(false);
-                //gameObject.renderer.enabled = false;
                 pauseScreen.SetActive(false);
             }
+            //not currently paused
             else
             {
+                //pause and show pause screen
                 Time.timeScale = 0;
-                //gameObject.SetActive(true);
-                //gameObject.renderer.enabled = true;
                 pauseScreen.SetActive(true);
+                //TODO
+                //will have to add code to stop all movement
+                //right now, if a key is pressed as game is paused,
+                //the game will continue as if that key is still pressed
             }
         }
 	}
@@ -43,14 +39,12 @@ public class PauseController : MonoBehaviour {
         //TODO not hard code "Main"?
         if (level.Equals("Main", System.StringComparison.OrdinalIgnoreCase))
         {
+            //going to main menu. Don't need the player anymore
             Destroy(GameObject.FindGameObjectWithTag("Player"));
             Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
             Destroy(GameObject.FindGameObjectWithTag("WeaponCanvas"));
         }
         Time.timeScale = 1;
-        //pauseScreen.SetActive(false);
-        
         Application.LoadLevel(level);
-        //Time.timeScale = 1;
     }
 }

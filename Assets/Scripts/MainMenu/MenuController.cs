@@ -4,6 +4,7 @@ using System.Collections;
 
 public class MenuController : MonoBehaviour {
 
+    //musicplayer prefab
     public GameObject musicSource;
 
     [SerializeField]
@@ -20,6 +21,7 @@ public class MenuController : MonoBehaviour {
 
     private bool isSound;
 
+    //AudioSource that plays the beeps
     private AudioSource audio;
 
     void Awake()
@@ -43,6 +45,7 @@ public class MenuController : MonoBehaviour {
 
     public void OpenOptions()
     {
+        //opens the options screen
         menuScreen.SetActive(false);
         optionsScreen.SetActive(true);
         playMenuScreen.SetActive(false);
@@ -50,6 +53,7 @@ public class MenuController : MonoBehaviour {
 
     public void OpenPlayMenu()
     {
+        //opens the play screen
         menuScreen.SetActive(false);
         optionsScreen.SetActive(false);
         playMenuScreen.SetActive(true);
@@ -57,6 +61,7 @@ public class MenuController : MonoBehaviour {
 
     public void OpenMainMenu()
     {
+        //opens main menu screen
         menuScreen.SetActive(true);
         optionsScreen.SetActive(false);
         playMenuScreen.SetActive(false);
