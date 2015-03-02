@@ -17,6 +17,17 @@ public class LMHelper {
         return mvt;
     }
 
+    //Checks whether target is in range
+    public static bool IsInRange(EnemyController enemy, GameObject player)
+    {
+        float dist = Vector3.Distance(player.transform.position, enemy.transform.position);
+        if (dist <= enemy.GetAggroRadius())
+        {
+            return true;
+        }
+        return false;
+    }
+
     //Calculates whether attack cooldown has elapsed
     // if so, resets attack timer
     // otherwise, increments attack timer

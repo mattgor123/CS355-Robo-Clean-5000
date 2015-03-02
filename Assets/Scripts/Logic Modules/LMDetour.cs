@@ -7,9 +7,7 @@ public class LMDetour : MonoBehaviour, LMMove {
 
     public Vector3 MoveLogic(EnemyController enemy, GameObject player)
     {
-
-        float dist = Vector3.Distance(player.transform.position, enemy.transform.position);
-        if (dist <= enemy.GetAggroRadius())
+        if (LMHelper.IsInRange(enemy, player))
         {
             enemy.SetAggroState(true);  //aggroed if within aggro range
             float pm = enemy.GetPrevMvt().magnitude;

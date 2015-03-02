@@ -32,9 +32,6 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float AttackCooldown;   //Time interval between attacks
 
-    [SerializeField]
-    private GameObject Projectile;  //The projectile this enemy fires
-
     private float AttackTimer;      //Time since last attack
     private bool AggroState;        //Whether enemy is aggroed and chasing player
 
@@ -120,11 +117,6 @@ public class EnemyController : MonoBehaviour {
 
     #region Get Functions
     // Get Functions
-    public GameObject GetProjectile()
-    {
-        return Projectile;
-    }
-
     public float GetAttackTimer()
     {
         return AttackTimer;
