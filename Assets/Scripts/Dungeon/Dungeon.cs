@@ -408,11 +408,10 @@ public class Dungeon : MonoBehaviour {
     
     private void spawnPlayer()
     {
-        Transform player = Instantiate(Player, new Vector3(0f, 0.5f, 0f), Quaternion.identity) as Transform;
+        Transform player = Instantiate(Player, new Vector3(0f, 0.09f, 0f), Quaternion.identity) as Transform;
         Transform weaponCanvasInstance = Instantiate(WeaponCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
         //player.Translate(Vector3.zero);
-        player.position = Vector3.zero;
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
