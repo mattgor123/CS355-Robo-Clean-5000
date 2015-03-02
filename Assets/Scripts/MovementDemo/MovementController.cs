@@ -29,7 +29,7 @@ public class MovementController : MonoBehaviour {
 	}
 
 	public void UpdateMovement (float z_axis, float x_axis) {
-		Debug.Log("Current Health: " + healthController.GetCurrentHealth());
+		//Debug.Log("Current Health: " + healthController.GetCurrentHealth());
 		// if the player is still alive, apply movement logic
 		if (healthController.GetCurrentHealth() > 0) {
 			// if the object is not standing still, move object

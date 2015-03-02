@@ -81,7 +81,7 @@ public class BulletController : MonoBehaviour {
            RaycastHit hitInfo; 
  
            //check for obstructions we might have missed 
-           if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude))
+           if (Physics.Raycast(myRigidbody.position, movementThisStep, out hitInfo, movementMagnitude))
            {
 
                myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
