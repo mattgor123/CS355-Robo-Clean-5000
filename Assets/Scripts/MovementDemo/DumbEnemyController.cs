@@ -27,7 +27,7 @@ public class DumbEnemyController : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
-		movement_controller.UpdateMovement(1.0f, 0);
+		movement_controller.UpdateMovement(1.0f, 0, true);
 		movement_controller.LookAt(player_transform.position);
 	}
 

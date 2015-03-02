@@ -10,13 +10,15 @@ public class PlayerController : MonoBehaviour {
 	private MovementController movement_controller;
 	private WeaponBackpackController weapon_backpack_controller;
 	private HealthController healthController;
-
+    private bool ControlScheme;  //True for mouse-oriented (W goes to mouse, S goes away from mouse)
+                                //False for screen-oriented (W goes up, S goes down)
 
 	private void Start () {
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 		healthController = GetComponent<HealthController>();
+        ControlScheme = true;
 	}
 
 	private void Update () {
@@ -30,6 +32,18 @@ public class PlayerController : MonoBehaviour {
 		if(Input.GetKeyDown("r")) {
 			weapon_backpack_controller.NextWeapon();
 		}
+
+        if (Input.GetKeyDown("c"))
+        {
+            if (ControlScheme)
+            {
+                ControlScheme = false;
+            }
+            else
+            {
+                ControlScheme = true;
+            }
+        }
 	}
 
 	public void AddWeapon (GameObject weapon) {
@@ -46,7 +60,7 @@ public class PlayerController : MonoBehaviour {
 	private void UpdateMovement () {
 		var z_axis = Input.GetAxis("Vertical");
 		var x_axis = Input.GetAxis("Horizontal");
-		movement_controller.UpdateMovement(z_axis, x_axis);
+		movement_controller.UpdateMovement(z_axis, x_axis, ControlScheme);
 	}
 
 	private void UpdateRotation () {

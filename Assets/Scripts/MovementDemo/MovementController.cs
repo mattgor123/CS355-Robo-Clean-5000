@@ -28,15 +28,26 @@ public class MovementController : MonoBehaviour {
 		last_rotation = -rotation_delay;
 	}
 
-	public void UpdateMovement (float z_axis, float x_axis) {
+	public void UpdateMovement (float z_axis, float x_axis, bool ControlScheme) {
 		//Debug.Log("Current Health: " + healthController.GetCurrentHealth());
 		// if the player is still alive, apply movement logic
 		if (healthController.GetCurrentHealth() > 0) {
 			// if the object is not standing still, move object
 			if(z_axis != 0f || x_axis != 0f) {
 				var force = walk_force;
-				var z_force = transform.forward * z_axis * force * Time.deltaTime;
-            	var x_force = transform.right * x_axis * force * Time.deltaTime;
+                Vector3 z_force;
+                Vector3 x_force;
+                if (ControlScheme)
+                {
+                    z_force = transform.forward * z_axis * force * Time.deltaTime;
+                    x_force = transform.right * x_axis * force * Time.deltaTime;
+                }
+                else
+                {
+                    z_force = new Vector3(0f, 0f, z_axis * force * Time.deltaTime);
+                    x_force = new Vector3(x_axis * force * Time.deltaTime, 0f, 0f);
+                }
+
 				anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
 				rigidbody.AddForce(z_force + x_force, ForceMode.Impulse);
 				last_force = Time.time;
