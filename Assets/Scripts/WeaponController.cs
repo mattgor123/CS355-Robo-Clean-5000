@@ -40,6 +40,17 @@ public class WeaponController : MonoBehaviour {
 		bullet_controller.SetCleanupDelay(cleanup_delay);
         instantiated_bullet.GetComponent<BulletController>().SetSource(source);
 		last_fired = Time.time;
+
+        instantiated_bullet.AddComponent<Light>();
+        instantiated_bullet.light.intensity = 0.5f;
+        if (source)
+        {
+            instantiated_bullet.light.color = Color.green;
+        }
+        else
+        {
+            instantiated_bullet.light.color = Color.cyan;
+        }
 	}
 
 	public void StartFiring () {
