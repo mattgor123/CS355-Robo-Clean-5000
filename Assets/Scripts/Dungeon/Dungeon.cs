@@ -374,7 +374,17 @@ public class Dungeon : MonoBehaviour {
 
                 }
                 placedRoom.transform.localScale = new Vector3(scale, 1, scale);
-                placedRoom.rotation = Quaternion.FromToRotation(placedRoom.forward, door.getFace());
+                int yAxis = (int) Quaternion.FromToRotation(placedRoom.forward, door.getFace()).eulerAngles.y;
+                Debug.Log(yAxis + "degrees rotation");
+                if (yAxis == 270)
+                {
+                    yAxis = 90;
+                }
+                if (yAxis == 180)
+                {
+                    yAxis = 0;
+                }
+                placedRoom.rotation = Quaternion.Euler(new Vector3(0, yAxis, 0));
                 if (placedRoom.up != Vector3.up) //ensures everything is upright (some bug somewhere is flipping random rooms upsidedown)
                 {
                     placedRoom.up = Quaternion.FromToRotation(placedRoom.up, Vector3.up) * placedRoom.up;
