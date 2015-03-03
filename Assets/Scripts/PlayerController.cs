@@ -13,12 +13,15 @@ public class PlayerController : MonoBehaviour {
     private bool ControlScheme;  //True for mouse-oriented (W goes to mouse, S goes away from mouse)
                                 //False for screen-oriented (W goes up, S goes down)
 
+    private bool Drop;          //Whether to drop
+
 	private void Start () {
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 		healthController = GetComponent<HealthController>();
         ControlScheme = true;
+        Drop = false;
 	}
 
 	private void Update () {
@@ -33,6 +36,7 @@ public class PlayerController : MonoBehaviour {
 			weapon_backpack_controller.NextWeapon();
 		}
 
+        //Control scheme toggle
         if (Input.GetKeyDown("c"))
         {
             if (ControlScheme)
@@ -46,6 +50,28 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
+    private void LateUpdate()
+    {
+        //Drop if drop flag is on (not colliding and thus floating)
+        if (Drop)
+        {
+            transform.position += new Vector3(0f, -0.05f, 0f);
+        }
+    }
+
+    //Deactivate drop flag if colliding with something (the floor)
+    private void OnCollisionStay(Collision other)
+    {
+        //If colliding with a ramp, move up a bit so that player can go up ramp)
+        //May cause some bouncing if staying put on a ramp
+        if (other.gameObject.tag == "Ramp")
+        {
+            transform.position += new Vector3(0f, 0.01f, 0f);
+        }
+        Drop = false;
+    }
+
+
 	public void AddWeapon (GameObject weapon) {
 		weapon_backpack_controller.AddWeapon(weapon);
 	}
@@ -54,13 +80,15 @@ public class PlayerController : MonoBehaviour {
 		UpdateMovement();
 		if (healthController.GetCurrentHealth() > 0) {
 			UpdateRotation();
-		}	
+		}
+        Drop = true;
 	}
 
 	private void UpdateMovement () {
 		var z_axis = Input.GetAxis("Vertical");
 		var x_axis = Input.GetAxis("Horizontal");
 		movement_controller.UpdateMovement(z_axis, x_axis, ControlScheme);
+
 	}
 
 	private void UpdateRotation () {
