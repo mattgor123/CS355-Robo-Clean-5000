@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour {
     //Deactivate drop flag if colliding with something (the floor)
     private void OnCollisionStay(Collision other)
     {
+        //If colliding with a ramp, move up a bit so that player can go up ramp)
+        //May cause some bouncing if staying put on a ramp
         if (other.gameObject.tag == "Ramp")
         {
             transform.position += new Vector3(0f, 0.01f, 0f);
