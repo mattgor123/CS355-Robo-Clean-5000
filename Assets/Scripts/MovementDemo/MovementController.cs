@@ -54,11 +54,6 @@ public class MovementController : MonoBehaviour {
 			} else {
 				anim.SetFloat("Speed", 0f);
 			}
-
-        	/*if (z_axis == 0 && x_axis == 0)
-        	{
-            	rigidbody.velocity *= 0.5f;
-        	}*/
         } else {
         	anim.SetBool("Dead", true);
         }	
