@@ -16,8 +16,10 @@ public class CameraController : MonoBehaviour {
 
 		transform.position = Player_Movement_Controller.transform.position + offset;
         //this.transform.forward = Player_Movement_Controller.transform.position.x;
+        transform.LookAt(Player_Movement_Controller.transform);
+        transform.Translate(Vector3.right * Time.deltaTime);
         transform.forward = Player_Movement_Controller.transform.forward;
-        transform.rotation = Quaternion.AngleAxis(65f, Vector3.right);
+        transform.rotation = Quaternion.AngleAxis(60f, Vector3.right);
 
 
 	}
