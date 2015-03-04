@@ -16,6 +16,7 @@ public class CutsceneController : MonoBehaviour {
     //how many lines have gone by until the screen needs to be cleared
     public int linesUntilSweep1;
     public int linesUntilSweep2;
+    public int linesUntilSweep3;
 
     //The name of the next scene
     public string nextLevel;
@@ -29,6 +30,7 @@ public class CutsceneController : MonoBehaviour {
     //Whether the screen has already been cleared
     private bool sweepIsPast1;
     private bool sweepIsPast2;
+    private bool sweepIsPast3;
 
 	void Start () {
         //Animator[] anims = GameObject.FindObjectsOfType<Animator>();
@@ -73,6 +75,18 @@ public class CutsceneController : MonoBehaviour {
                 //for every line on screen
                 //add 1 to State which should move it off screen
                 for (int i = linesUntilSweep1; i < linesUntilSweep2; i++)
+                {
+                    Animator a = (Animator)animList[i];
+                    a.SetInteger("State", a.GetInteger("State") + 1);
+                }
+                current -= 1;
+            }
+            else if (current == linesUntilSweep3 && !sweepIsPast3)
+            {
+                sweepIsPast3 = true;
+                //for every line on screen
+                //add 1 to State which should move it off screen
+                for (int i = linesUntilSweep2; i < linesUntilSweep3; i++)
                 {
                     Animator a = (Animator)animList[i];
                     a.SetInteger("State", a.GetInteger("State") + 1);

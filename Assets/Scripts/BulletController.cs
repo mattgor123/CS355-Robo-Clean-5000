@@ -81,12 +81,19 @@ public class BulletController : MonoBehaviour {
            RaycastHit hitInfo; 
  
            //check for obstructions we might have missed 
-           if (Physics.Raycast(myRigidbody.position, movementThisStep, out hitInfo, movementMagnitude))
+           //if (Physics.Raycast(myRigidbody.position, movementThisStep, out hitInfo, movementMagnitude))
+           if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude))
            {
 
                myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
 
                GameObject other = hitInfo.collider.gameObject;
+
+               //raycast hit the bullet itself
+               if (other.name.Contains("Bullet"))
+               {
+                   return;
+               }
 
                //Player-fired bullets do not hit the player
                if (source_player && other.tag == "Player")
@@ -98,7 +105,7 @@ public class BulletController : MonoBehaviour {
                {
                    return;
                }
-
+               
                var victim_health = other.GetComponent<HealthController>();
                if (victim_health != null)
                {
