@@ -43,6 +43,7 @@ public class PauseController : MonoBehaviour {
             Destroy(GameObject.FindGameObjectWithTag("Player"));
             Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
             Destroy(GameObject.FindGameObjectWithTag("WeaponCanvas"));
+            Destroy(GameObject.FindGameObjectWithTag("HealthCanvas"));
         }
         Time.timeScale = 1;
         Application.LoadLevel(level);
