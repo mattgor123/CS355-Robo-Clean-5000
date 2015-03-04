@@ -23,6 +23,7 @@ public class WeaponController : MonoBehaviour {
     private void Start()
     {
         owner = transform.parent.parent;
+        backpack_controller = owner.GetComponent<WeaponBackpackController>();
         weapon_health = max_weapon_health;
     }
 
