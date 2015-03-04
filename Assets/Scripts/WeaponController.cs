@@ -20,7 +20,7 @@ public class WeaponController : MonoBehaviour {
     private void Start()
     {
         owner = transform.parent.parent;
-        backpack_controller = owner.GetComponent<WeaponBackpackController>();
+        backpack_controller = owner.GetComponent<WeaponBackpackController>();        
     }
 
 	private void LateUpdate () {
@@ -33,6 +33,9 @@ public class WeaponController : MonoBehaviour {
                 source = false;
 			Fire(source);
 		}
+        //Setup proper weapon position
+        transform.position = owner.transform.position + new Vector3(0f, 2.8f, 0f);
+        transform.position += owner.transform.forward * 1.5f;
 	}
 
 	private void Fire (bool source) {
