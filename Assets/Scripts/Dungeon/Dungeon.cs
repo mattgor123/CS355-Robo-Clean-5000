@@ -7,6 +7,7 @@ public class Dungeon : MonoBehaviour {
     //Entity Prefabs {
     public Transform Player;
     public Transform WeaponCanvas;
+	public Transform HealthCanvas;
     public Transform Camera;
     public Transform Gun;
     public Transform enemy_dumb;
@@ -411,12 +412,14 @@ public class Dungeon : MonoBehaviour {
     {
         Transform player = Instantiate(Player, new Vector3(0f, 0.09f, 0f), Quaternion.identity) as Transform;
         Transform weaponCanvasInstance = Instantiate(WeaponCanvas) as Transform;
+		Transform healthCanvasInstance = Instantiate (HealthCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
         //player.Translate(Vector3.zero);
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
         DontDestroyOnLoad(weaponCanvasInstance);
+		DontDestroyOnLoad (healthCanvasInstance);
         DontDestroyOnLoad(cameraInstance);
     }
     
