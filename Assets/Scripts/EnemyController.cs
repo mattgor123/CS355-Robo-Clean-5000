@@ -94,8 +94,10 @@ public class EnemyController : MonoBehaviour {
             WallHit = false;
         }
 
-        //Perform attack & apply proper facing 
-        transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);       
+        //Perform attack & face player if aggroed
+        if (AggroState) { 
+            transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);       
+        }
 
         //Apply animations
         if(rigidbody.velocity.magnitude > 0) {

@@ -39,16 +39,16 @@ public class MovementController : MonoBehaviour {
                 Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
                 if (ControlScheme)
                 {
-                    z_force = transform.forward * z_axis * force * Time.deltaTime * 3;                    
-                    x_force = transform.right * x_axis * force * Time.deltaTime * 3;
+                    z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;                    
+                    x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
                     if (z_axis <= 0f)                   
                         counteraction = transform.forward * -7.5f;                    
                 }
                 else
                 {
-                    z_force = new Vector3(0f, 0f, z_axis * force * Time.deltaTime) * 3;
-                    x_force = new Vector3(x_axis * force * Time.deltaTime, 0f, 0f) * 3;
-                    counteraction = transform.forward * -7.5f; 
+                    z_force = new Vector3(0f, 0f, z_axis * force * Time.deltaTime) * 3f;
+                    x_force = new Vector3(x_axis * force * Time.deltaTime, 0f, 0f) * 3f;
+                    counteraction = transform.forward * -6.5f; 
                 }
 				anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
 				rigidbody.AddForce(z_force + x_force, ForceMode.Impulse);
