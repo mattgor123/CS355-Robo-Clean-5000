@@ -310,6 +310,7 @@ public class Dungeon : MonoBehaviour {
         bool stairwayPlaced = false;
         int lostRooms = 0; //when a door path collides, the number of rooms on that path are stored and put onto another branch
         spawnStart();
+        Door lastDoor = new Door(Vector3.right*CELL_SIZE, Vector3.right, 1);
         int countdown = maxRooms;
         //TODO
         //replace for loop with while queue not empty
@@ -318,6 +319,7 @@ public class Dungeon : MonoBehaviour {
         while (unusedDoors.Count != 0) {
             //Debug.Log(currentRoomsPlaced);
             Door door = (Door) unusedDoors.Dequeue();
+            lastDoor = door;
             door.addNum(lostRooms);
             lostRooms = 0;
             //Debug.Log("Currently working on door at " + door.getPos() + " facing " + door.getFace());
@@ -384,6 +386,17 @@ public class Dungeon : MonoBehaviour {
 
             }
 
+        }
+        if (!stairwayPlaced)
+        {
+            Transform placedRoom = Instantiate(Stairway, lastDoor.getPos(), Quaternion.identity) as Transform;
+            stairwayPlaced = true;
+            placedRoom.transform.localScale = new Vector3(scale, 1, scale);
+            placedRoom.rotation = Quaternion.FromToRotation(placedRoom.forward, lastDoor.getFace());
+            if (placedRoom.up != Vector3.up) //ensures everything is upright (some bug somewhere is flipping random rooms upsidedown)
+            {
+                placedRoom.up = Quaternion.FromToRotation(placedRoom.up, Vector3.up) * placedRoom.up;
+            }
         }
 
     
