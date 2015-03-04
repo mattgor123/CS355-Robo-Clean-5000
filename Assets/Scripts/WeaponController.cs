@@ -43,6 +43,7 @@ public class WeaponController : MonoBehaviour {
 
         instantiated_bullet.AddComponent<Light>();
         instantiated_bullet.light.intensity = 0.5f;
+        instantiated_bullet.light.range = 1f;
         if (source)
         {
             instantiated_bullet.light.color = Color.green;

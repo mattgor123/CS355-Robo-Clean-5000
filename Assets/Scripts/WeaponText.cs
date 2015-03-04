@@ -14,13 +14,12 @@ public class WeaponText : MonoBehaviour {
 	void Start () {
         GameObject player = GameObject.FindWithTag("Player");
         weapon_backpack_controller = player.GetComponent<WeaponBackpackController>();
-        weapon_name = GetComponent<Text>();
-	
+        weapon_name = GetComponent<Text>();	
 	}
 
     private void LateUpdate()
     {
         //Debug.Log(weapon_backpack_controller.GetWeaponName());
-        weapon_name.text = weapon_backpack_controller.GetWeaponName();
+        weapon_name.text = "Weapon: " + weapon_backpack_controller.GetWeaponName();
     }
 }
