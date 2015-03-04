@@ -48,8 +48,7 @@ public class BulletController : MonoBehaviour {
 	public void SetCleanupDelay (float delay) {
 		cleanup_delay = delay;
 	}
-
-    /*
+    
 	void OnCollisionEnter(Collision collision) {
         //Player-fired bullets do not hit the player
         if (source_player && collision.gameObject.tag == "Player")        
@@ -64,8 +63,7 @@ public class BulletController : MonoBehaviour {
 			victim_health.ChangeHealth(-damage);
 		}
         Destroy(gameObject);
-	}
-     * */
+	}    
 
     void FixedUpdate()
     {

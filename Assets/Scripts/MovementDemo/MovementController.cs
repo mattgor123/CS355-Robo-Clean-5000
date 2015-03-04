@@ -29,27 +29,32 @@ public class MovementController : MonoBehaviour {
 	}
 
 	public void UpdateMovement (float z_axis, float x_axis, bool ControlScheme) {
-		//Debug.Log("Current Health: " + healthController.GetCurrentHealth());
+        
+
 		// if the player is still alive, apply movement logic
-		if (healthController.GetCurrentHealth() > 0) {
+		if (healthController.GetCurrentHealth() > 0) { 
 			// if the object is not standing still, move object
 			if(z_axis != 0f || x_axis != 0f) {
 				var force = walk_force;
                 Vector3 z_force;
                 Vector3 x_force;
+                Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
                 if (ControlScheme)
                 {
-                    z_force = transform.forward * z_axis * force * Time.deltaTime;
-                    x_force = transform.right * x_axis * force * Time.deltaTime;
+                    z_force = transform.forward * z_axis * force * Time.deltaTime * 3;                    
+                    x_force = transform.right * x_axis * force * Time.deltaTime * 3;
+                    if (z_axis <= 0f)                   
+                        counteraction = transform.forward * -7.5f;                    
                 }
                 else
                 {
-                    z_force = new Vector3(0f, 0f, z_axis * force * Time.deltaTime);
-                    x_force = new Vector3(x_axis * force * Time.deltaTime, 0f, 0f);
+                    z_force = new Vector3(0f, 0f, z_axis * force * Time.deltaTime) * 3;
+                    x_force = new Vector3(x_axis * force * Time.deltaTime, 0f, 0f) * 3;
+                    counteraction = transform.forward * -7.5f; 
                 }
-
 				anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
 				rigidbody.AddForce(z_force + x_force, ForceMode.Impulse);
+                rigidbody.AddForce(counteraction, ForceMode.Impulse);
 				last_force = Time.time;
 			} else {
 				anim.SetFloat("Speed", 0f);

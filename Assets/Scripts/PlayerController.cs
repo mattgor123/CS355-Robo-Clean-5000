@@ -77,9 +77,9 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
-		UpdateMovement();
 		if (healthController.GetCurrentHealth() > 0) {
 			UpdateRotation();
+            UpdateMovement();
 		}
         Drop = true;
 	}
@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour {
 		var z_axis = Input.GetAxis("Vertical");
 		var x_axis = Input.GetAxis("Horizontal");
 		movement_controller.UpdateMovement(z_axis, x_axis, ControlScheme);
-
 	}
 
 	private void UpdateRotation () {
