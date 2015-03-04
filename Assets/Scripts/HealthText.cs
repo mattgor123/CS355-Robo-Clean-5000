@@ -21,6 +21,8 @@ public class HealthText : MonoBehaviour {
 	private void LateUpdate()
 	{
 			//Debug.Log(weapon_backpack_controller.GetWeaponName());
+		if (health_controller != null) {
 			player_health.text = "Health: " + health_controller.GetCurrentHealth ().ToString ();
+		}
 	}
 }
