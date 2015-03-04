@@ -15,7 +15,6 @@ public class HealthText : MonoBehaviour {
 		GameObject player = GameObject.FindWithTag("Player");
 		health_controller = player.GetComponent<HealthController>();
 		player_health = GetComponent<Text>();
-		
 	}
 	
 	private void LateUpdate()
