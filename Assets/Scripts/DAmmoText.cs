@@ -2,24 +2,24 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class WeaponText : MonoBehaviour {
+public class DAmmoText : MonoBehaviour {
 	
 	//[SerializeField]
 	private WeaponBackpackController weapon_backpack_controller;
 	
 	//private GUIText weapon_name;
-	private Text weapon_name;
+	private Text player_ammo;
 	
 	// Use this for initialization
 	void Start () {
 		GameObject player = GameObject.FindWithTag("Player");
 		weapon_backpack_controller = player.GetComponent<WeaponBackpackController>();
-		weapon_name = GetComponent<Text>();	
+		player_ammo = GetComponent<Text>();	
 	}
 	
 	private void LateUpdate()
 	{
 		//Debug.Log(weapon_backpack_controller.GetWeaponName());
-		weapon_name.text = "Weapon: " + weapon_backpack_controller.GetWeaponName().ToString();
+		player_ammo.text = "Ammo: " + weapon_backpack_controller.GetAmmo().ToString();
 	}
 }
