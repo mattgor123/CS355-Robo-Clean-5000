@@ -51,6 +51,7 @@ public class EnemyController : MonoBehaviour {
         health_controller = GetComponent<HealthController>();
         anim = GetComponent<Animator>();
         AggroState = false;
+        transform.position -= new Vector3(0f, transform.position.y, 0f);
 	}
 	
 	// Update 
