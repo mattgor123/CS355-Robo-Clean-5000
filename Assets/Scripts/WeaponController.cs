@@ -23,7 +23,7 @@ public class WeaponController : MonoBehaviour {
     private void Start()
     {
         owner = transform.parent.parent;
-        weapon_healh = max_weapon_health;
+        weapon_health = max_weapon_health;
     }
 
 	private void LateUpdate () {
