@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float speed;
     public GameObject explosion;
+    public GameObject treasure_chest;
 
     private HealthController health_controller;
     private Vector3 PrevPos;    //previous position
@@ -58,6 +59,7 @@ public class EnemyController : MonoBehaviour {
         if (health_controller.GetCurrentHealth() == 0)
         {
             var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+            var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
             Destroy(gameObject);
         }
 

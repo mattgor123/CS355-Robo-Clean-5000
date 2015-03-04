@@ -93,8 +93,4 @@ public class WeaponBackpackController : MonoBehaviour {
 	public void ChangeAmmo (int change) {
 		ammo += change;
 	}
-
-	public float GetCurrentWeaponHealth () {
-		return weapon_instance.GetComponent<WeaponController>().GetHealth();
-	}
 }
