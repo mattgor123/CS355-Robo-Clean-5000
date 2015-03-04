@@ -20,6 +20,7 @@ public class CutsceneController : MonoBehaviour {
 
     //The name of the next scene
     public string nextLevel;
+    //public string skipLevel;
 
     //A list of all the Animator lines
     private ArrayList animList;
@@ -51,9 +52,18 @@ public class CutsceneController : MonoBehaviour {
         animList.Add(line8);
 	}
 
+    void OnGui()
+    {
+
+    }
+
 	void Update () {
-        
-        if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            Application.LoadLevel(nextLevel);
+        } 
+        else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
         {
             //time to do first sweep
             if (current == linesUntilSweep1 && !sweepIsPast1)
