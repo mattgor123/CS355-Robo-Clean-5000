@@ -28,9 +28,7 @@ public class MovementController : MonoBehaviour {
 		last_rotation = -rotation_delay;
 	}
 
-	public void UpdateMovement (float z_axis, float x_axis, bool ControlScheme) {
-        
-
+	public void UpdateMovement (float z_axis, float x_axis, bool ControlScheme) {        
 		// if the player is still alive, apply movement logic
 		if (healthController.GetCurrentHealth() > 0) { 
 			// if the object is not standing still, move object

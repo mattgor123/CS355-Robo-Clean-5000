@@ -79,8 +79,8 @@ public class PlayerController : MonoBehaviour {
 	private void FixedUpdate () {
 		if (healthController.GetCurrentHealth() > 0) {
 			UpdateRotation();
-            UpdateMovement();
 		}
+        UpdateMovement();
         Drop = true;
 	}
 
