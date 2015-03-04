@@ -445,7 +445,7 @@ public class Dungeon : MonoBehaviour {
             spawnPlayer();
         }
         Player = GameObject.FindWithTag("Player").transform;
-        
+        Player.transform.position = new Vector3(0, 0.1f, 0);
         
         spawnEnemies();
         lastSpawn = Time.time;

@@ -13,7 +13,8 @@ public class NewRoomTrigger : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
             //move player to (0,0,0) because that's where all scenes start
-            other.gameObject.transform.position = Vector3.zero;
+            //moved code to beginning of each scene
+            //other.gameObject.transform.position = Vector3.zero;
             //load next scene
             Application.LoadLevel(level);
         }
