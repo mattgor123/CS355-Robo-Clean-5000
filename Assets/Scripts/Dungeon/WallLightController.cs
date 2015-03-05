@@ -15,7 +15,7 @@ public class WallLightController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	    light.intensity = 0;
+	    GetComponent<Light>().intensity = 0;
         activated = false;
 	}
 	
@@ -29,14 +29,14 @@ public class WallLightController : MonoBehaviour {
 	void LateUpdate () {
         if (TTile.GetTriggerStatus())
         {
-            light.intensity = strength;
+            GetComponent<Light>().intensity = strength;
             activated = true;
         }
         else if (activated)
         {
-            light.intensity = dim;
+            GetComponent<Light>().intensity = dim;
         }
         else
-            light.intensity = 0;       
+            GetComponent<Light>().intensity = 0;       
 	}
 }

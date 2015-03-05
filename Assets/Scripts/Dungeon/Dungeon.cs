@@ -290,9 +290,9 @@ public class Dungeon : MonoBehaviour {
      */ 
     private void placeLight(Vector3 center)
     {
-        Transform light = Instantiate(roomLight, center + (Vector3.up * 4), Quaternion.Euler(90, 0, 0)) as Transform;
-        Transform tile = Instantiate(trigger, center, Quaternion.identity) as Transform;
-        light.GetComponent<WallLightController>().LinkTile(tile);
+        //Transform light = Instantiate(roomLight, center + (Vector3.up * 4), Quaternion.Euler(90, 0, 0)) as Transform;
+        //Transform tile = Instantiate(trigger, center, Quaternion.identity) as Transform;
+        //light.GetComponent<WallLightController>().LinkTile(tile);
         
     }
 

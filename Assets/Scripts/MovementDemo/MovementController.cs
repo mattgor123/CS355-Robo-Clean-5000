@@ -23,7 +23,7 @@ public class MovementController : MonoBehaviour {
 
 	private void Start () {
 		// The rotation is not handled by physics
-		rigidbody.freezeRotation = true;
+		GetComponent<Rigidbody>().freezeRotation = true;
 		last_force = -force_delay;
 		last_rotation = -rotation_delay;
 	}
@@ -51,8 +51,8 @@ public class MovementController : MonoBehaviour {
                     counteraction = transform.forward * -6.5f; 
                 }
 				anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
-				rigidbody.AddForce(z_force + x_force, ForceMode.Impulse);
-                rigidbody.AddForce(counteraction, ForceMode.Impulse);
+				GetComponent<Rigidbody>().AddForce(z_force + x_force, ForceMode.Impulse);
+                GetComponent<Rigidbody>().AddForce(counteraction, ForceMode.Impulse);
 				last_force = Time.time;
 			} else {
 				anim.SetFloat("Speed", 0f);

@@ -41,22 +41,22 @@ public class WeaponController : MonoBehaviour {
 	private void Fire (bool source) {
 		if(backpack_controller.HasAmmo(ammo_per_shot)) {
 			var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
-			instantiated_bullet.rigidbody.velocity = muzzle.TransformDirection(Vector3.forward * speed);
+			instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
 			var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
 			bullet_controller.SetDamage(damage);
 			bullet_controller.SetCleanupDelay(cleanup_delay);
         	instantiated_bullet.GetComponent<BulletController>().SetSource(source);
 			last_fired = Time.time;
         	instantiated_bullet.AddComponent<Light>();
-        	instantiated_bullet.light.intensity = 0.5f;
-        	instantiated_bullet.light.range = 1f;
+        	instantiated_bullet.GetComponent<Light>().intensity = 0.5f;
+        	instantiated_bullet.GetComponent<Light>().range = 1f;
         	if (source)
         	{
-        	    instantiated_bullet.light.color = Color.green;
+        	    instantiated_bullet.GetComponent<Light>().color = Color.green;
         	}
         	else
         	{
-        	    instantiated_bullet.light.color = Color.cyan;
+        	    instantiated_bullet.GetComponent<Light>().color = Color.cyan;
         	}
         	backpack_controller.ChangeAmmo(-ammo_per_shot);
         }

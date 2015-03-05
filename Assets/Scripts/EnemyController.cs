@@ -80,7 +80,7 @@ public class EnemyController : MonoBehaviour {
         //apply the movement
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;
-        rigidbody.AddForce(mvt);
+        GetComponent<Rigidbody>().AddForce(mvt);
 
         PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
         PrevPos = transform.position;
@@ -100,7 +100,7 @@ public class EnemyController : MonoBehaviour {
         }
 
         //Apply animations
-        if(rigidbody.velocity.magnitude > 0) {
+        if(GetComponent<Rigidbody>().velocity.magnitude > 0) {
 			anim.SetFloat("Speed", 5.5f, 0.1f, Time.deltaTime);
 		} else {
 			anim.SetFloat("Speed", 0f);

@@ -23,9 +23,9 @@ public class BulletController : MonoBehaviour {
 		creation_time = Time.time;
 
         //Following is from http://wiki.unity3d.com/index.php?title=DontGoThroughThings
-        myRigidbody = rigidbody;
+        myRigidbody = GetComponent<Rigidbody>();
         previousPosition = myRigidbody.position;
-        minimumExtent = Mathf.Min(Mathf.Min(collider.bounds.extents.x, collider.bounds.extents.y), collider.bounds.extents.z);
+        minimumExtent = Mathf.Min(Mathf.Min(GetComponent<Collider>().bounds.extents.x, GetComponent<Collider>().bounds.extents.y), GetComponent<Collider>().bounds.extents.z);
         partialExtent = minimumExtent * (1.0f - skinWidth);
         sqrMinimumExtent = minimumExtent * minimumExtent; 
 	}
