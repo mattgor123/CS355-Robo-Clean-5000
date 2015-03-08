@@ -10,10 +10,7 @@ public class Tile
         used = false;
 	}
 
-    public bool GetStatus()
-    {
-        return this.used;
-    }
+
     /*FloorTile
      * The basic ground tile
      * Has walls on each side of tile depending on bool members
@@ -48,11 +45,8 @@ public class Tile
             this.z = z;
         }
 
-        public bool GetStatus()
-        {
-            return this.used;
-        }
-        public void Create()
+
+        public new void Create()
         {
             if (used)
             {
@@ -92,12 +86,20 @@ public class Tile
             }
         }
 
-        public string ToString()
+        public new string ToString()
         {
             return "Floor" + this.position;
         }
     }
 
+    public class Boundary : Tile
+    {
+        private bool used;
+        public Boundary()
+        {
+            this.used = true;
+        }
+    }
 
 
     public class Doorway
@@ -114,9 +116,6 @@ public class Tile
     public class Hole
     {
         public Hole() { }
-    }
-    public Tile Blank() {
-        return new Tile();        
     }
 
     public void Create() { }
