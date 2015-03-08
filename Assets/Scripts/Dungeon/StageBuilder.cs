@@ -17,6 +17,8 @@ public class StageBuilder : MonoBehaviour {
 	void Start () {
         stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD);
         stage.PlaceRooms(NUMBER_ROOM_TRIES);
+        Debug.Log(stage.ToString());
+
         stage.Create();
 
 	}

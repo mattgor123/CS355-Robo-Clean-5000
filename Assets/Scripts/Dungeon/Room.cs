@@ -6,54 +6,66 @@ using System.Collections;
  * Made up of floor tiles 
  * tiles on edges must have approrpriate walls
  */ 
-public class Room : MonoBehaviour {
+public class Room {
     private Tile[,] room;
     private int width;
     private int height;
 
-    public Room(int width, int height)
+    public Room(int width, int height, int startX, int startY)
     {
         this.width = width;
         this.height = height;
         room =  new Tile[width, height];
 
         //Generate all the tiles for the room
-        for (int x = 1; x < width; x++ )
+        for (int x = 0; x < width; x++ )
         {
             for (int y = 0; y < height; y++)
             {
-                if (x == 0 && y == 0) //Bottom left corner piece
-                {
-                    room[x, y] = new Tile.Floor(x, y, false, true, true, false);
-                }
-                else if (x == 0 && y == height - 1) //Top left corner piece
-                {
-                    room[x, y] = new Tile.Floor(x, y, true, false, true, false);
+                if (x == 0 && y == 0) //South + West corner piece
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, true, true, false);
 
                 }
-                else if (x == width -1 && y == 0) //Bottom right corner piece 
-                {
-                    room[x, y] = new Tile.Floor(x, y, false, true, false, true);
+                else if (x == 0 && y == height - 1) //North West corner piece
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, true, false, true, false);
+
                 }
-                else if (x == width - 1 && y == height - 1) //Top right corner piece
-                {
-                    room[x, y] = new Tile.Floor(x, y, true, false, false, true);
+                else if (x == width -1 && y == 0) //south east corner piece 
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, true, false, true);
+
                 }
-                else if (x == 0) //Left Edge
-                {
-                    room[x, y] = new Tile.Floor(x, y, false, false, true, false);
+                else if (x == width - 1 && y == height - 1) //northeast corner piece
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, true, false, false, true);
+
                 }
-                else if (x == width - 1) //Right Edge
-                {
-                    room[x, y] = new Tile.Floor(x, y, false, true, false, false);
+                else if (x == 0) //west Edge
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, false, true, false);
+
                 }
-                else if (y == 0) //Bottom Edge
-                {
-                    room[x, y] = new Tile.Floor(x, y, false, true, false, false);
+                else if (x == width - 1) //east Edge
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, false, false, true);
+
                 }
-                else if (y == height - 1) //Top Edge
-                {
-                    room[x, y] = new Tile.Floor(x, y, false, true, false, false);
+                else if (y == 0) //south Edge
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, true, false, false);
+
+                }
+                else if (y == height - 1) //north Edge
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, true, false, false, false);
+
+                }
+                else //middle pieces (no walls)
+                {                                                     //North, South, West, East
+                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, false, false, false);
+
                 }
             }
         }
@@ -68,7 +80,7 @@ public class Room : MonoBehaviour {
         return this.height;
     }
 
-    internal Tile getTile(int x, int y)
+    public Tile getTile(int x, int y)
     {
         return this.room[x, y];
     }

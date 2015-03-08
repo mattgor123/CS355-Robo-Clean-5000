@@ -21,6 +21,7 @@ public class Stage  {
             for (int y = 0; y < this.height; y++)
             {
                 tiles[x, y] = new Tile();
+                Debug.Log(tiles[x, y].GetStatus());
             }
         }
     }
@@ -44,24 +45,36 @@ public class Stage  {
     }
 
     public void PlaceRooms(int numTries) {
-        for (int i = 0; i < numTries; i++)
-        {
-            int roomWidth = Random.Range(7, 20);
-            int roomHeight = Random.Range(7, 20);
-            int randomX = Random.Range(0, this.width);
-            int randomY = Random.Range(0, this.height);
-            bool overlap = CheckPlacement(roomWidth, roomHeight, randomX, randomY);
-            if (!overlap) { //room doesn't overlap, so add it to stage
+       // for (int i = 0; i < 1; i++)
+        //{
+            int roomWidth = 3;
+            int roomHeight = 3;
+            int randomX = 1;
+            int randomY = 1;
+            Room room = new Room(roomWidth, roomHeight, randomX, randomY);
+            for (int x = randomX; x < randomX + roomWidth; x++)
+            {
+                for (int y = randomY; y < randomY + roomHeight; y++)
+                {
+                    tiles[x, y] = room.getTile(x - randomX, y - randomY);
+                    Debug.Log(tiles[x, y]);
+                }
+            }
+           // bool overlap = CheckPlacement(roomWidth, roomHeight, randomX, randomY);
+
+/*            if (!overlap) { //room doesn't overlap, so add it to stage
                 Room room = new Room(roomWidth, roomHeight);
                 for (int x = randomX; x < randomX + roomWidth; x++)
                 {
                     for (int y = randomY; y < randomY + roomHeight; y++)
                     {
                         tiles[x - randomX, y - randomY] = room.getTile(x - randomX, y - randomY);
+                        Debug.Log("Added " + room.getTile(x - randomX, y - randomY));
                     }
                 }
             }
-        }
+ */ 
+        //}
     }
 
     public void Create()
@@ -70,21 +83,29 @@ public class Stage  {
         {
             for (int y = 0; y < this.height; y++)
             {
-
-                    Debug.Log("Spawning things!");
-                    Tile.Floor tile = this.tiles[x, y] as Tile.Floor;
-                    if (tile.GetStatus())
-                    {
-                        tile.Create();
-                    }
-                    else
-                    {
-                        Debug.Log("Tile not Floor");
-                    }
-                
+                        if (this.tiles[x, y].GetType().FullName.Equals("Tile+Floor"))
+                        {
+                            Tile.Floor tile = this.tiles[x, y] as Tile.Floor;
+                            tile.Create();
+                        }
             }
         }
     }
+
+    public string ToString()
+    {
+        string result = "";
+        for (int x = 0; x < this.width; x++)
+        {
+            for (int y = 0; y < this.height; y++)
+            {
+                result += tiles[x, y].GetType().FullName + ", ";
+            }
+            result += "\n";
+        }
+        return result;
+    }
+        
 
 }
 

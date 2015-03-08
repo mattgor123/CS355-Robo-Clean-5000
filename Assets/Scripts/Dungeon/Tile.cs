@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Tile
 {
-    private bool used = false;
+    private bool used;
 	/*Tile Constructor */ public Tile()
 	{
         used = false;
@@ -12,7 +12,7 @@ public class Tile
 
     public bool GetStatus()
     {
-        return used;
+        return this.used;
     }
     /*FloorTile
      * The basic ground tile
@@ -27,6 +27,8 @@ public class Tile
         private GameObject southWall;
         private GameObject westWall;
         private GameObject eastWall;
+        private Vector3 position;
+        private bool used;
         
         
         private float x; //x is x-coordinate of tile
@@ -40,45 +42,59 @@ public class Tile
             this.South = South;
             this.West = West;
             this.East = East;
+            this.position = new Vector3(x, 0.5f, z);
+            this.used = true;
             this.x = x;
             this.z = z;
-            used = true;
         }
 
+        public bool GetStatus()
+        {
+            return this.used;
+        }
         public void Create()
         {
             if (used)
             {
                 floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                floor.transform.Translate(this.x, 0.5f, this.z);
+                floor.name = "Floor";
+                floor.transform.position = new Vector3(this.x, 0f, this.z);
                 floor.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
                 if (North)
                 {
                     northWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    northWall.transform.Translate(new Vector3(this.x, 0.5f, this.z + 0.5f), floor.transform);
+                    northWall.name = "North Wall";
+                    northWall.transform.position = (new Vector3(this.x, 0.5f, this.z + 0.5f));
 
                 }
                 if (South)
                 {
                     southWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    southWall.transform.Translate(new Vector3(this.x, 0.5f, this.z - 0.5f), floor.transform);
+                    southWall.name = "South Wall";
+                    southWall.transform.position = (new Vector3(this.x, 0.5f, this.z - 0.5f));
                     southWall.transform.rotation = Quaternion.Euler(new Vector3(0, 180f, 0));
                 }
                 if (West)
                 {
                     westWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    westWall.transform.Translate(new Vector3(this.x - 0.5f, 0.5f, this.z), floor.transform);
-                    southWall.transform.rotation = Quaternion.Euler(new Vector3(0, -90f, 0));
-
+                    westWall.name = "West Wall";
+                    westWall.transform.position = (new Vector3(this.x - 0.5f, 0.5f, this.z));
+                    westWall.transform.rotation = Quaternion.Euler(new Vector3(0, -90f, 0));
                 }
                 if (East)
                 {
                     eastWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    eastWall.transform.Translate(new Vector3(this.x + 0.5f, 0.5f, this.z), floor.transform);
-                    southWall.transform.rotation = Quaternion.Euler(new Vector3(0, 90f, 0));
+                    eastWall.name = "East Wall";
+                    eastWall.transform.position = (new Vector3(this.x + 0.5f, 0.5f, this.z));
+                    eastWall.transform.rotation = Quaternion.Euler(new Vector3(0, 90f, 0));
 
                 }
             }
+        }
+
+        public string ToString()
+        {
+            return "Floor" + this.position;
         }
     }
 
@@ -103,8 +119,10 @@ public class Tile
         return new Tile();        
     }
 
-    public String toString()
+    public void Create() { }
+
+    public String ToString()
     {
-        return this.used.ToString();
+        return "Regular Tile";
     }
 }
