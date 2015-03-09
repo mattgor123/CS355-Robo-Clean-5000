@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour {
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
 		offset = transform.position;
-        TrackFace = true;
+        TrackFace = false;
 	}
 
 	void LateUpdate () {

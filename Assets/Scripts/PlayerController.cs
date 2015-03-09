@@ -130,10 +130,10 @@ public class PlayerController : MonoBehaviour {
         if (TrackFace)
         {
             Vector3 vector = Input.mousePosition;
-            float offcenter = vector.x - ScreenSize.x / 2;
+            float offcenter = (vector.x - ScreenSize.x / 2);
 
             //Rotate proportional to how far mouse is from center
-            float angle = transform.eulerAngles.y + 3*offcenter/ScreenSize.x;
+            float angle = transform.eulerAngles.y + 5*offcenter/ScreenSize.x;
             if (angle > 360)
             {
                 angle -= 360;
