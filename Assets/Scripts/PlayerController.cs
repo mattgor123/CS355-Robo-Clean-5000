@@ -6,6 +6,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
  
 	private new Camera camera;
+    private CameraController CamControl;
+    private FlashlightController Flashlight;
 
 	private MovementController movement_controller;
 	private WeaponBackpackController weapon_backpack_controller;
@@ -14,14 +16,26 @@ public class PlayerController : MonoBehaviour {
                                 //False for screen-oriented (W goes up, S goes down)
 
     private bool Drop;          //Whether to drop
+    private bool TrackFace;     //Whether camera tracks facing or is map-fixed
+    private Vector3 ScreenSize; //size of screen
 
 	private void Start () {
-        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        GameObject MC = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
+        camera = MC.GetComponent<Camera>();                             //Attach camera and controller components
+        CamControl = MC.GetComponent<CameraController>();
+
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 		healthController = GetComponent<HealthController>();
+
+        Flashlight = GetComponentInChildren<FlashlightController>();  //Attach the flashlight
+
         ControlScheme = true;
         Drop = false;
+        TrackFace = false;
+        CamControl.SetTrackFace(TrackFace);
+
+        ScreenSize = new Vector3(Screen.width, Screen.height);
 	}
 
 	private void Update () {
@@ -41,12 +55,32 @@ public class PlayerController : MonoBehaviour {
         {
             if (ControlScheme)
             {
-                ControlScheme = false;
+                ControlScheme = false;                
             }
             else
             {
                 ControlScheme = true;
             }
+        }
+
+        //Track Facing toggle
+        if (Input.GetKeyDown("k"))
+        {
+            if (TrackFace)
+            {
+                TrackFace = false;                
+            }
+            else
+            {
+                TrackFace = true;
+            }
+            CamControl.SetTrackFace(TrackFace);
+        }
+
+        //Flashlight Toggle
+        if (Input.GetKeyDown("f"))
+        {
+            Flashlight.ToggleFlashlight();
         }
 	}
 
@@ -91,10 +125,35 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void UpdateRotation () {
-		var forward = transform.forward;
-		var vector = camera.WorldToScreenPoint(transform.position) - Input.mousePosition;
-		var angle = 90 - Mathf.Atan2(forward.y - vector.y, forward.x - vector.x) * Mathf.Rad2Deg;
-		var new_rotation = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
-		movement_controller.UpdateRotation(new_rotation);
+
+        //camera behind player
+        if (TrackFace)
+        {
+            Vector3 vector = Input.mousePosition;
+            float offcenter = vector.x - ScreenSize.x / 2;
+
+            //Rotate proportional to how far mouse is from center
+            float angle = transform.eulerAngles.y + 3*offcenter/ScreenSize.x;
+            if (angle > 360)
+            {
+                angle -= 360;
+            }
+            else if (angle < 0)
+            {
+                angle += 360;
+            }
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+
+
+        }
+        //normal above map-fixed camera
+        else
+        {
+            var forward = transform.forward;
+            var vector = camera.WorldToScreenPoint(transform.position) - Input.mousePosition;
+            var angle = 90 - Mathf.Atan2(forward.y - vector.y, forward.x - vector.x) * Mathf.Rad2Deg;
+            var new_rotation = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+            movement_controller.UpdateRotation(new_rotation);
+        }
 	}
 }
