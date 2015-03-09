@@ -42,7 +42,8 @@ public class ExplosionMatEditor : Editor {
 		ExplosionMat Mat = (ExplosionMat) target;
 		serializedObject.Update(); // Always call this
 		
-		EditorGUIUtility.LookLikeInspector();
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		
 		// Check if any changes are made to the GUI
 		EditorGUI.BeginChangeCheck();

@@ -22,11 +22,11 @@ public class MenuController : MonoBehaviour {
     private bool isSound;
 
     //AudioSource that plays the beeps
-    private AudioSource audio;
+    private AudioSource ouraudio;
 
     void Awake()
     {
-        audio = gameObject.GetComponent<AudioSource>();
+        ouraudio = gameObject.GetComponent<AudioSource>();
         isSound = true;
         optionsScreen.SetActive(false);
         menuScreen.SetActive(true);
@@ -74,6 +74,6 @@ public class MenuController : MonoBehaviour {
 
     public void playBleep()
     {
-        audio.PlayOneShot(beep, 1.0f);
+        ouraudio.PlayOneShot(beep, 1.0f);
     }
 }
