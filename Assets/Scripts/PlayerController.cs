@@ -91,13 +91,17 @@ public class PlayerController : MonoBehaviour {
         //Control scheme toggle
         if (Input.GetKeyDown("c"))
         {
+			GameObject nlog = GameObject.FindWithTag("Log");
+			NotificationLog log = nlog.GetComponent<NotificationLog>(); 
             if (ControlScheme)
             {
-                ControlScheme = false;                
+                ControlScheme = false;  
+				log.PassMessage("cardinal controls");
             }
             else
             {
                 ControlScheme = true;
+				log.PassMessage("mouse oriented controls");
             }
         }
 
