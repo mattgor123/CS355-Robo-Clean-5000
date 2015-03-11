@@ -13,6 +13,7 @@ public class Dungeon : MonoBehaviour {
     public Transform enemy_dumb;
     public Transform enemy_smart;
     public Transform enemy_aggressive;
+    public GameObject hurt_canvas;
 
     //Branching Room Prefabs 
     public Transform hall_straight;
