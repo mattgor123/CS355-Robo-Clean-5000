@@ -6,9 +6,6 @@ using System.Collections.Generic;
 public class NotificationLog : MonoBehaviour {
 
 	private List<string> loggedNotifications;
-	public Transform currentNotificationCanvas;
-	//public Transform loggedNotificationCanvas;
-	private Text currentNotification;
 	private string currentNotificationString;
 	private bool showString;
 	private float displayTime;
@@ -17,15 +14,10 @@ public class NotificationLog : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		loggedNotifications = new List<string> ();
-		Transform currentNotificationCanvasInstance = Instantiate (currentNotificationCanvas) as Transform;
-		//Transform loggedNotificationCanvasInstance = Instantiate (loggedNotificationCanvas) as Transform;
-		DontDestroyOnLoad (currentNotificationCanvasInstance);
-		//DontDestroyOnLoad (loggedNotificationCanvasInstance);
 		currentNotificationString = "";
 		showString = false;
 		displayTime = 5;
 		lastMessageTime = 0;
-		currentNotification = GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
@@ -33,21 +25,24 @@ public class NotificationLog : MonoBehaviour {
 		if (lastMessageTime + displayTime > Time.time) {
 			showString = false;
 		}
+	}
+
+	public string getCurrentNotification() {
 		if (showString) {
-			currentNotification.text = currentNotificationString;
+			return currentNotificationString;
 		} else {
-			currentNotification.text = "";
+			return "";
 		}
 	}
 
-	void passMessage(string s) {
+	public void PassMessage(string s) {
 		bool showString = true;
 		loggedNotifications.Add (s);
 		currentNotificationString = s;
 		lastMessageTime = Time.time;
 	}
 
-	void setDisplayTime(float f) {
+	public void SetDisplayTime(float f) {
 		displayTime = f;
 	}
 }

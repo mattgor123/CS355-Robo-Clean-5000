@@ -9,6 +9,7 @@ public class Dungeon : MonoBehaviour {
     public Transform WeaponCanvas;
 	public Transform HealthCanvas;
 	public Transform AmmoCanvas;
+	public Transform NotificationCanvas;
     public Transform Camera;
     public Transform Gun;
     public Transform enemy_dumb;
@@ -428,6 +429,7 @@ public class Dungeon : MonoBehaviour {
         Transform weaponCanvasInstance = Instantiate(WeaponCanvas) as Transform;
 		Transform healthCanvasInstance = Instantiate (HealthCanvas) as Transform;
 		Transform ammoCanvasInstance = Instantiate (AmmoCanvas) as Transform;
+		Transform notificationCanvasInstance = Instantiate (NotificationCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
         //player.Translate(Vector3.zero);
 
@@ -436,6 +438,7 @@ public class Dungeon : MonoBehaviour {
         DontDestroyOnLoad(weaponCanvasInstance);
 		DontDestroyOnLoad (healthCanvasInstance);
 		DontDestroyOnLoad (ammoCanvasInstance);
+		DontDestroyOnLoad (notificationCanvasInstance);
         DontDestroyOnLoad(cameraInstance);
     }
     
