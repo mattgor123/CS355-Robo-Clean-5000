@@ -6,8 +6,8 @@ public class ExplosionController : MonoBehaviour {
 	[SerializeField] 
     private float life;
 
-	[SerializeField] 
-    private Light ourlight;
+	//[SerializeField] 
+    //private Light ourlight;
 
     [SerializeField]
     private int splashDamage;
@@ -21,8 +21,9 @@ public class ExplosionController : MonoBehaviour {
 
 	private void Start () {
 		start_time = Time.time;
-		max_intensity = this.ourlight.intensity;
-		this.ourlight.intensity = 0.0f;
+		//max_intensity = this.ourlight.intensity;
+
+		//this.ourlight.intensity = 0.0f;
 
         //explosion splash damage
         Collider[] intersect = Physics.OverlapSphere(gameObject.transform.position, radius);
@@ -47,7 +48,7 @@ public class ExplosionController : MonoBehaviour {
 				scale = 1.0f;
 			}
 			gameObject.transform.localScale = new Vector3(scale, scale, scale);
-			this.ourlight.intensity = max_intensity * scale;
+			//this.ourlight.intensity = max_intensity * scale;
 		}
 	}
 }
