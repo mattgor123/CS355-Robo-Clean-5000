@@ -11,13 +11,14 @@ public class NotificationText : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		GameObject notificationLog = GameObject.FindWithTag("NotificationLog");
+		GameObject notificationLog = GameObject.FindWithTag("Log");
 		log = notificationLog.GetComponent<NotificationLog>();
 		currentNotification = GetComponent<Text>();
+		DontDestroyOnLoad (currentNotification);
 	}
 	
 	private void LateUpdate()
 	{
-		currentNotification.text = log.getCurrentNotification ();
+		currentNotification.text = "" + log.getCurrentNotification ();
 	}
 }
