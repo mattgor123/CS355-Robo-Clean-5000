@@ -14,11 +14,13 @@ public class LoadCutscene : MonoBehaviour {
 
     private Transform playerTransform;
     private GameObject player;
+    private bool going;
 
     void Start()
     {
         currentText = 0;
         textArray = new List<string>();
+        going = false;
 
         player = GameObject.FindGameObjectWithTag("Player");
         playerTransform = player.transform;
@@ -31,16 +33,38 @@ public class LoadCutscene : MonoBehaviour {
             GameObject cc = Instantiate(cutsceneCanvas);
             text = cc.GetComponentInChildren<Text>();
             //create array of strings for text
-            textArray.Add("Testing");
+            textArray.Add("Woah");
+            textArray.Add("What were those creatures?");
+            textArray.Add("And where are all the researchers?");
+            textArray.Add("Why is the building so run down?");
+            textArray.Add("Is it possible that the creatures took over the labs?");
+            textArray.Add("Or maybe an apocalypse occurred...");
+            textArray.Add("I was sent to a post-apocalytic world???");
+            text.text = "";
+            //Time.timeScale = 0;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
             text.text = textArray[currentText];
             Time.timeScale = 0;
+            going = true;
+
+
         }
     }
 
     void Update()
     {
         
-        if (currentText < textArray.Count)
+        if (going && currentText < textArray.Count)
         {
             //Because gravity still pulls player down when timeScale = 0
             player.transform.position = playerTransform.position;
@@ -53,6 +77,7 @@ public class LoadCutscene : MonoBehaviour {
                 {
                     Time.timeScale = 1;
                     text.text = "";
+                    Destroy(gameObject);
                     return;
                 }
                 text.text = textArray[currentText];
