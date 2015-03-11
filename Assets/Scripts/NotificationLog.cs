@@ -22,8 +22,7 @@ public class NotificationLog : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (showString);
-		if (lastMessageTime + displayTime < Time.time) {
+		if (lastMessageTime + displayTime > Time.time) {
 			showString = true;
 		} else {
 			showString = false;
