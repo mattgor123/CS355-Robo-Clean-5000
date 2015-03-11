@@ -59,6 +59,8 @@ public class EnemyController : MonoBehaviour {
         //Die if at zero hp
         if (health_controller.GetCurrentHealth() == 0)
         {
+            anim.SetBool("Dead", true);
+            // need delay so enemy dying animations can show
             var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
             Destroy(gameObject);
