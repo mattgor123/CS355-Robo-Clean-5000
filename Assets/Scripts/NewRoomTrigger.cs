@@ -7,6 +7,13 @@ public class NewRoomTrigger : MonoBehaviour {
     [SerializeField]
     string level;
 
+    private GameObject player;
+
+    void Start()
+    {
+        //player = GameObject.FindGameObjectWithTag("Player");
+    }
+
     void OnTriggerEnter(Collider other)
     {
         //if this object hits Player

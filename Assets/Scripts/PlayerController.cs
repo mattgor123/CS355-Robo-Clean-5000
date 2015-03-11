@@ -41,8 +41,12 @@ public class PlayerController : MonoBehaviour {
     private float doubleTapCountdown;
 
     //Number of times key is pressed, for double tap
-    //W,A, S,D
+    //in order of W,A, S,D
     private int[] count;
+
+    private int currentFloor;
+    
+    private int deepestFloorVisited;
 
 	private void Start () {
         GameObject MC = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
@@ -67,6 +71,9 @@ public class PlayerController : MonoBehaviour {
         count = new int[4];
         resetDoubleTapCount();
         dodgeDirection = new Vector2(0, 0);
+
+        currentFloor = 0;
+        deepestFloorVisited = 0;
 	}
 
 	private void Update () {
@@ -218,14 +225,6 @@ public class PlayerController : MonoBehaviour {
          
 	}
 
-    private void resetDoubleTapCount()
-    {
-        for (int i = 0; i < count.Length; i++)
-        {
-            count[i] = 0;
-        }
-    }
-
     private void LateUpdate()
     {
         //Drop if drop flag is on (not colliding and thus floating)
@@ -247,6 +246,37 @@ public class PlayerController : MonoBehaviour {
         Drop = false;
     }
 
+    private void resetDoubleTapCount()
+    {
+        for (int i = 0; i < count.Length; i++)
+        {
+            count[i] = 0;
+        }
+    }
+
+    public void increaseCurrentFloor()
+    {
+        currentFloor += 1;
+        if (currentFloor > deepestFloorVisited)
+        {
+            deepestFloorVisited = currentFloor;
+        }
+    }
+
+    public void decreaseCurrentFloor()
+    {
+        currentFloor -= 1;
+    }
+
+    public int getCurrentFloor()
+    {
+        return currentFloor;
+    }
+
+    public int getDeepestFloorVisited()
+    {
+        return deepestFloorVisited;
+    }
 
 	public void AddWeapon (GameObject weapon) {
 		weapon_backpack_controller.AddWeapon(weapon);
