@@ -10,10 +10,12 @@ public class TreasureController : MonoBehaviour {
 		if(weapon_backpack != null) {
 			var found_ammo = Random.Range(0, max_ammo + 1);
 			weapon_backpack.ChangeAmmo(found_ammo);
+			var player = GameObject.FindGameObjectWithTag("StartingWeapons");
+			string pickupMessage = player.GetComponent<StartingWeapons>().RandomWeaponPickup();
 			Destroy(gameObject);
 			GameObject nlog = GameObject.FindWithTag("Log");
 			NotificationLog log = nlog.GetComponent<NotificationLog>(); 
-			log.PassMessage("Got " + found_ammo + " ammo");
+			log.PassMessage("Got " + found_ammo + " ammo, " + pickupMessage);
 		}
 	}
 }
