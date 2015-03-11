@@ -51,7 +51,7 @@ public class EnemyController : MonoBehaviour {
         health_controller = GetComponent<HealthController>();
         anim = GetComponent<Animator>();
         AggroState = false;
-        transform.position -= new Vector3(0f, transform.position.y, 0f);
+        //transform.position -= new Vector3(0f, transform.position.y, 0f);
 	}
 	
 	// Update 
@@ -101,9 +101,9 @@ public class EnemyController : MonoBehaviour {
 
         //Apply animations
         if(GetComponent<Rigidbody>().velocity.magnitude > 0) {
-			anim.SetFloat("Speed", 5.5f, 0.1f, Time.deltaTime);
+			anim.SetBool("Moving", true);
 		} else {
-			anim.SetFloat("Speed", 0f);
+			anim.SetBool("Moving", false);
 		}
 
 	}

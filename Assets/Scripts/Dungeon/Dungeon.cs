@@ -416,8 +416,13 @@ public class Dungeon : MonoBehaviour {
             if (closeRooms.Length > 0)
             {
                 Vector3 randomRoom = closeRooms[Random.Range(0, closeRooms.Length - 1)].transform.position;
-                //Debug.Log(randomRoom);
-                Instantiate(enemy_aggressive, randomRoom + Vector3.up, Quaternion.identity);
+                //Debug.Log( randomRoom + Vector3.up*3);
+                if (Random.Range(0f,1f) <= .5) {
+                    Instantiate(enemy_aggressive, randomRoom + Vector3.up*3, Quaternion.identity);
+                } else {
+                    Instantiate(enemy_smart, randomRoom + Vector3.up, Quaternion.identity);
+                }
+                
 
             }   
         }
