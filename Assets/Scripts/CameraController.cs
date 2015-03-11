@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour {
 
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
-		offset = transform.position;
+        offset = new Vector3(0f, 10f, -5f);//transform.position;
         TrackFace = false;
 	}
 
