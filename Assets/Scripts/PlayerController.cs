@@ -25,20 +25,26 @@ public class PlayerController : MonoBehaviour {
 
     //Force player moves when dodging
     [SerializeField]
-    private float dodgeForce;
+    private float dashForce;
 
-    //time since dodge started
+    //time since dash started
     [SerializeField]
-    private float dodgeTime;
+    private float dashTime;
 
-    private float dodgeCountdown;
+	[SerializeField]
+	private float dashCooldownTime;
+
+    private float dashCountdown;
 
     private bool isDodging;
 
-    private Vector2 dodgeDirection;
+    private Vector2 dashDirection;
 
     //Time passed since last key down
     private float doubleTapCountdown;
+
+	//Time passed since last dash down
+	private float dashCooldownCountdown;
 
     //Number of times key is pressed, for double tap
     //in order of W,A, S,D
@@ -70,7 +76,8 @@ public class PlayerController : MonoBehaviour {
         //count = 0;
         count = new int[4];
         resetDoubleTapCount();
-        dodgeDirection = new Vector2(0, 0);
+        dashDirection = new Vector2(0, 0);
+		dashCooldownCountdown = 0;
 
         currentFloor = 0;
         deepestFloorVisited = 0;
@@ -125,97 +132,85 @@ public class PlayerController : MonoBehaviour {
             Flashlight.ToggleFlashlight();
         }
 
-        if (dodgeCountdown == 0)
-        {
-            if (Input.GetKeyDown("d") || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                if (count[3] == 0)
-                {
-                    resetDoubleTapCount();
-                    count[3] += 1;
-                    doubleTapCountdown = doubleTapTime;
+		//double tap for dash
+        if (dashCountdown == 0 && dashCooldownCountdown == 0) {
+			if (Input.GetKeyDown ("d") || Input.GetKeyDown (KeyCode.RightArrow)) {
+				if (count [3] == 0) {
+					resetDoubleTapCount ();
+					count [3] += 1;
+					doubleTapCountdown = doubleTapTime;
 
-                }
-                else if (count[3] == 1 && doubleTapCountdown > 0)
-                {
-                    //dodge
-                    //movement_controller.UpdateMovement(0, dodgeForce, ControlScheme);
-                    dodgeDirection = new Vector2(0, dodgeForce);
+				} else if (count [3] == 1 && doubleTapCountdown > 0) {
+					//dash
+					//movement_controller.UpdateMovement(0, dashForce, ControlScheme);
+					dashDirection = new Vector2 (0, dashForce);
 
-                    //count[3] = 0;
-                    resetDoubleTapCount();
-                    doubleTapCountdown = 0;
-                    dodgeCountdown = dodgeTime;
-                }
+					//count[3] = 0;
+					resetDoubleTapCount ();
+					doubleTapCountdown = 0;
+					dashCountdown = dashTime;
+				}
 
-            }
+			}
 
-            if (Input.GetKeyDown("s") || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                if (count[2] == 0)
-                {
-                    resetDoubleTapCount();
-                    count[2] += 1;
-                    doubleTapCountdown = doubleTapTime;
+			if (Input.GetKeyDown ("s") || Input.GetKeyDown (KeyCode.DownArrow)) {
+				if (count [2] == 0) {
+					resetDoubleTapCount ();
+					count [2] += 1;
+					doubleTapCountdown = doubleTapTime;
 
-                }
-                else if (count[2] == 1 && doubleTapCountdown > 0)
-                {
-                    //dodge
-                    //movement_controller.UpdateMovement(-dodgeForce, 0, ControlScheme);
-                    dodgeDirection = new Vector2(-dodgeForce, 0);
-                    //count[2] = 0;
-                    resetDoubleTapCount();
-                    doubleTapCountdown = 0;
-                    dodgeCountdown = dodgeTime;
-                }
+				} else if (count [2] == 1 && doubleTapCountdown > 0) {
+					//dash
+					//movement_controller.UpdateMovement(-dashForce, 0, ControlScheme);
+					dashDirection = new Vector2 (-dashForce, 0);
+					//count[2] = 0;
+					resetDoubleTapCount ();
+					doubleTapCountdown = 0;
+					dashCountdown = dashTime;
+				}
 
-            }
+			}
 
-            if (Input.GetKeyDown("w") || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                if (count[0] == 0)
-                {
-                    resetDoubleTapCount();
-                    count[0] += 1;
-                    doubleTapCountdown = doubleTapTime;
+			if (Input.GetKeyDown ("w") || Input.GetKeyDown (KeyCode.UpArrow)) {
+				if (count [0] == 0) {
+					resetDoubleTapCount ();
+					count [0] += 1;
+					doubleTapCountdown = doubleTapTime;
 
-                }
-                else if (count[0] == 1 && doubleTapCountdown > 0)
-                {
-                    //dodge
-                    //movement_controller.UpdateMovement(dodgeForce, 0, ControlScheme);
-                    dodgeDirection = new Vector2(dodgeForce, 0);
-                    //count[0] = 0;
-                    resetDoubleTapCount();
-                    doubleTapCountdown = 0;
-                    dodgeCountdown = dodgeTime;
-                }
+				} else if (count [0] == 1 && doubleTapCountdown > 0) {
+					//dash
+					//movement_controller.UpdateMovement(dashForce, 0, ControlScheme);
+					dashDirection = new Vector2 (dashForce, 0);
+					//count[0] = 0;
+					resetDoubleTapCount ();
+					doubleTapCountdown = 0;
+					dashCountdown = dashTime;
+				}
 
-            }
+			}
 
-            if (Input.GetKeyDown("a") || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                if (count[1] == 0)
-                {
-                    resetDoubleTapCount();
-                    count[1] += 1;
-                    doubleTapCountdown = doubleTapTime;
+			if (Input.GetKeyDown ("a") || Input.GetKeyDown (KeyCode.LeftArrow)) {
+				if (count [1] == 0) {
+					resetDoubleTapCount ();
+					count [1] += 1;
+					doubleTapCountdown = doubleTapTime;
 
-                }
-                else if (count[1] == 1 && doubleTapCountdown > 0)
-                {
-                    //dodge
-                    //movement_controller.UpdateMovement(0, -dodgeForce, ControlScheme);
-                    dodgeDirection = new Vector2(0, -dodgeForce);
-                    //count[1] = 0;
-                    resetDoubleTapCount();
-                    doubleTapCountdown = 0;
-                    dodgeCountdown = dodgeTime;
-                }
+				} else if (count [1] == 1 && doubleTapCountdown > 0) {
+					//dash
+					//movement_controller.UpdateMovement(0, -dashForce, ControlScheme);
+					dashDirection = new Vector2 (0, -dashForce);
+					//count[1] = 0;
+					resetDoubleTapCount ();
+					doubleTapCountdown = 0;
+					dashCountdown = dashTime;
+				}
 
-            }
-        }
+			}
+		} else if (dashCooldownCountdown > 0) {
+			dashCooldownCountdown = dashCooldownCountdown - Time.deltaTime;
+		} else if (dashCooldownCountdown < 0) {
+			dashCooldownCountdown = 0;
+		}
         
         if (doubleTapCountdown > 0)
         {
@@ -295,21 +290,22 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void UpdateMovement () {
-        if (dodgeCountdown == 0)
+        if (dashCountdown == 0)
         {
             var z_axis = Input.GetAxis("Vertical");
             var x_axis = Input.GetAxis("Horizontal");
             movement_controller.UpdateMovement(z_axis, x_axis, ControlScheme);
         }
-        else if (dodgeCountdown > 0)
+        else if (dashCountdown > 0)
         {
-            movement_controller.UpdateMovement(dodgeDirection.x, dodgeDirection.y, ControlScheme);
-            dodgeCountdown = dodgeCountdown - Time.deltaTime;
+            movement_controller.UpdateMovement(dashDirection.x, dashDirection.y, ControlScheme);
+            dashCountdown = dashCountdown - Time.deltaTime;
             //Debug.Log(Time.deltaTime);
         }
         else
         {
-            dodgeCountdown = 0;
+            dashCountdown = 0;
+			dashCooldownCountdown = dashCooldownTime;
         }
 	}
 
