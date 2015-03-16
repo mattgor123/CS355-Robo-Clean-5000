@@ -28,7 +28,7 @@ public class LoadCutscene : MonoBehaviour {
         PlayerController pc = player.GetComponent<PlayerController>();
 
         //first time exiting first floor
-        if (pc.getCurrentFloor() == pc.getDeepestFloorVisited() && pc.getCurrentFloor() == 1)
+        if (pc.getCurrentFloor() == pc.getDeepestFloorVisited() && pc.getCurrentFloor() == 0)
         {
             GameObject cc = Instantiate(cutsceneCanvas);
             text = cc.GetComponentInChildren<Text>();

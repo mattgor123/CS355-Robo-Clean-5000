@@ -18,16 +18,21 @@ public class NewRoomTriggerForRamp : MonoBehaviour {
         {
             PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
 
+
             if (upOrDown == "down")
             {
                 playerController.increaseCurrentFloor();
             }
             else if (upOrDown == "up")
             {
+				//if (playerController.getCurrentFloor() == 0) {
+				//	return;
+				//}
                 playerController.decreaseCurrentFloor();
             }
 
             Application.LoadLevel(level);
+
         }
     }
 }
