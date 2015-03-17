@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour {
 
     private int currentFloor;
     
-    private int deepestFloorVisited;
+    private int dialogueLevel;
 
 	private void Start () {
         GameObject MC = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour {
 		dashCooldownCountdown = 0;
 
         currentFloor = 0;
-        deepestFloorVisited = 0;
+        dialogueLevel = 0;
 	}
 
 	private void Update () {
@@ -253,18 +253,25 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void increaseCurrentFloor()
+    public void incrementCurrentFloor()
     {
         currentFloor += 1;
-        if (currentFloor > deepestFloorVisited)
+        /*
+        if (currentFloor > dialogueLevel)
         {
-            deepestFloorVisited = currentFloor;
+            dialogueLevel = currentFloor;
         }
+         * */
     }
 
-    public void decreaseCurrentFloor()
+    public void decrementCurrentFloor()
     {
         currentFloor -= 1;
+    }
+
+    public void incrementDialogueLevel()
+    {
+        dialogueLevel += 1;
     }
 
     public int getCurrentFloor()
@@ -272,9 +279,9 @@ public class PlayerController : MonoBehaviour {
         return currentFloor;
     }
 
-    public int getDeepestFloorVisited()
+    public int getDialogueLevel()
     {
-        return deepestFloorVisited;
+        return dialogueLevel;
     }
 
 	public void AddWeapon (GameObject weapon) {

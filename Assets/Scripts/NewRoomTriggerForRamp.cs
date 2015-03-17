@@ -21,14 +21,14 @@ public class NewRoomTriggerForRamp : MonoBehaviour {
 
             if (upOrDown == "down")
             {
-                playerController.increaseCurrentFloor();
+                playerController.incrementCurrentFloor();
             }
             else if (upOrDown == "up")
             {
 				//if (playerController.getCurrentFloor() == 0) {
 				//	return;
 				//}
-                playerController.decreaseCurrentFloor();
+                playerController.decrementCurrentFloor();
             }
 
             Application.LoadLevel(level);

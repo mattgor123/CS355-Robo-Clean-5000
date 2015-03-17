@@ -28,7 +28,7 @@ public class LoadCutscene : MonoBehaviour {
         PlayerController pc = player.GetComponent<PlayerController>();
 
         //first time exiting first floor
-        if (pc.getCurrentFloor() == pc.getDeepestFloorVisited() && pc.getCurrentFloor() == 0)
+        if (pc.getCurrentFloor() == pc.getDialogueLevel() && pc.getCurrentFloor() == 0)
         {
             GameObject cc = Instantiate(cutsceneCanvas);
             text = cc.GetComponentInChildren<Text>();
@@ -42,6 +42,8 @@ public class LoadCutscene : MonoBehaviour {
             textArray.Add("I was sent to a post-apocalytic world???");
             text.text = "";
             //Time.timeScale = 0;
+
+            pc.incrementDialogueLevel();
         }
         else
         {
@@ -54,6 +56,7 @@ public class LoadCutscene : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
             text.text = textArray[currentText];
+            other.attachedRigidbody.useGravity = false;
             Time.timeScale = 0;
             going = true;
 
@@ -70,12 +73,13 @@ public class LoadCutscene : MonoBehaviour {
             player.transform.position = playerTransform.position;
 
             //TODO change to mouse right click
-            if (Input.GetKeyDown(KeyCode.G))
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
                 currentText += 1;
                 if (currentText == textArray.Count)
                 {
                     Time.timeScale = 1;
+                    player.GetComponent<Collider>().attachedRigidbody.useGravity = true;
                     text.text = "";
                     Destroy(gameObject);
                     return;
