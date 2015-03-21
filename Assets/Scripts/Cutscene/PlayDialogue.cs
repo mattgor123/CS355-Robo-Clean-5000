@@ -2,18 +2,23 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
 
-public class LoadCutscene : MonoBehaviour {
+public class PlayDialogue : MonoBehaviour {
 
     [SerializeField]
-    private GameObject cutsceneCanvas;
+    private GameObject cutsceneCanvas; //prefab
 
-    private int currentText;
-    private List<string> textArray;
-    private Text text;
+    private int currentText; //current position in the dialogueArray
+    private List<string> textArray; //array of strings to be in dialogue
+    private GameObject cc; //cutscene canvas
+    private Text text; //text of cutscene canvas
 
     private Transform playerTransform;
     private GameObject player;
+
+    //is dialogue playing
     private bool going;
 
     void Start()
@@ -27,22 +32,32 @@ public class LoadCutscene : MonoBehaviour {
 
         PlayerController pc = player.GetComponent<PlayerController>();
 
-        //first time exiting first floor
-        if (pc.getCurrentFloor() == pc.getDialogueLevel() && pc.getCurrentFloor() == 0)
+        //first time exiting floor
+        if (pc.getCurrentFloor() == pc.getDialogueLevel())
         {
-            GameObject cc = Instantiate(cutsceneCanvas);
+            cc = Instantiate(cutsceneCanvas);
             text = cc.GetComponentInChildren<Text>();
-            //create array of strings for text
-            textArray.Add("Woah");
-            textArray.Add("What were those creatures?");
-            textArray.Add("And where are all the researchers?");
-            textArray.Add("Why is the building so run down?");
-            textArray.Add("Is it possible that the creatures took over the labs?");
-            textArray.Add("Or maybe an apocalypse occurred...");
-            textArray.Add("I was sent to a post-apocalytic world???");
             text.text = "";
-            //Time.timeScale = 0;
 
+            try
+            {
+                string fileName = Application.dataPath + Path.DirectorySeparatorChar + "Dialogue" + Path.DirectorySeparatorChar + "dialogue" + pc.getDialogueLevel() + ".txt";
+                StreamReader fileInput = new StreamReader(fileName);
+
+                string line = fileInput.ReadLine();
+
+                while (line != null)
+                {
+                    textArray.Add(line);
+                    line = fileInput.ReadLine();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Destroy(cc);
+                Destroy(gameObject);
+            }
+            
             pc.incrementDialogueLevel();
         }
         else
@@ -59,8 +74,6 @@ public class LoadCutscene : MonoBehaviour {
             other.attachedRigidbody.useGravity = false;
             Time.timeScale = 0;
             going = true;
-
-
         }
     }
 
@@ -72,18 +85,21 @@ public class LoadCutscene : MonoBehaviour {
             //Because gravity still pulls player down when timeScale = 0
             player.transform.position = playerTransform.position;
 
-            //TODO change to mouse right click
+            //move to next sentence is these keys are pressed
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
                 currentText += 1;
+
+                //if we've reached the end of the textArray
                 if (currentText == textArray.Count)
                 {
                     Time.timeScale = 1;
                     player.GetComponent<Collider>().attachedRigidbody.useGravity = true;
-                    text.text = "";
+                    Destroy(cc);
                     Destroy(gameObject);
                     return;
                 }
+
                 text.text = textArray[currentText];
                 
             }
