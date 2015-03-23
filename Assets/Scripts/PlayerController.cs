@@ -81,7 +81,6 @@ public class PlayerController : MonoBehaviour {
 
         currentFloor = 0;
         dialogueLevel = 0;
-        PrevMousePos = Input.mousePosition;
 	}
 
 	private void Update () {
@@ -323,7 +322,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void UpdateRotation () {
 
-        //camera behind player
+        //player-fixed camera
         if (TrackFace)
         {
             float delta = Input.GetAxis("Mouse X");
@@ -339,26 +338,8 @@ public class PlayerController : MonoBehaviour {
                 angle += 360;
             }
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
-
-
-            /* old rotation
-            float offcenter = (vector.x - ScreenSize.x / 2);
-
-            //Rotate proportional to how far mouse is from center
-            float angle = transform.eulerAngles.y + 5*offcenter/ScreenSize.x;
-            if (angle > 360)
-            {
-                angle -= 360;
-            }
-            else if (angle < 0)
-            {
-                angle += 360;
-            }
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
-            */
-
         }
-        //normal above map-fixed camera
+        //map-fixed camera
         else
         {
             var forward = transform.forward;
