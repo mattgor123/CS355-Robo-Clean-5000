@@ -37,6 +37,7 @@ public class PlayDialogue : MonoBehaviour {
         {
             cc = Instantiate(cutsceneCanvas);
             text = cc.GetComponentInChildren<Text>();
+            cc.SetActive(false);
             text.text = "";
 
             try
@@ -70,7 +71,9 @@ public class PlayDialogue : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
+            cc.SetActive(true);
             text.text = textArray[currentText];
+            //Because gravity still pulls player down when timeScale = 0
             other.attachedRigidbody.useGravity = false;
             Time.timeScale = 0;
             going = true;
@@ -82,8 +85,8 @@ public class PlayDialogue : MonoBehaviour {
         
         if (going && currentText < textArray.Count)
         {
-            //Because gravity still pulls player down when timeScale = 0
-            player.transform.position = playerTransform.position;
+            
+            //player.transform.position = playerTransform.position;
 
             //move to next sentence is these keys are pressed
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
