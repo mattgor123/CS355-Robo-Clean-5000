@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour {
 
         currentFloor = 0;
         dialogueLevel = 0;
+        PrevMousePos = Input.mousePosition;
 	}
 
 	private void Update () {
@@ -117,11 +118,15 @@ public class PlayerController : MonoBehaviour {
         {
             if (TrackFace)
             {
-                TrackFace = false;                
+                TrackFace = false;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
             else
             {
                 TrackFace = true;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             CamControl.SetTrackFace(TrackFace);
         }
@@ -321,7 +326,22 @@ public class PlayerController : MonoBehaviour {
         //camera behind player
         if (TrackFace)
         {
-            Vector3 vector = Input.mousePosition;
+            float delta = Input.GetAxis("Mouse X");
+
+            //Rotate proportional to mouse movement
+            float angle = transform.eulerAngles.y + (5.0f) * delta;
+            if (angle > 360)
+            {
+                angle -= 360;
+            }
+            else if (angle < 0)
+            {
+                angle += 360;
+            }
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+
+
+            /* old rotation
             float offcenter = (vector.x - ScreenSize.x / 2);
 
             //Rotate proportional to how far mouse is from center
@@ -335,7 +355,7 @@ public class PlayerController : MonoBehaviour {
                 angle += 360;
             }
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
-
+            */
 
         }
         //normal above map-fixed camera
