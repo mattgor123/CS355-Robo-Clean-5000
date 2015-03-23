@@ -20,12 +20,25 @@ public class LMHelper {
     //Checks whether target is in range
     public static bool IsInRange(EnemyController enemy, GameObject player)
     {
-        float dist = Vector3.Distance(player.transform.position, enemy.transform.position);
+        float dist = GetDistance(enemy, player);
         if (dist <= enemy.GetAggroRadius())
         {
             return true;
         }
         return false;
+    }
+
+    //Gets the distance
+    public static float GetDistance(EnemyController enemy, GameObject player)
+    {
+        //Ignore distance along vertical (y) axis
+        Vector3 pp = player.transform.position;
+        pp = new Vector3(pp.x, 0f, pp.z);
+        Vector3 ep = enemy.transform.position;
+        ep = new Vector3(ep.x, 0f, ep.z);
+
+        float dist = Vector3.Distance(player.transform.position, enemy.transform.position);
+        return dist;
     }
 
     //Calculates whether attack cooldown has elapsed

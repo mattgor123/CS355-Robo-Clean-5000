@@ -70,14 +70,16 @@ public class EnemyController : MonoBehaviour {
         //call primary movement logic to get movement direction
         Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
 
-        // If primary movement is zero, run auxiliary movement pattern
-        if (mvt.magnitude == 0)
+        // If primary movement is zero, and not aggroed, run auxiliary movement pattern
+        if (mvt.magnitude == 0 && !AggroState)
         {
             var aux = (LMAuxMove)GetComponent("LMAuxMove");
             if (aux != null) {
                 mvt = aux.AuxMoveLogic(this, player);
             }
         }
+
+        Debug.Log(AggroState);
         
         //apply the movement
         PrevTime = Time.deltaTime;
@@ -107,7 +109,6 @@ public class EnemyController : MonoBehaviour {
 		} else {
 			anim.SetBool("Moving", false);
 		}
-
 	}
   
 
