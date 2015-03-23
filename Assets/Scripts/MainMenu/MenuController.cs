@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour {
     private AudioClip beep;
 
     [SerializeField]
-    private Toggle soundToggle;
+    private Slider soundSlider;
 
     //AudioSource that plays the beeps
     private AudioSource ouraudio;
@@ -29,28 +29,19 @@ public class MenuController : MonoBehaviour {
         optionsScreen.SetActive(false);
         menuScreen.SetActive(true);
         playMenuScreen.SetActive(false);
-        if (PlayerPrefs.GetInt("Volume") == 0) {
-            soundToggle.isOn = false;
-            AudioListener.volume = 0;
-        }
-        soundToggle.onValueChanged.AddListener((value) =>
+        soundSlider.value = PlayerPrefs.GetFloat("Volume");
+        AudioListener.volume = soundSlider.value;
+        soundSlider.onValueChanged.AddListener((value) =>
         {
             handleCheckbox(value);
         } 
        );   
     }
 
-    private void handleCheckbox(bool value)
+    private void handleCheckbox(float value)
     {
-        if (value) {
-            PlayerPrefs.SetInt("Volume", 1);
-            AudioListener.volume = 1;
-        }
-        else
-        {
-            PlayerPrefs.SetInt("Volume", 0);
-            AudioListener.volume = 0;
-        }
+        AudioListener.volume = value;
+        PlayerPrefs.SetFloat("Volume", value);
     }
 
     public void LoadScene(string level)
