@@ -10,8 +10,9 @@ public class WeaponController : MonoBehaviour {
 	[SerializeField] private int ammo_per_shot;   // The amount of ammo used per shot
 	[SerializeField] private Transform muzzle;    // The location of the muzzle
 	[SerializeField] private GameObject bullet;   // The bullet prefab -- must have a Rigidbody
+    [SerializeField] private AudioSource shot_sound;      // The audio clip to play when bullet is fired
 
-	private bool firing = false;
+    private bool firing = false;
 	private Quaternion bullet_rotation = new Quaternion(0.7f, 0, 0, 0.7f);
 	private float last_fired = 0;
     private Transform owner;                        //The owner of the gun
@@ -40,8 +41,12 @@ public class WeaponController : MonoBehaviour {
 
 	private void Fire (bool source) {
 		if(backpack_controller.HasAmmo(ammo_per_shot)) {
+            if (shot_sound != null)
+            {
+                shot_sound.Play();
+            }
 			var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
-			instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
+            instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
 			var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
 			bullet_controller.SetDamage(damage);
 			bullet_controller.SetCleanupDelay(cleanup_delay);

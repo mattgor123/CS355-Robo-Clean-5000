@@ -4,8 +4,6 @@ using System.Collections;
 
 public class MenuController : MonoBehaviour {
 
-    //musicplayer prefab
-    public GameObject musicSource;
 
     [SerializeField]
     private GameObject menuScreen;
@@ -32,10 +30,6 @@ public class MenuController : MonoBehaviour {
         menuScreen.SetActive(true);
         playMenuScreen.SetActive(false);
 
-        if (GameObject.FindWithTag("Music") == null)
-        {
-            Instantiate(musicSource);
-        }
     }
 
     public void LoadScene(string level)
