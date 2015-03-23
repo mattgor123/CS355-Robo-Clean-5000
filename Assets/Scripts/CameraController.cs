@@ -7,10 +7,15 @@ public class CameraController : MonoBehaviour {
     private bool TrackFace; //Whether to track player facing (and be behind player) or not
 
 	private Vector3 offset;
+    private Vector3 offset2;
+
+    private Vector3 facedown;   //angle facing down
 
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
         offset = new Vector3(0f, 10f, -5f);//transform.position;
+        offset2 = new Vector3(0f, 10f, 0f);
+        facedown = new Vector3(45f, 0f, 0f);
         TrackFace = false;
 	}
 
@@ -22,7 +27,8 @@ public class CameraController : MonoBehaviour {
         {
             transform.position = Player.transform.position;
             transform.forward = Player.transform.forward;
-            transform.position += new Vector3(0f, 3f, 0f) + (0.5f)*transform.forward;
+            transform.position += offset2 - Player.transform.forward * (5f);
+            transform.Rotate(facedown);
         }
         else
         {
