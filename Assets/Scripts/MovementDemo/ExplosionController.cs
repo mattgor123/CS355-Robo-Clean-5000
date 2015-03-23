@@ -16,10 +16,16 @@ public class ExplosionController : MonoBehaviour {
     [SerializeField]
     private int radius;
 
+    [SerializeField]
+    private AudioClip sound_effect;
+
 	private float start_time;
 	private float max_intensity;
 
 	private void Start () {
+        if (sound_effect != null) {
+            AudioSource.PlayClipAtPoint(sound_effect, transform.position);
+        }
 		start_time = Time.time;
 		//max_intensity = this.ourlight.intensity;
 
