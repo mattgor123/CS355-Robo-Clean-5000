@@ -39,13 +39,16 @@ public class PauseController : MonoBehaviour {
         //TODO not hard code "Main"?
         if (level.Equals("Main", System.StringComparison.OrdinalIgnoreCase))
         {
-            //going to main menu. Don't need the player anymore
-            Destroy(GameObject.FindGameObjectWithTag("Player"));
-            Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
-            Destroy(GameObject.FindGameObjectWithTag("WeaponCanvas"));
-            Destroy(GameObject.FindGameObjectWithTag("HealthCanvas"));
+            foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
+            {
+                Destroy(o);
+            }
         }
         Time.timeScale = 1;
+
+        //TODO fix this
+        //Must be a better way to do this, but as of now Main Menu settings don't persist.
+        AudioListener.volume = 1;
         Application.LoadLevel(level);
     }
 }

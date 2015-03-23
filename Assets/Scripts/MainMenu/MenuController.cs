@@ -17,19 +17,35 @@ public class MenuController : MonoBehaviour {
     [SerializeField]
     private AudioClip beep;
 
-    private bool isSound;
+    [SerializeField]
+    private Toggle soundToggle;
 
     //AudioSource that plays the beeps
     private AudioSource ouraudio;
 
+
     void Awake()
     {
         ouraudio = gameObject.GetComponent<AudioSource>();
-        isSound = true;
         optionsScreen.SetActive(false);
         menuScreen.SetActive(true);
         playMenuScreen.SetActive(false);
+        soundToggle.onValueChanged.AddListener((value) =>
+        {
+            handleCheckbox(value);
+        } 
+       );   
+    }
 
+    private void handleCheckbox(bool value)
+    {
+        if (value) {
+            AudioListener.volume = 1;
+        }
+        else
+        {
+            AudioListener.volume = 0;
+        }
     }
 
     public void LoadScene(string level)
