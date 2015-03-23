@@ -23,13 +23,16 @@ public class MenuController : MonoBehaviour {
     //AudioSource that plays the beeps
     private AudioSource ouraudio;
 
-
     void Awake()
     {
         ouraudio = gameObject.GetComponent<AudioSource>();
         optionsScreen.SetActive(false);
         menuScreen.SetActive(true);
         playMenuScreen.SetActive(false);
+        if (PlayerPrefs.GetInt("Volume") == 0) {
+            soundToggle.isOn = false;
+            AudioListener.volume = 0;
+        }
         soundToggle.onValueChanged.AddListener((value) =>
         {
             handleCheckbox(value);
@@ -40,16 +43,19 @@ public class MenuController : MonoBehaviour {
     private void handleCheckbox(bool value)
     {
         if (value) {
+            PlayerPrefs.SetInt("Volume", 1);
             AudioListener.volume = 1;
         }
         else
         {
+            PlayerPrefs.SetInt("Volume", 0);
             AudioListener.volume = 0;
         }
     }
 
     public void LoadScene(string level)
     {
+        PlayerPrefs.Save();
         Application.LoadLevel(level);
     }
 
