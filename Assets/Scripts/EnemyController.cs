@@ -79,8 +79,6 @@ public class EnemyController : MonoBehaviour {
             }
         }
 
-        Debug.Log(AggroState);
-        
         //apply the movement
         PrevTime = Time.deltaTime;
         mvt = mvt * speed * PrevTime;

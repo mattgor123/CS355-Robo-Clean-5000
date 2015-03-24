@@ -118,14 +118,10 @@ public class PlayerController : MonoBehaviour {
             if (TrackFace)
             {
                 TrackFace = false;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
             }
             else
             {
                 TrackFace = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
             }
             CamControl.SetTrackFace(TrackFace);
         }
@@ -225,7 +221,18 @@ public class PlayerController : MonoBehaviour {
             resetDoubleTapCount();
             doubleTapCountdown = 0;
         }
-         
+
+        //Make sure cursor is in the right mode 
+        if (TrackFace)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;  //keep cursor on screen for testing
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true; 
+        }
 	}
 
     private void LateUpdate()

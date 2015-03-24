@@ -25,6 +25,7 @@ public class CameraController : MonoBehaviour {
 
         if (TrackFace)
         {
+            //Stay behind the player, facing in same direction
             transform.position = Player.transform.position;
             transform.forward = Player.transform.forward;
             transform.position += offset2 - Player.transform.forward * (5f);
