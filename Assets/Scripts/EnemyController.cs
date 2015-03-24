@@ -23,6 +23,8 @@ public class EnemyController : MonoBehaviour {
     private bool WallHit;       //whether it is hitting a wall
     private float WallHitTimer; //timer for keeping wall hit status
 
+    private Rigidbody RBody;
+
     // Combat variables
     [SerializeField]
     private float OptimalRange;     //optimal firing range
@@ -51,6 +53,8 @@ public class EnemyController : MonoBehaviour {
         health_controller = GetComponent<HealthController>();
         anim = GetComponent<Animator>();
         AggroState = false;
+        RBody = GetComponent<Rigidbody>();
+
         //transform.position -= new Vector3(0f, transform.position.y, 0f);
 	}
 	
@@ -86,7 +90,8 @@ public class EnemyController : MonoBehaviour {
 
         PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
         PrevPos = transform.position;
-        transform.forward = mvt; 
+        if (RBody.velocity.magnitude > 0)
+            transform.forward = RBody.velocity; 
 
         //decrement wall hit timer
         WallHitTimer -= PrevTime;
@@ -102,7 +107,7 @@ public class EnemyController : MonoBehaviour {
         }
 
         //Apply animations
-        if(GetComponent<Rigidbody>().velocity.magnitude > 0) {
+        if(RBody.velocity.magnitude > 0) {
 			anim.SetBool("Moving", true);
 		} else {
 			anim.SetBool("Moving", false);
