@@ -55,6 +55,9 @@ public class Dungeon : MonoBehaviour {
     private int currentRoomsPlaced;
     private float lastSpawn;
 
+    public AudioClip[] dungeon_backgrounds;
+    public AudioSource audio;
+
 
     /*
      * TODO: Enemies need to be able to spawn safely within bounds. 
@@ -475,9 +478,19 @@ public class Dungeon : MonoBehaviour {
         spawnEnemies();
         lastSpawn = Time.time;
 
-
+        //Randomly choose which audio clip to play for this dungeon
+        PlayRandom();
 
 	}
+
+    void PlayRandom()
+    {
+        int index = Random.Range(0, dungeon_backgrounds.Length);
+        Debug.Log("Now playing song " + index);
+        audio.clip = dungeon_backgrounds[index];
+        audio.loop = true;
+        audio.Play();
+    }
 
 
 	// Update is called once per frame
