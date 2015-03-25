@@ -7,101 +7,90 @@ using System.Collections;
  * tiles on edges must have approrpriate walls
  */ 
 public class Room {
-    private Tile[,] room;
     private int width;
     private int height;
-
+    private int startX;
+    private int startY;
+    private GameObject roomObject;
+    private string[,] room;
     public Room(int width, int height, int startX, int startY)
     {
         this.width = width;
         this.height = height;
-        room =  new Tile[width + 1, height + 1];
+        this.startX = startX;
+        this.startY = startY;
+        room = new string[width, height];
 
         //Generate all the tiles for the room
-        for (int x = 1; x < width; x++ )
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 1; y < height; y++)
+            for (int y = 0; y < height; y++)
             {
-                if (x == 1 && y == 1) //South + West corner piece
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, true, true, false);
+
+                if (x == 0 && y == 0) //South + West corner piece
+                {
+                    room[x, y] = "SWCorner";
 
                 }
-                else if (x == 1 && y == height - 1) //North West corner piece
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, true, false, true, false);
+                else if (x == 0 && y == height - 1) //North West corner piece
+                {
+                    room[x, y] = "NWCorner";
 
                 }
-                else if (x == width -1 && y == 1) //south east corner piece 
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, true, false, true);
+                else if (x == width - 1 && y == 0) //south east corner piece 
+                {
+                    room[x, y] = "SECorner";
 
                 }
                 else if (x == width - 1 && y == height - 1) //northeast corner piece
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, true, false, false, true);
+                {
+                    room[x, y] = "NECorner";
 
                 }
-                else if (x == 1) //west Edge
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, false, true, false);
+                else if (x == 0) //west Edge
+                {
+                    room[x, y] = "WWall";
 
                 }
                 else if (x == width - 1) //east Edge
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, false, false, true);
+                {
+                    room[x, y] = "EWall";
 
                 }
-                else if (y == 1) //south Edge
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, true, false, false);
+                else if (y == 0) //south Edge
+                {
+                    room[x, y] = "SWall";
 
                 }
                 else if (y == height - 1) //north Edge
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, true, false, false, false);
+                {
+                    room[x, y] = "NWall";
 
                 }
                 else //middle pieces (no walls)
-                {                                                     //North, South, West, East
-                    room[x, y] = new Tile.Floor(x + startX, y + startY, false, false, false, false);
-
+                {
+                    room[x, y] = "Floor";
                 }
             }
         }
-        //Generate Boundary around room
+    }
 
-        //Bottom boundary
-        int i = 0;
-        int j = 0;
-        for (i = 0; i < this.width + 1; i++)
-        {
-            room[i, j] = new Tile.Boundary();
-        }
+    //Where each tile exists in the world
+    public Vector2 getWorldCoordinates(int x, int y)
+    {
+        return new Vector2(x + startX, y + startY);
+    }
 
-        //top boundary
-        j = this.height;
-        i = 0;
-        for (i = 0; i < this.width + 1; i++)
-        {
-            room[i, j] = new Tile.Boundary();
-        }
+    public GameObject GetRoom()
+    {
+        return roomObject;
+    }
 
-        //left boundary
-        i = 0;
-        j = 0;
-        for (j = 0; j < this.height + 1; j++)
-        {
-            room[i, j] = new Tile.Boundary();
-        }
-
-        //right boundary
-        i = this.width;
-        j = 0;
-        for (j = 0; j < this.height + 1; j++)
-        {
-            room[i, j] = new Tile.Boundary();
-        }
+    public Vector2 GetRoomCenter()
+    {
+        int x = startX + this.width / 2;
+        int y = startY + this.height / 2;
+        return new Vector2(x, y);
     }
 
     public int getWidth()
@@ -113,7 +102,7 @@ public class Room {
         return this.height;
     }
 
-    public Tile getTile(int x, int y)
+    public string GetTile(int x, int y)
     {
         return this.room[x, y];
     }
