@@ -121,7 +121,7 @@ public class Tile
                 tile.transform.position = this.position;
                 GameObject exit = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 exit.transform.localScale = new Vector3(1, 1, 1) * scale;
-                exit.transform.position = new Vector3(this.position.x, 2, this.position.z) * scale;
+                exit.transform.position = new Vector3(this.position.x, 0, this.position.z) * scale;
                 exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
                 Renderer Exrend = exit.GetComponent<Renderer>();
                 Exrend.material.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
