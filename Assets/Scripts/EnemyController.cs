@@ -13,6 +13,10 @@ public class EnemyController : MonoBehaviour {
     // Positional/Movement variables
     [SerializeField]
     private float speed;
+
+    [SerializeField]
+    private float SpeedLimit;   //maximum velocity magnitude
+
     public GameObject explosion;
     public GameObject treasure_chest;
 
@@ -90,8 +94,16 @@ public class EnemyController : MonoBehaviour {
 
         PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
         PrevPos = transform.position;
+
+        //Face in the direction of movement
         if (RBody.velocity.magnitude > 0)
-            transform.forward = RBody.velocity; 
+            transform.forward = RBody.velocity;
+        
+        //Do not exceed maximum speed
+        if (RBody.velocity.magnitude > SpeedLimit)
+        {
+            RBody.velocity = RBody.velocity.normalized*SpeedLimit;
+        }
 
         //decrement wall hit timer
         WallHitTimer -= PrevTime;
