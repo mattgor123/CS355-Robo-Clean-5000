@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour {
         offset = new Vector3(0f, 10f, -5f);//transform.position;
         offset2 = new Vector3(0f, 10f, 0f);
         facedown = new Vector3(45f, 0f, 0f);
-        TrackFace = false;
+        TrackFace = true;
 	}
 
 	void LateUpdate () {
