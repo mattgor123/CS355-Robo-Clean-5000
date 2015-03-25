@@ -23,8 +23,6 @@ public class LMLongPatrol : MonoBehaviour, LMAuxMove {
         dir.Normalize();
 
         //Setup search directions & reacq time
-        ReAcTime = 2;
-        NumDirs = 6;
         SearchDirs = new Vector3[4];
         SearchDirs[0] = new Vector3(1f, 0f, 0f);
         SearchDirs[1] = new Vector3(-1f, 0f, 0f);

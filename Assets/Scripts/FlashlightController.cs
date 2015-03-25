@@ -42,4 +42,10 @@ public class FlashlightController : MonoBehaviour {
 
         }
     }
+
+    //Get Status
+    public bool GetActive()
+    {
+        return Active;
+    }
 }

@@ -160,9 +160,13 @@ public class EnemyController : MonoBehaviour {
         return WallHitTimer;
     }
 
+    //If player flashlight is off, aggro radius is at 75%
     public float GetAggroRadius()
     {
-        return AggroRadius;
+        if (player.GetComponentInChildren<FlashlightController>().GetActive())
+            return AggroRadius;
+        else
+            return AggroRadius * 0.75f;
     }
 
     public Vector3 GetPrevMvt()

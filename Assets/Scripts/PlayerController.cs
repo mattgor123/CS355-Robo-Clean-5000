@@ -295,6 +295,11 @@ public class PlayerController : MonoBehaviour {
         return dialogueLevel;
     }
 
+    public bool GetFlashlightActive()
+    {
+        return Flashlight.GetActive();
+    }
+
 	public void AddWeapon (GameObject weapon) {
 		weapon_backpack_controller.AddWeapon(weapon);
 	}
