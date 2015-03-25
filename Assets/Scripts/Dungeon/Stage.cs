@@ -12,19 +12,21 @@ public class Stage  {
     private Tile[,] tiles;
     private ArrayList rooms;
     private int currentRegion; //the color of the region being carved
+    private float scale;
 
     private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
 
     /*Constructor for stage
      * Initializes grid of tiles to standard Tiles
      */ 
-    public Stage(int width, int height, Material floor, Material wall)
+    public Stage(int width, int height, Material floor, Material wall, float scale) 
     {
         this.width = width;
         this.height = height;
         tiles = new Tile[width, height];
         rooms = new ArrayList();
         currentRegion = -1;
+        this.scale = scale;
         for (int x = 0; x < this.width; x++)
         {
             for (int y = 0; y < this.height; y++)
@@ -98,11 +100,7 @@ public class Stage  {
         }
     }
 
-    public void fillRooms()
-    {
-        //traverse the edge of the room
-        //store the locations of tiles that are like doors
-    }
+
 
     public void PlaceHalls()
     {
@@ -192,7 +190,10 @@ public class Stage  {
         return tiles[x, y].getType() == "Rock";
     }
 
-    
+    public Room RandomRoom()
+    {
+        return (Room) rooms[Random.Range(0, rooms.Count)];
+    }
 
     /*OpenDoors
      * Picks a Blank tile between hall and room
@@ -201,7 +202,7 @@ public class Stage  {
      */
     public void OpenDoors()
     {
-
+        /*
         // Find all of the tiles that can connect two (or more) regions.
         Dictionary<Vector2, List<int>> connectorRegions = new Dictionary<Vector2, List<int>>();
         foreach (Tile tile in tiles)
@@ -312,7 +313,7 @@ public class Stage  {
 
         //iterate through stage.rooms
         //iterate through boundary tiles and pick 1 or maybe more to turn into doors
-
+        */
     }
 
 
@@ -372,19 +373,115 @@ public class Stage  {
         }
     }
 
+    public void spawnExit() {
+        Room room = RandomRoom();
+        Vector2 center = room.GetRoomCenter();
+        for (int i = Mathf.FloorToInt(center.x - 1); i < Mathf.FloorToInt(center.x + 1); i++)
+        {
+            for (int j = Mathf.FloorToInt(center.y - 1); j < Mathf.FloorToInt(center.y + 1); j++)
+            {
+                tiles[i, j].setType("Exit");
+            }
+        }
+    }
+
+
+    public void KillIslands(int maxDead, int maxIslands)
+    {
+        int killedDeadends = 0;
+        int killedIslands = 0;
+        for (int x = 1; x < this.width - 1; x++)
+        {
+            for (int y = 1; y < this.height - 1; y++)
+            {
+                int weight = 0;
+                /* For every Rock adjacent, weight goes up. weight of 4 means inner wall
+                 * 3 weights means the hall is a dead end
+                 * 2 weights doesn't mean much
+                 * 1 weight means it's a sticking out piece
+                 * 0 means it's an island
+                 * I'll be removing weights 3 and 0
+                 */
+                Vector2 central = tiles[x, y].pos();
+                if (inBounds(central, Vector2.up))
+                {
+                    if (tiles[Mathf.FloorToInt(central.x) , Mathf.FloorToInt(central.y + 1)].getType().Equals("Rock")) {
+                        weight++;
+                        
+                    }
+                }
+                else { weight--;  } //we don't want the border walls of the dungeon to chip away
+                if (inBounds(central, Vector2.up * -1))
+                {
+                    if (tiles[Mathf.FloorToInt(central.x) , Mathf.FloorToInt(central.y - 1)].getType().Equals("Rock")) {
+                        weight++;
+                    }
+                }
+                else { weight--; } //we don't want the border walls of the dungeon to chip away
+
+                if (inBounds(central, Vector2.right))
+                {
+                    if (tiles[Mathf.FloorToInt(central.x + 1) , Mathf.FloorToInt(central.y)].getType().Equals("Rock")) {
+                        weight++;
+                    }
+                }
+                else { weight--; } //we don't want the border walls of the dungeon to chip away
+
+                if (inBounds(central, Vector2.right * -1))
+                {
+                    if (tiles[Mathf.FloorToInt(central.x - 1) , Mathf.FloorToInt(central.y)].getType().Equals("Rock")) {
+                        weight++;
+                    }
+                }
+                else { weight--; } //we don't want the border walls of the dungeon to chip away
+
+                //This a deadend
+                if ( weight == 3 && killedDeadends < maxDead)
+                {
+                    tiles[x, y].setType("Rock");
+                    killedDeadends++;
+                }
+                if (weight == 0 && killedIslands < maxIslands)
+                {
+                    tiles[x, y].setType("Floor");
+                    killedIslands++;
+                }
+                if (weight == 4)
+                {
+                    tiles[x, y].setType("Rock");
+                }
+
+            }
+        }
+    }
+
 
 
     /* Create()
      * Spawn the rooms and floors added to the grid.
      */ 
-    public void Create()
+    public void Create(int killCycles)
     {
+        GameObject Facility = new GameObject();
+        Facility.name = "Research Facility";
+        Facility.AddComponent<BoxCollider>();
+        BoxCollider ground = Facility.GetComponent<BoxCollider>();
+
+        ground.size = new Vector3(this.width, 0.5f, this.height) * scale;
+        ground.transform.position = new Vector3(this.width / 2 * scale, -0.25f, this.height / 2 * scale);
+
+        for (int i = 0; i < killCycles; i++)
+        {
+            KillIslands(400, 400);
+        }
+
+        spawnExit();
+
         for (int x = 0; x < this.width; x++)
         {
             for (int y = 0; y < this.height; y++)
             {
-                tiles[x, y].Create();
-                
+                tiles[x, y].Create(Facility.transform, scale);
             }
         }
 
@@ -417,7 +514,7 @@ public class Stage  {
 
     //Return string topdown view of grid. 
     //Doesn't display nicely because console is not monotype font
-    public string ToString()
+    public override string ToString()
     {
 		string result = "Stage";
         return result;

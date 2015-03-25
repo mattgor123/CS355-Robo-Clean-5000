@@ -318,26 +318,18 @@ public class Dungeon : MonoBehaviour {
         spawnStart();
         Door lastDoor = new Door(Vector3.right*CELL_SIZE, Vector3.right, 1);
         int countdown = maxRooms;
-        //TODO
-        //replace for loop with while queue not empty
-        //Debug.Log("There are " + unusedDoors.Count + " doors left in queue");
+
 
         while (unusedDoors.Count != 0) {
-            //Debug.Log(currentRoomsPlaced);
             Door door = (Door) unusedDoors.Dequeue();
             lastDoor = door;
             door.addNum(lostRooms);
             lostRooms = 0;
-            //Debug.Log("Currently working on door at " + door.getPos() + " facing " + door.getFace());
-            //Debug.Log(door.getNum() + " rooms in this path");
             Vector3 position = door.getPos() + (door.getFace() * CELL_SIZE);
-            //Debug.Log("Checking for collision at " + position);
             if (!willCollide(position) && currentRoomsPlaced < maxRooms)  //if the next prefab would clip inside an already existing thing, then it stops.
             {
-                //Debug.Log("No collision!");
                 if (door.getNum() == 1)
                 {
-                    //Debug.Log("Should close the path at " + door.getPos());
                     Prefab room = WeightedRandomizer.From(deadends).TakeOne();
                     placeDeadEndRoom(room, door);
                     countdown--;
@@ -370,7 +362,6 @@ public class Dungeon : MonoBehaviour {
 
                 
                 lostRooms += door.getNum();
-                //Debug.Log("Collision detected at " + position);
                 Transform placedRoom = null;
                 if (stairwayPlaced || currentRoomsPlaced < maxRooms/2)
                 {
@@ -412,14 +403,12 @@ public class Dungeon : MonoBehaviour {
     {
         LayerMask EnemySpawnable = 1 << 8;
         Collider[] closeRooms = Physics.OverlapSphere(Player.position, spawnRadius * scale, EnemySpawnable); 
-        //Debug.Log(closeRooms.Length + " collided objects");
 
         for (int i = numEnemies; i < maxEnemies; i++)
         {
             if (closeRooms.Length > 0)
             {
                 Vector3 randomRoom = closeRooms[Random.Range(0, closeRooms.Length - 1)].transform.position;
-                //Debug.Log( randomRoom + Vector3.up*3);
                 if (Random.Range(0f,1f) <= .5) {
                     Instantiate(enemy_aggressive, randomRoom + Vector3.up*3, Quaternion.identity);
                 } else {
@@ -440,7 +429,6 @@ public class Dungeon : MonoBehaviour {
 		Transform ammoCanvasInstance = Instantiate (AmmoCanvas) as Transform;
 		Transform notificationCanvasInstance = Instantiate (NotificationCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
-        //player.Translate(Vector3.zero);
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);

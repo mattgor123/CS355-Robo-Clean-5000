@@ -72,6 +72,7 @@ public class EnemyController : MonoBehaviour {
             var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
             Destroy(gameObject);
+            StageBuilder.EnemyDied();
         }
 
         //Movement
