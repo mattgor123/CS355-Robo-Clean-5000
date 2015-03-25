@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Stage  {
 
@@ -9,6 +11,9 @@ public class Stage  {
     private int height;
     private Tile[,] tiles;
     private ArrayList rooms;
+    private int currentRegion; //the color of the region being carved
+
+    private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
 
     /*Constructor for stage
      * Initializes grid of tiles to standard Tiles
@@ -19,11 +24,12 @@ public class Stage  {
         this.height = height;
         tiles = new Tile[width, height];
         rooms = new ArrayList();
+        currentRegion = -1;
         for (int x = 0; x < this.width; x++)
         {
             for (int y = 0; y < this.height; y++)
             {
-                tiles[x, y] = new Tile("Blank", new Vector3(x, 0, y));
+                tiles[x, y] = new Tile("Rock", new Vector3(x, 0, y));
             }
         }
     }
@@ -46,7 +52,7 @@ public class Stage  {
             for (int y = startY; y < startY + roomHeight; y++)
             {
                 //During room placement the stage is either "blank" tiles or parts of rooms
-                if (this.tiles[x, y].getType() != "Blank")
+                if (this.tiles[x, y].getType() != "Rock")
                 {
                     return true;
                 }
@@ -80,12 +86,13 @@ public class Stage  {
                 {
                     for (int y = randomY; y < randomY + roomHeight; y++)
                     {
-                        tiles[x, y].setType(room.GetTile(x - randomX, y - randomY));
-                        tiles[x, y].setColor(-1); //Rooms don't need different colors, only non rooms
+                        tiles[x, y].Carve();
+                        tiles[x, y].setColor(currentRegion); //Rooms don't need different colors, only non rooms
                         
                     }
                 }
                 rooms.Add(room);
+                currentRegion++;
             }
 
         }
@@ -93,109 +100,91 @@ public class Stage  {
 
     public void PlaceHalls()
     {
-        int region = 1; //color region. As FloodFill exits this increments before going back in
-        for (int x = 0; x < this.width; x++)
+        for (var x = 1; x < this.width; x += 2)
         {
-            for (int y = 0; y < this.height; y++) {
-                Debug.Log(tiles[x, y].getColor());
-                if (tiles[x, y].getType().Equals("Blank"))
-                {
-                    this.FloodFill(tiles[x, y], region);
-                    region++;
-                }
-            }
+            for (var y = 1; y < this.height; y += 2)
+            {
 
+                if (tiles[x, y].getType() != "Rock") continue;
+                FloodFill(x, y, currentRegion);
+                currentRegion++;
+
+            }
         }
 
     }
 
-    /*FloodFill()
-     * Fill the remaining tiles of stage with maze
-         Flood-fill (node, target-color, replacement-color):
-         1. If the color of node is not equal to target-color, return.
-         2. Set Q to an empty queue
-         3. Add node to Q.
-         4. For each element N of Q:
-         5.         Set w and e equal to N.
-         6.         Move w to the west until the color of the node to the west of w no longer matches target-color.
-         7.         Move e to the east until the color of the node to the east of e no longer matches target-color.
-         8.         For each node n between w and e:
-         9.             Set the color of n to replacement-color.
-        10.             If the color of the node to the north of n is target-color, add that node to Q.
-        11.             If the color of the node to the south of n is target-color, add that node to Q.
-        12. Continue looping until Q is exhausted.
-        13. Return.
-     */
-    public void FloodFill(Tile startTile, int replace)
+
+    public void FloodFill(int x, int y, int color)
     {
-        //Debug.Log(startTile.ToString() + " has color " + startTile.getColor());
-        Queue queue = new Queue();                  //2.
-        queue.Enqueue(startTile);                   //3.
-        while (queue.Count > 0)                     //4.
+        var lastdir = Vector2.zero;
+        int windingPercent = 50;
+        var start = new Vector2(x ,y );
+        var cells = new Queue();
+        tiles[x, y].Carve();
+        tiles[x, y].setColor(color);
+        cells.Enqueue(start);
+        while (cells.Count > 0)
         {
-            Tile tile = (Tile) queue.Dequeue();
-            int x = tile.getX();
-            int y = tile.getY();
-            int east = x;                           //5.
-            int west = x;                           //5.
-            while (tiles[east, y].getColor() == 0)  //6.
+            var cell = cells.Dequeue();
+            
+            var unmadeCells = new ArrayList();
+            foreach (var dir in CARDINAL)
             {
-                east += 1;
-                if (east >= this.width)
+                if (canCarve((Vector2)cell, dir))
                 {
-                    east -= 1; //we dont want it out of bounds.
-                    break;
-                }
-
-            }
-            while (this.tiles[west, y].getColor() == 0)  //7.
-            {
-                west -= 1;
-                if (west < 0)
-                {
-                    west += 1; //we don't want it out of bounds.
-                    break;
+                    unmadeCells.Add(dir);
                 }
             }
-            for (int i = west; i < east + 1; i++)   //8.
+            if (unmadeCells.Count > 0)
             {
-
-                bool N = false;
-                bool E = false;
-                bool W = false;
-                bool S = false;
-                if (i == west) {
-                    W = true; //left most part of region, so it definitely has a West-facing wall.
-                }
-                if (i == east)
+                var direction = Vector2.zero;
+                if (unmadeCells.Contains(lastdir) && Random.Range(0, 100) > windingPercent)
                 {
-                    E = true; //right most part of region, so it definitely has an East-facing wall.
-                }
-                this.tiles[i, y].setColor(replace);       //9.
-                if ((y + 1 < this.width) && this.tiles[i, y + 1].getColor() == 0) //tile to north
-                {
-                    queue.Enqueue(this.tiles[i, y + 1]);  //10.
+                    direction = lastdir;
                 }
                 else
                 {
-                    N = true; //Since the tile to the north is out of bounds or wrong color, this tile gets a north wall
+                    direction = (Vector2)unmadeCells[Random.Range(0, unmadeCells.Count)];
                 }
-                if ((y - 1 >= 0) && tiles[i, y - 1].getColor() == 0) //tile to south
-                {
-                    queue.Enqueue(tiles[i, y - 1]);  //11.
-                }
-                else
-                {
-                    S = true; //Since the tile to the south is out of bounds or wrong color, this tile gets a south wall
-                }
-                tiles[i, y].DecideType(N, S, E, W);
-            }
+                Vector2 vCell = (Vector2)cell;
+                int nextX = Mathf.FloorToInt( vCell.x + direction.x);
+                int nextY = Mathf.FloorToInt(vCell.y + direction.y);
+                int moreX = Mathf.FloorToInt(vCell.x + direction.x * 2);
+                int moreY = Mathf.FloorToInt(vCell.y + direction.y * 2);
+                tiles[nextX, nextY].Carve();
+                tiles[nextX, nextY].setColor(color);
+                tiles[moreX, moreY].Carve();
+                tiles[moreX, moreY].setColor(color);
+                cells.Enqueue(new Vector2(moreX, moreY));
 
-        }   //while queue not empty                  //12.
+                lastdir = direction;
+            }
+            else
+            {
+                lastdir = Vector2.zero;
+            }
+        }
     }
 
+    private bool inBounds(Vector2 cell, Vector2 dir) {
+        var sum = cell + dir * 3;
+        if (sum.x >= this.width || sum.x < 0 || sum.y > this.height || sum.y < 0)
+        {
+            return false;
+        }
+        return true;
+    }
 
+    private bool canCarve(Vector2 cell, Vector2 dir) {
 
+        if (!inBounds(cell, dir)) {
+            return false;
+        }
+        int x = Mathf.FloorToInt(cell.x + dir.x * 2);
+        int y = Mathf.FloorToInt(cell.y + dir.y * 2);
+        return tiles[x, y].getType() == "Rock";
+    }
 
     
 
@@ -203,22 +192,181 @@ public class Stage  {
      * Picks a Blank tile between hall and room
      * Replaces hall tile, blank tile, and room tile to form entrance
      * may happen multiple times per room.
-     */ 
+     */
     public void OpenDoors()
     {
+
+        // Find all of the tiles that can connect two (or more) regions.
+        Dictionary<Vector2, List<int>> connectorRegions = new Dictionary<Vector2, List<int>>();
+        foreach (Tile tile in tiles)
+        {
+            if ((tile.pos().x < 1 ) || (tile.pos().x > this.width - 2) || (tile.pos().y < 1) || (tile.pos().y > this.height -2)) continue;  
+            int x = Mathf.FloorToInt(tile.pos().x);
+            int y = Mathf.FloorToInt(tile.pos().y);
+            // Can't already be part of a region.
+            if (tile.getType() != "Rock") continue;
+
+            var regions = new List<int>();
+            foreach (var dir in CARDINAL)
+            {
+                int dirx = Mathf.FloorToInt(dir.x);
+                int diry = Mathf.FloorToInt(dir.y);
+                if (inBounds(tile.pos(), dir))
+                {
+                    var region = tiles[x + dirx, y + diry].getColor();
+                    if (region != null) regions.Add(region);
+                }
+            }
+
+            if (regions.Count < 2) continue;
+
+            connectorRegions[new Vector2(x, y)] = regions;
+
+        }
+        var connectors = connectorRegions.Keys.ToList();
+
+
+        // Keep track of which regions have been merged. This maps an original
+        // region index to the one it has been merged to.
+        var merged = new ArrayList();
+        var openRegions = new HashSet<int>();
+        for (var i = 0; i <= currentRegion; i++)
+        {
+            merged.Add(i);
+            openRegions.Add(i);
+        }
+
+        // Keep connecting regions until we're down to one.
+        while (openRegions.Count > 1)
+        {
+            var connector = connectors[Random.Range(0, connectors.Count() + 1)];
+
+            // Carve the connection.
+            addJunction(connector);
+
+            // Merge the connected regions. We'll pick one region (arbitrarily) and
+            // map all of the other regions to its index.
+            var regions = connectorRegions[connector]
+                .Select((region) => merged[region]);
+            var dest = regions.First();
+            var sources = regions;
+
+            // Merge all of the affected regions. We have to look at *all* of the
+            // regions because other regions may have previously been merged with
+            // some of the ones we're merging now.
+            for (var i = 0; i <= currentRegion; i++)
+            {
+                if (sources.Contains(merged[i]))
+                {
+                    merged[i] = dest;
+                }
+            }
+
+
+            // The sources are no longer in use.
+            List<int> clone = new List<int>();
+            foreach (int item in sources)
+            {
+                clone.Add(item);
+            }
+            for (int i = 0; i < sources.ToList().Count; i++)
+            {
+                openRegions.Remove((int)sources.ToList()[i]);
+            }
+
+            // Remove any connectors that aren't needed anymore.
+            List<Vector2> copy = new List<Vector2>();
+            foreach (Vector2 pos in connectors)
+            {
+                // Don't allow connectors right next to each other.
+                if ((connector - pos).magnitude < 2)
+                {
+                    copy.Add(new Vector2(pos.x, pos.y));
+                    continue;
+                }
+                // If the connector no long spans different regions, we don't need it.
+ 
+                var _regions = connectorRegions[pos].Select((region) => merged[region])
+                    .ToList().Distinct();
+
+                // This connecter isn't needed, but connect it occasionally so that the
+                // dungeon isn't singly-connected.
+                int extraConnectorChance = 20;
+                if (oneIn(extraConnectorChance)) addJunction(pos);
+
+            }
+
+            for (int i = 0; i < copy.Count(); i++)
+            {
+                connectors.Remove(copy[i]);
+            }
+
+        }
+
+
         //iterate through stage.rooms
         //iterate through boundary tiles and pick 1 or maybe more to turn into doors
 
+    }
+
+
+    bool oneIn(int num)
+    {
+        return Random.Range(1, num + 1) == num;
+    }
+
+
+    /*TODO: Make the required Tiles and add this to addJunction()
+    if (rng.oneIn(4))
+    {
+        setTile(pos, rng.oneIn(3) ? Tiles.openDoor : Tiles.floor);
+    }
+    else
+    {
+        setTile(pos, Tiles.closedDoor);
+    }
+    */
+    private void addJunction(Vector2 pos)
+    {
+
+        tiles[Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y)].setType("Floor");
     }
     /*TrimHalls
      * Remove some of the tiles at the ends of the mazes
      * Makes for fewer deadends.
      */
-    public void TrimHalls()
+    public void removeDeadEnds()
     {
+        var done = false;
 
+        while (!done)
+        {
+            done = true;
 
+            foreach (Tile tile in tiles)
+            {
+                int x = Mathf.FloorToInt(tile.pos().x);
+                int y = Mathf.FloorToInt(tile.pos().y);
+                if (tiles[x, y].getType() == "Rock") continue;
+
+                // If it only has one exit, it's a dead end.
+                var exits = 0;
+                foreach (var dir in CARDINAL)
+                {
+                    int dirx = Mathf.FloorToInt(dir.x);
+                    int diry = Mathf.FloorToInt(dir.y);
+                    if (tiles[x + dirx, y + diry].getType() != "Rock") exits++;
+                }
+
+                if (exits != 1) continue;
+
+                done = false;
+                tiles[x, y].setType("Rock");
+            }
+        }
     }
+
+
 
     /* Create()
      * Spawn the rooms and floors added to the grid.

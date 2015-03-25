@@ -19,7 +19,7 @@ public class StageBuilder : MonoBehaviour {
         stage.PlaceRooms(NUMBER_ROOM_TRIES);
         stage.PlaceHalls(); 
         //stage.OpenDoors();
-        //stage.TrimHalls();
+        //stage.removeDeadEnds();
         stage.Create();
 
 	}
