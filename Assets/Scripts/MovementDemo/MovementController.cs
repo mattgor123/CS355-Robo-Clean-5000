@@ -65,7 +65,7 @@ public class MovementController : MonoBehaviour {
         }
         else
         {
-            anim.SetBool("Dead", true);
+            anim.SetBool("isDead", true);
         }	
 	}
 
