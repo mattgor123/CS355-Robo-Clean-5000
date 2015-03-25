@@ -18,6 +18,9 @@ public class MovementController : MonoBehaviour {
 
 	private void Awake() {
 		anim = GetComponent<Animator>();
+		if (anim.layerCount >= 2) {
+			anim.SetLayerWeight(1, 1);
+		}
 		healthController = GetComponent<HealthController>();
 	}
 
