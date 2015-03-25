@@ -30,36 +30,42 @@ public class MovementController : MonoBehaviour {
 
 	public void UpdateMovement (float z_axis, float x_axis, bool ControlScheme) {        
 		// if the player is still alive, apply movement logic
-		if (healthController.GetCurrentHealth() > 0) {
-			// if the object is not standing still, move object
-			if(z_axis != 0f || x_axis != 0f) {
-				var force = walk_force;
-        Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
         Vector3 resulting_force;
-        if (ControlScheme)
+        if (healthController.GetCurrentHealth() > 0)
         {
-            var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
-            var x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
-            if (z_axis <= 0f)
-                counteraction = transform.forward * -7.5f;
-            resulting_force = z_force + x_force;
+            // if the object is not standing still, move object
+            if (z_axis != 0f || x_axis != 0f)
+            {
+                var force = walk_force;
+                Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
+                if (ControlScheme)
+                {
+                    var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
+                    var x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
+                    if (z_axis <= 0f)
+                        counteraction = transform.forward * -7.5f;
+                    resulting_force = z_force + x_force;
+                }
+                else
+                {
+                    var z_force = new Vector3(0f, 0f, z_axis);
+                    var x_force = new Vector3(x_axis, 0f, 0f);
+                    counteraction = transform.forward * -6.5f;
+                    resulting_force = force * Time.deltaTime * 3.0f * (z_force + x_force).normalized;
+                }
+                anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
+                GetComponent<Rigidbody>().AddForce(resulting_force, ForceMode.Impulse);
+                GetComponent<Rigidbody>().AddForce(counteraction, ForceMode.Impulse);
+                last_force = Time.time;
+            }
+            else
+            {
+                anim.SetFloat("Speed", 0f);
+            }
         }
         else
         {
-            var z_force = new Vector3(0f, 0f, z_axis);
-            var x_force = new Vector3(x_axis, 0f, 0f);
-            counteraction = transform.forward * -6.5f;
-            ressulting_force = (z_force + x_force).normalized * force * Time.deltaTime * 3.0f;
-        }
-				anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
-				GetComponent<Rigidbody>().AddForce(resulting_force, ForceMode.Impulse);
-        GetComponent<Rigidbody>().AddForce(counteraction, ForceMode.Impulse);
-				last_force = Time.time;
-			} else {
-				anim.SetFloat("Speed", 0f);
-			}
-        } else {
-        	anim.SetBool("Dead", true);
+            anim.SetBool("Dead", true);
         }	
 	}
 

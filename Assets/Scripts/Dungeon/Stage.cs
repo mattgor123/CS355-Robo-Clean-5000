@@ -18,7 +18,7 @@ public class Stage  {
     /*Constructor for stage
      * Initializes grid of tiles to standard Tiles
      */ 
-    public Stage(int width, int height)
+    public Stage(int width, int height, Material floor, Material wall)
     {
         this.width = width;
         this.height = height;
@@ -29,7 +29,7 @@ public class Stage  {
         {
             for (int y = 0; y < this.height; y++)
             {
-                tiles[x, y] = new Tile("Rock", new Vector3(x, 0, y));
+                tiles[x, y] = new Tile("Rock", new Vector3(x, 0, y), floor, wall);
             }
         }
     }
@@ -52,7 +52,7 @@ public class Stage  {
             for (int y = startY; y < startY + roomHeight; y++)
             {
                 //During room placement the stage is either "blank" tiles or parts of rooms
-                if (this.tiles[x, y].getType() != "Rock")
+                if (this.tiles[x, y].getColor() == -1)
                 {
                     return true;
                 }
@@ -87,7 +87,7 @@ public class Stage  {
                     for (int y = randomY; y < randomY + roomHeight; y++)
                     {
                         tiles[x, y].Carve();
-                        tiles[x, y].setColor(currentRegion); //Rooms don't need different colors, only non rooms
+                        tiles[x, y].setColor(-1); //Rooms don't need different colors, only non rooms
                         
                     }
                 }
@@ -96,6 +96,12 @@ public class Stage  {
             }
 
         }
+    }
+
+    public void fillRooms()
+    {
+        //traverse the edge of the room
+        //store the locations of tiles that are like doors
     }
 
     public void PlaceHalls()
@@ -118,7 +124,7 @@ public class Stage  {
     public void FloodFill(int x, int y, int color)
     {
         var lastdir = Vector2.zero;
-        int windingPercent = 50;
+        int windingPercent = 45;
         var start = new Vector2(x ,y );
         var cells = new Queue();
         tiles[x, y].Carve();

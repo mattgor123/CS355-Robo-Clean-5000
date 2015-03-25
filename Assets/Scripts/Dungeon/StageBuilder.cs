@@ -10,15 +10,20 @@ public class StageBuilder : MonoBehaviour {
     private int HEIGHT_MUST_BE_ODD;
     [SerializeField]
     private int NUMBER_ROOM_TRIES;
+    [SerializeField]
+    private Material wallMaterial;
+    [SerializeField]
+    private Material floorMaterial;
 
 
 
 	// Use this for initialization
 	void Start () {
-        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD);
+        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
+        stage.PlaceHalls();
         stage.PlaceRooms(NUMBER_ROOM_TRIES);
-        stage.PlaceHalls(); 
-        //stage.OpenDoors();
+        
+        stage.fillRooms();
         //stage.removeDeadEnds();
         stage.Create();
 

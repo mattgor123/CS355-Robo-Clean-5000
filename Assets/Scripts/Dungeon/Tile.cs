@@ -11,14 +11,19 @@ public class Tile
     /*Types of Tiles Currently */
     private const string Rock  = "Rock";      //No objects created (initial state)
     private const string Floor = "Floor";      //No objects created (initial state)
+    private Material wallMaterial;
+    private Material floorMaterial;
 
 
     /*Tile Constructor */ 
-    public Tile(String type, Vector3 position)
+    public Tile(String type, Vector3 position, Material wall, Material floor)
 	{
         this.color = 0;
         this.type = type;
         this.position = position;
+        this.wallMaterial = wall;
+        this.floorMaterial = floor;
+
         
 	}
 
@@ -43,6 +48,8 @@ public class Tile
                 GameObject ceiling = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 ceiling.transform.position = new Vector3(this.position.x, 4, this.position.z);
                 ceiling.transform.SetParent(tile.transform);
+                Renderer ceilRend = ceiling.GetComponent<Renderer>();
+                ceilRend.material.color = Color.black;
                 ceiling.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
                 ceiling.name = "Ceiling";
 
@@ -51,6 +58,8 @@ public class Tile
                 NorthWall.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 NorthWall.transform.SetParent(tile.transform);
                 NorthWall.name = "NorthWall";
+                Renderer NWrend = NorthWall.GetComponent<Renderer>();
+                NWrend.material = this.wallMaterial;
                 NorthWall.transform.localScale = new Vector3(1, 4, 1);
 
                 GameObject SouthWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -59,6 +68,9 @@ public class Tile
                 SouthWall.transform.localScale = new Vector3(1, 4, 1);
                 SouthWall.transform.SetParent(tile.transform);
                 SouthWall.name = "SouthWall";
+                Renderer SWrend = SouthWall.GetComponent<Renderer>();
+                SWrend.material = this.wallMaterial;
+
 
                 GameObject WestWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 WestWall.transform.position = new Vector3(this.position.x - 0.5f, 2, this.position.z);
@@ -66,6 +78,8 @@ public class Tile
                 WestWall.transform.SetParent(tile.transform);
                 WestWall.name = "WestWall";
                 WestWall.transform.localScale = new Vector3(1, 4, 1);
+                Renderer Wrend = WestWall.GetComponent<Renderer>();
+                Wrend.material = this.wallMaterial;
 
                 GameObject EastWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 EastWall.transform.position = new Vector3(this.position.x + 0.5f, 2, this.position.z);
@@ -73,6 +87,8 @@ public class Tile
                 EastWall.transform.SetParent(tile.transform);
                 EastWall.name = "EastWall";
                 EastWall.transform.localScale = new Vector3(1, 4, 1);
+                Renderer Erend = EastWall.GetComponent<Renderer>();
+                Erend.material = this.wallMaterial;
 
                 break;
             case Floor:
@@ -83,6 +99,8 @@ public class Tile
                 floor.transform.localScale = new Vector3(1, 1, 1);
                 floor.transform.position = new Vector3(this.position.x, 2, this.position.z);
                 floor.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+                Renderer Frend = floor.GetComponent<Renderer>();
+                Frend.material = this.floorMaterial;
                 floor.transform.SetParent(tile.transform);
                 break;
         }
