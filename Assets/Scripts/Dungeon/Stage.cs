@@ -25,7 +25,7 @@ public class Stage  {
         this.width = ensureOdd(width); 
         this.height = ensureOdd(height);
         grid = new Tile[this.width, this.height];
-        currentRegion = 0;
+        currentRegion = -1;
         rooms = new ArrayList(); 
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
@@ -57,8 +57,8 @@ public class Stage  {
                 height += rectangularity;
             }
 
-            int startx = UnityEngine.Random.Range(0,this.width - width)  / 2 * 2 + 1;;
-            int starty = UnityEngine.Random.Range(0, this.height - height)  / 2 * 2 + 1;;
+            int startx = UnityEngine.Random.Range(2 ,this.width - width - 2)  / 2 * 2 + 1;;
+            int starty = UnityEngine.Random.Range(2, this.height - height - 2)  / 2 * 2 + 1;;
 
             var room = new Room(width, height, startx, starty);
 
@@ -184,11 +184,14 @@ public class Stage  {
             {
                 int dirx = Mathf.FloorToInt(dir.x);
                 int diry = Mathf.FloorToInt(dir.y);
-                if (inBounds2(pos, dir))
+               // if (inBounds2(pos, dir))
+                //{
+                var region = grid[x + dirx, y + diry];
+                if (region.getType() != "Rock")
                 {
-                        var region = grid[x + dirx, y + diry].getColor();
-                        regions.Add(region);
+                    regions.Add(region.getColor());
                 }
+                //}
             }
 
             if (regions.Count < 2) continue;
@@ -212,7 +215,7 @@ public class Stage  {
         int test = openRegions.Count;
         while (test > 1)
         {
-            Debug.Log(openRegions.Count);
+            //Debug.Log(openRegions.Count);
             Vector2 connector = connectors[UnityEngine.Random.Range(0, connectors.Count())];
 
             // Carve the connection.
@@ -220,7 +223,7 @@ public class Stage  {
 
             // Merge the connected regions. We'll pick one region (arbitrarily) and
             // map all of the other regions to its index.
-            var regions = connectorRegions[connector].Select( region => merged.ElementAt(region));
+            var regions = connectorRegions[connector].Select( region => merged[region]).ToList<int>();
             var dest = regions.First();
             var sources = regions.Skip(1).ToList<int>();
 
@@ -257,10 +260,16 @@ public class Stage  {
             });
             test--;
         }
+        int max = 0;
         foreach (var item in openRegions)
         {
-            Debug.Log(item.ToString());
+            max = Mathf.Max(max, item);
         }
+        foreach (var tile in grid)
+        {
+            tile.passMaxColors(max);
+        }
+
     }
 
     
@@ -302,6 +311,117 @@ public class Stage  {
         }
     }
 
+
+    //Looks for rooms that didn't get connected and forces connections
+    public void createDoors()
+    {
+        /*
+         * Iterate through rooms
+         *      Run alongside the border of the room.
+         *      if the border tile is rock, check if floor exists one beyond
+         *          if so, add coordinates to a list of potential doors to open
+         *      if border tile is door, then door is already open
+         *      if a door was already open, then quit.
+         *      else randomly pick one a tile from the list and make a door
+         */
+
+        foreach (Room room in this.rooms)
+        {
+            List<Vector2> borderTiles = room.getBorderTiles();
+            Debug.Log(room.getWidth() * 2 + room.getHeight() * 2);
+            Debug.Log(borderTiles.Count);
+            List<Vector2> potentialDoors = new List<Vector2>();
+            bool hasDoor = false;
+            for (int i = 0; i < room.getWidth(); i++)
+            {
+                if (hasDoor) { break; }
+                for (int j = 0; j < room.getHeight(); j++)
+                {
+                    if (hasDoor) break;
+                    Vector2 world = room.getGridCoordinates(i, j);
+
+                    int x = Mathf.FloorToInt(world.x);
+                    int y = Mathf.FloorToInt(world.y);
+                    #region Checking border for whether there's a door or can be one
+                    //Left Side of room
+                    if (i == 0)
+                    {
+                        if (grid[x - 1, y].getType() == "Rock") //Normal rock border
+                        {
+                            if (grid[x - 2, y].getType() == "Floor")
+                            {
+                                potentialDoors.Add(new Vector2(x - 1, y));
+                            }
+                        }
+                        else
+                        {
+                            hasDoor = true;
+                            break;
+                        }
+                    }
+                    //Bottom Side of room
+                    if (j == 0)
+                    {
+                        if (grid[x, y - 1].getType() == "Rock") //Normal rock border
+                        {
+                            if (grid[x, y - 2].getType() == "Floor")
+                            {
+                                potentialDoors.Add(new Vector2(x, y - 1));
+                            }
+                        }
+                        else
+                        {
+                            hasDoor = true;
+                            break;
+                        }
+                    }
+                    //Top Side of room
+                    if (j == room.getHeight() - 1)
+                    {
+                        if (grid[x, y + 1].getType() == "Rock") //Normal rock border
+                        {
+                            if (grid[x, y + 2].getType() == "Floor")
+                            {
+                                potentialDoors.Add(new Vector2(x, y + 1));
+                            }
+                        }
+                        else
+                        {
+                            hasDoor = true;
+                            break;
+                        }
+                    }
+                    //Right Side of room
+                    if (i == room.getWidth() - 1)
+                    {
+                        if (grid[x + 1, y].getType() == "Rock") //Normal rock border
+                        {
+                            if (grid[x + 2, y].getType() == "Floor")
+                            {
+                                potentialDoors.Add(new Vector2(x + 1, y));
+                            }
+                        }
+                        else
+                        {
+                            hasDoor = true;
+                            break;
+                        }
+                    }
+                    #endregion
+                }
+            }
+            if (!hasDoor)
+            {
+                Debug.Log("Room at " + room.GetRoomCenter() + " can have a door installed");
+                Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
+                int doorx = Mathf.FloorToInt(randomDoor.x);
+                int doory = Mathf.FloorToInt(randomDoor.y);
+                grid[doorx, doory].Carve();
+                Debug.Log("Carving new door at " + new Vector2(doorx, doory));
+                    
+            }
+        }
+    }
 
     //Returns a random room that's been placed in the grid
     public Room RandomRoom()
@@ -416,7 +536,7 @@ public class Stage  {
             GameObject roomObject = room.GetRoom();
             roomObject = new GameObject();
             Vector2 center = room.GetRoomCenter();
-            roomObject.name = "Room at " + center;
+            roomObject.name ="Room at " + center;
             roomObject.transform.position = new Vector3(center.x, 0, center.y);
             for (int x = 0; x < room.getWidth(); x++)
             {

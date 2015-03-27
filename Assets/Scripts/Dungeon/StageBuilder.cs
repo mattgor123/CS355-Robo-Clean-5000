@@ -67,7 +67,7 @@ public class StageBuilder : MonoBehaviour
         //TODO: place rooms first. 
         stage._addRooms(NUMBER_ROOM_TRIES);
         stage.PlaceHalls();
-        stage.ConnectRegions();
+        stage.createDoors();
         stage.removeDeadEnds();
         stage.Create();
     }
@@ -128,7 +128,7 @@ public class StageBuilder : MonoBehaviour
      */
     private void spawnEnemies()
     {
-        Vector2 randomRoom = stage.RandomRoom().GetRoomCenter() * scale;
+        Vector2 randomRoom = stage.RandomRoom().GetRoomCenter() * StageBuilder.scale;
         if (Random.Range(0f, 1f) <= .5)
         {
             Instantiate(enemy_aggressive, new Vector3(randomRoom.x, 0, randomRoom.y) + Vector3.up * 3, Quaternion.identity);
@@ -143,7 +143,7 @@ public class StageBuilder : MonoBehaviour
     void PlayRandom()
     {
         int index = Random.Range(0, dungeon_backgrounds.Length);
-        Debug.Log("Now playing song " + index);
+        //Debug.Log("Now playing song " + index);
         audio.clip = dungeon_backgrounds[index];
         audio.loop = true;
         audio.Play();

@@ -15,6 +15,7 @@ public class Tile
     private const string Exit = "Exit";       //Special Exit tile. TODO: Probably goes away with Connie's elevator
     private Material wallMaterial; //material to assign to walls if the tile has any
     private Material floorMaterial; //material to assign to floor if the tile has one
+    private int maxColors;
     #endregion
 
     /*Tile Constructor */ 
@@ -35,6 +36,9 @@ public class Tile
         return new Vector2(this.position.x, this.position.z);
     }
 
+    public void passMaxColors(int max) {
+        this.maxColors = max;
+    }
     
     public void Carve()
     {
@@ -141,7 +145,7 @@ public class Tile
         floor.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         Renderer Frend = floor.GetComponent<Renderer>();
         GameObject.DestroyImmediate(floor.GetComponent<BoxCollider>());
-        Frend.material = this.floorMaterial;
+        Frend.material = floorMaterial;
         floor.transform.SetParent(tile.transform);
         return floor;
     }
