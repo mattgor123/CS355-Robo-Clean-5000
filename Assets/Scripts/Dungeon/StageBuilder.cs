@@ -65,9 +65,9 @@ public class StageBuilder : MonoBehaviour
         scale = Accessiblescale;
         stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
         //TODO: place rooms first. 
-        stage.PlaceRooms(NUMBER_ROOM_TRIES);
+        stage._addRooms(NUMBER_ROOM_TRIES);
         stage.PlaceHalls();
-        //stage.connectRegions();
+        stage.ConnectRegions();
         //stage.removeDeadEnds();
         stage.Create();
     }

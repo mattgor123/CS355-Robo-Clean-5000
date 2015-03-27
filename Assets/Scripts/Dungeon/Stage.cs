@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class Stage  {
 
@@ -36,31 +37,63 @@ public class Stage  {
         }
     }
 
-    public void PlaceRooms(int numTries)
+
+
+    public void _addRooms(int numTries)
     {
-        for (int i = 0; i < numTries; i++)
+        for (var i = 0; i < numTries; i++)
         {
-            //Randomly create room size
-            //Note: Dimensions do not include walls around room (TODO fix that)
-            int roomWidth = ensureOdd(Random.Range(5, 11)); //5 floor tiles, not 3 floor and 2 walls
-            int roomHeight = ensureOdd(Random.Range(5, 11)); 
-            //Randomly create location for room. Doesn't include 0 and max so that dungeon border is thick
-            int randomX = ensureOdd(Random.Range(1, this.width - 1));
-            int randomY = ensureOdd(Random.Range(1, this.height -1));
-            //Only places room if it will remain in bounds and doesn't overlap other rooms
-            if (!CheckPlacement(roomWidth, roomHeight, randomX, randomY))
+            int roomExtraSize = 2;
+            var size = UnityEngine.Random.Range(3, 3 + roomExtraSize) * 2 + 1;
+            var rectangularity = UnityEngine.Random.Range(0, 1 + size / 2) * 2;
+            var width = size;
+            var height = size;
+            if (oneIn(2))
             {
-                //Create room to be placed
-                Room room = new Room(roomWidth, roomHeight, randomX, randomY);
-                CarveRoom(room, roomWidth, roomHeight, randomX, randomY);
-                rooms.Add(room); 
-                currentRegion++; /*Note: Maybe rooms do need an initial color for algorithm. Check it */
+                width += rectangularity;
+            }
+            else
+            {
+                height += rectangularity;
             }
 
+            int startx = UnityEngine.Random.Range(0,this.width - width)  / 2 * 2 + 1;;
+            int starty = UnityEngine.Random.Range(0, this.height - height)  / 2 * 2 + 1;;
+
+            var room = new Room(width, height, startx, starty);
+
+
+            var overlaps = false;
+            foreach (var other in rooms)
+            {
+                if (room.DistanceTo((Room)other))
+                {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (overlaps) continue;
+
+            rooms.Add(room);
+
+            currentRegion++;
+            for (int x = startx; x < startx + width; x++)
+            {
+                for (int y = starty; y < starty + height; y++)
+                {
+                    grid[x, y].Carve();
+                    grid[x, y].setColor(currentRegion);
+                }
+            }
         }
-
-
     }
+    
+          
+          
+
+
+    
 
     public void PlaceHalls()
     {   
@@ -70,8 +103,7 @@ public class Stage  {
             for (var y = 1; y < this.height; y += 2) //also, due to rooms being oddly placed, this skips the walls that make the room
             {
                 if (grid[x, y].getType() != "Rock") continue; //continue means to skip to the next iteration of forloop
-                growMaze(x, y, currentRegion);
-                currentRegion++;
+                growMaze(new Vector2(x, y));
             }
         }
     }
@@ -81,53 +113,54 @@ public class Stage  {
      * Creates halls and numbers them accordingly
      * 
      */ 
-    private void growMaze(int x, int y, int color)
+    private void growMaze(Vector2 start)
     {
-        var lastdir = Vector2.zero;
-        int windingPercent = 90;
-        var start = new Vector2(x ,y );
-        var cells = new Queue();
-        grid[x, y].Carve();
-        grid[x, y].setColor(color);
-        cells.Enqueue(start);
-        while (cells.Count > 0)
+        var lastdir = Vector2.zero; //the direction the path last took
+        int windingPercent = 50; //chance that the path will turn
+        var cells = new List<Vector2>(); //carries x and y 
+        int x = Mathf.FloorToInt(start.x);
+        int y = Mathf.FloorToInt(start.y);
+        currentRegion++; //since this is a new path, its color changes
+        grid[x, y].Carve(); //Carve out start of this path
+        grid[x, y].setColor(currentRegion); 
+        cells.Add(start); 
+        while (cells.Count > 0) //while the path can still grow
         {
-            var cell = cells.Dequeue();
-            
-            var unmadeCells = new ArrayList();
+            var cell = cells.Last(); 
+            var unmadeCells = new ArrayList(); //list of open cells adjacent to [cell]
             foreach (var dir in CARDINAL)
             {
-                if (canCarve((Vector2)cell, dir))
-                {
-                    unmadeCells.Add(dir);
-                }
+                //checks if tile 2 away is carvable
+                if (canCarve(cell, dir))  unmadeCells.Add(dir); 
             }
             if (unmadeCells.Count > 0)
             {
-                var direction = Vector2.zero;
-                if (unmadeCells.Contains(lastdir) && Random.Range(0, 100) > windingPercent)
+                var dir = Vector2.zero; //direction that path is going to carve
+                if (unmadeCells.Contains(lastdir) && UnityEngine.Random.Range(0, 100) > windingPercent)
                 {
-                    direction = lastdir;
+                    dir = lastdir; //keep going same direction
                 }
                 else
                 {
-                    direction = (Vector2)unmadeCells[Random.Range(0, unmadeCells.Count)];
+                    //pick another direction
+                    dir = (Vector2) unmadeCells[UnityEngine.Random.Range(0, unmadeCells.Count)];
                 }
+                //Carves out 2 tiles in [dir] direction
                 Vector2 vCell = (Vector2)cell;
-                int nextX = Mathf.FloorToInt( vCell.x + direction.x);
-                int nextY = Mathf.FloorToInt(vCell.y + direction.y);
-                int moreX = Mathf.FloorToInt(vCell.x + direction.x * 2);
-                int moreY = Mathf.FloorToInt(vCell.y + direction.y * 2);
-                grid[nextX, nextY].Carve();
-                grid[nextX, nextY].setColor(color);
-                grid[moreX, moreY].Carve();
-                grid[moreX, moreY].setColor(color);
-                cells.Enqueue(new Vector2(moreX, moreY));
-
-                lastdir = direction;
+                int firstX = Mathf.FloorToInt( vCell.x + dir.x);
+                int firstY = Mathf.FloorToInt(vCell.y + dir.y);
+                int secondX = Mathf.FloorToInt(vCell.x + dir.x * 2);
+                int secondY = Mathf.FloorToInt(vCell.y + dir.y * 2);
+                grid[firstX, firstY].Carve();
+                grid[secondX, secondY].Carve();
+                grid[firstX, firstY].setColor(currentRegion);
+                grid[secondX, secondY].setColor(currentRegion);
+                cells.Add(new Vector2(secondX, secondY));
+                lastdir = dir;
             }
             else
             {
+                cells.Remove(cells.Last());
                 lastdir = Vector2.zero;
             }
         }
@@ -139,32 +172,34 @@ public class Stage  {
  */
     public void ConnectRegions()
     {
-        /*
+        int extraConnectorChance = 100;
         // Find all of the tiles that can connect two (or more) regions.
-        Dictionary<Vector2, List<int>> connectorRegions = new Dictionary<Vector2, List<int>>();
-        foreach (Tile tile in tiles)
+        //This means Rock, not floor
+        Dictionary<Vector2, HashSet<int>> connectorRegions = new Dictionary<Vector2, HashSet<int>>();
+        foreach (Tile tile in grid)
         {
-            if ((tile.pos().x < 1 ) || (tile.pos().x > this.width - 2) || (tile.pos().y < 1) || (tile.pos().y > this.height -2)) continue;  
-            int x = Mathf.FloorToInt(tile.pos().x);
-            int y = Mathf.FloorToInt(tile.pos().y);
-            // Can't already be part of a region.
-            if (tile.getType() != "Rock") continue;
+            Vector2 pos = tile.pos();
+            //this if skips the borders of the grid
+            if ((pos.x < 2) || (pos.x > this.width - 3) || (pos.y < 2) || (pos.y > this.height - 3)) continue;
+            int x = Mathf.FloorToInt(pos.x);
+            int y = Mathf.FloorToInt(pos.y);
 
-            var regions = new List<int>();
+            if (tile.getType() != "Rock") continue;
+            var regions = new HashSet<int>();
             foreach (var dir in CARDINAL)
             {
                 int dirx = Mathf.FloorToInt(dir.x);
                 int diry = Mathf.FloorToInt(dir.y);
                 if (inBounds(tile.pos(), dir))
                 {
-                    var region = tiles[x + dirx, y + diry].getColor();
-                    if (region != null) regions.Add(region);
+                    var region = grid[x + dirx, y + diry].getColor();
+                        regions.Add(region);
+                    
                 }
             }
-
             if (regions.Count < 2) continue;
 
-            connectorRegions[new Vector2(x, y)] = regions;
+            connectorRegions[pos] = regions;
 
         }
         var connectors = connectorRegions.Keys.ToList();
@@ -172,8 +207,8 @@ public class Stage  {
 
         // Keep track of which regions have been merged. This maps an original
         // region index to the one it has been merged to.
-        var merged = new ArrayList();
-        var openRegions = new HashSet<int>();
+        var merged = new List<int>(); //these don't need set properites, so just lists
+        var openRegions = new List<int>();
         for (var i = 0; i <= currentRegion; i++)
         {
             merged.Add(i);
@@ -181,19 +216,22 @@ public class Stage  {
         }
 
         // Keep connecting regions until we're down to one.
-        while (openRegions.Count > 1)
+        int test = openRegions.Count;
+        while (test > 1)
         {
-            var connector = connectors[Random.Range(0, connectors.Count() + 1)];
+            Debug.Log(openRegions.Count);
+            Vector2 connector = connectors[UnityEngine.Random.Range(0, connectors.Count() - 1)];
 
             // Carve the connection.
             addJunction(connector);
 
             // Merge the connected regions. We'll pick one region (arbitrarily) and
             // map all of the other regions to its index.
-            var regions = connectorRegions[connector]
-                .Select((region) => merged[region]);
+            var regions = connectorRegions[connector].Select( region => merged.ElementAt(region));
+
+
             var dest = regions.First();
-            var sources = regions;
+            var sources = regions.Skip(1).ToList<int>();
 
             // Merge all of the affected regions. We have to look at *all* of the
             // regions because other regions may have previously been merged with
@@ -208,50 +246,41 @@ public class Stage  {
 
 
             // The sources are no longer in use.
-            List<int> clone = new List<int>();
-            foreach (int item in sources)
-            {
-                clone.Add(item);
-            }
+
             for (int i = 0; i < sources.ToList().Count; i++)
             {
-                openRegions.Remove((int)sources.ToList()[i]);
+
+
+                openRegions.RemoveAll(s => sources.Contains(s));
             }
 
+            
             // Remove any connectors that aren't needed anymore.
-            List<Vector2> copy = new List<Vector2>();
-            foreach (Vector2 pos in connectors)
+            connectors.RemoveAll(s =>
             {
                 // Don't allow connectors right next to each other.
-                if ((connector - pos).magnitude < 2)
-                {
-                    copy.Add(new Vector2(pos.x, pos.y));
-                    continue;
-                }
+                if ((connector - s).magnitude < 2) return true;
+
                 // If the connector no long spans different regions, we don't need it.
- 
-                var _regions = connectorRegions[pos].Select((region) => merged[region])
-                    .ToList().Distinct();
+                var spans = connectorRegions[s].Select((region) => merged[region]);
+
+                if (spans.Count<int>() > 1) return false;
 
                 // This connecter isn't needed, but connect it occasionally so that the
                 // dungeon isn't singly-connected.
-                int extraConnectorChance = 20;
-                if (oneIn(extraConnectorChance)) addJunction(pos);
-
-            }
-
-            for (int i = 0; i < copy.Count(); i++)
-            {
-                connectors.Remove(copy[i]);
-            }
-
+                if (oneIn(extraConnectorChance)) addJunction(s);   
+             
+                return true;
+            });
+            test--;
         }
-
-
-        //iterate through stage.rooms
-        //iterate through boundary tiles and pick 1 or maybe more to turn into doors
-        */
+        foreach (var item in openRegions)
+        {
+            Debug.Log(item.ToString());
+        }
     }
+
+    
 
 /*
 * Part of Munificent's algorithm
@@ -292,7 +321,7 @@ public class Stage  {
     //Returns a random room that's been placed in the grid
     public Room RandomRoom()
     {
-        return (Room)rooms[Random.Range(0, rooms.Count)];
+        return (Room)rooms[UnityEngine.Random.Range(0, rooms.Count)];
     }
 
 
@@ -322,8 +351,8 @@ public class Stage  {
             return false;
         }
         //Math from munificent's algorithm
-        int x = Mathf.FloorToInt(cell.x + dir.x * 2); 
-        int y = Mathf.FloorToInt(cell.y + dir.y * 2);
+        int x = Mathf.CeilToInt(cell.x + (dir.x * 2)); 
+        int y = Mathf.CeilToInt(cell.y + (dir.y * 2));
         return grid[x, y].getType() == "Rock";
     }
 
@@ -331,7 +360,7 @@ public class Stage  {
     //Built because munificent's code has it. basically "one in x" chance something happens
     private bool oneIn(int num)
     {
-        return Random.Range(1, num + 1) == num; 
+        return UnityEngine.Random.Range(1, num + 1) == num; 
     }
 
 
@@ -419,7 +448,8 @@ public class Stage  {
             for (int y = startY; y < startY + height; y++)
             {
                 grid[x, y].Carve();
-                grid[x, y].setColor(-1); //Rooms don't need different colors at this point    
+                                grid[x, y].setColor(currentRegion);
+
             }
         }
     }
@@ -444,7 +474,7 @@ public class Stage  {
             {
                 //During room placement the stage is either Rock tiles or parts of rooms
                 //TODO: Rooms are also going to have Wall tiles, so change this
-                if (this.grid[x, y].getColor() == -1)
+                if (this.grid[x, y].getType() == "Floor")
                 {
                     return true;
                 }

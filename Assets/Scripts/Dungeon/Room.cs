@@ -22,7 +22,15 @@ public class Room {
         room = new string[width, height];
 
 
-    }   
+    }
+
+    public bool DistanceTo(Room room)
+    {
+        //http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
+        return (this.startX <= (room.startX + room.width) && (this.startX + this.width) >= room.startX &&
+            this.startY <= (room.startY + room.height) && (this.startY + this.height) >= room.startY);
+        
+        }
 
     //Where each tile exists in the world
     public Vector2 getGridCoordinates(int x, int y)
