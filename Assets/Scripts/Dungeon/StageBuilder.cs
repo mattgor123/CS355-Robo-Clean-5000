@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StageBuilder : MonoBehaviour {
+public class StageBuilder : MonoBehaviour
+{
 
+    #region StageBuilder's private variables
     private Stage stage;
     [SerializeField]
     private int WIDTH_MUST_BE_ODD;
@@ -45,7 +47,7 @@ public class StageBuilder : MonoBehaviour {
     [SerializeField]
     private Transform trigger;
     [SerializeField]
-    private float scale; //scale of the rooms
+    private float Accessiblescale; //scale of the rooms, this one is editable from Unity
     [SerializeField]
     private int KillCycles;
     [SerializeField]
@@ -53,12 +55,56 @@ public class StageBuilder : MonoBehaviour {
     [SerializeField]
     private int maxEnemies; //max enemies to be in dungeon at any one time;
     private static int numEnemies;
-    
+    public static float scale; //static and public so its reachable across classes
+    #endregion
 
+
+    /*Everything related to creating the dungeon itself */
+    void Awake()
+    {
+        scale = Accessiblescale;
+        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
+        //TODO: place rooms first. 
+        stage.PlaceRooms(NUMBER_ROOM_TRIES);
+        stage.PlaceHalls();
+        //stage.connectRegions();
+        //stage.removeDeadEnds();
+        stage.Create();
+    }
+
+	/*Spawning the player and game elements besides dungeon and enemies */
+	void Start () {
+
+        spawnPlayer();
+        Player = GameObject.FindWithTag("Player").transform;
+
+        float lastSpawn = Time.time;
+        //Randomly choose which audio clip to play for this dungeon
+        PlayRandom();
+
+	}
+	
+	/*Currently only used to ensure enemies are refreshed */
+	void Update () {
+        if (numEnemies < maxEnemies)
+        {
+            spawnEnemies();
+            numEnemies++;
+
+        }
+
+    }
+
+    /*Spawns player, camera, HUD and others */
     private void spawnPlayer()
     {
+        //Get room to spawn in
+        //TODO: add a pickSpawnableTile() class to expand number of locations
+        //perhaps label Floor tiles so that OverlapSphere gets them?
         Room room = stage.RandomRoom();
         var roomCenter = room.GetRoomCenter() * scale;
+
+
         Vector3 spawnpoint = new Vector3(roomCenter.x - 1, 1f, roomCenter.y - 1);
         Transform player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
         Transform weaponCanvasInstance = Instantiate(WeaponCanvas) as Transform;
@@ -76,6 +122,10 @@ public class StageBuilder : MonoBehaviour {
         DontDestroyOnLoad(cameraInstance);
     }
 
+
+    /* Spawns enemies
+     * TODO: Use pickSpawnableTile()
+     */
     private void spawnEnemies()
     {
         Vector2 randomRoom = stage.RandomRoom().GetRoomCenter() * scale;
@@ -89,37 +139,7 @@ public class StageBuilder : MonoBehaviour {
         }
     }
 
-
-    void Awake()
-    {
-        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial, scale);
-        stage.PlaceHalls();
-        stage.PlaceRooms(NUMBER_ROOM_TRIES);
-        //stage.removeDeadEnds();
-        stage.Create(KillCycles);
-    }
-
-	// Use this for initialization
-	void Start () {
-
-        spawnPlayer();
-        Player = GameObject.FindWithTag("Player").transform;
-
-        float lastSpawn = Time.time;
-        //Randomly choose which audio clip to play for this dungeon
-        PlayRandom();
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (numEnemies < maxEnemies)
-        {
-            spawnEnemies();
-            numEnemies++;
-        }
-    }
-
+    /*Pick random background music */
     void PlayRandom()
     {
         int index = Random.Range(0, dungeon_backgrounds.Length);
@@ -129,6 +149,7 @@ public class StageBuilder : MonoBehaviour {
         audio.Play();
     }
 
+    /*Global method that let's EnemyController inform StageBuilder when an enemy dies */
     public static void EnemyDied()
     {
         numEnemies--;

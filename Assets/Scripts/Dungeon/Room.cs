@@ -22,10 +22,10 @@ public class Room {
         room = new string[width, height];
 
 
-    }
+    }   
 
     //Where each tile exists in the world
-    public Vector2 getWorldCoordinates(int x, int y)
+    public Vector2 getGridCoordinates(int x, int y)
     {
         return new Vector2(x + startX, y + startY);
     }
