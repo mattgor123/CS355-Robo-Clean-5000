@@ -166,13 +166,13 @@ public class Stage  {
  */
     public void ConnectRegions()
     {
-        int extraConnectorChance = 100;
+        int extraConnectorChance = 5;
         // Find all of the tiles that can connect two (or more) regions.
-        //This means Rock, not floor
+        //This means Rock, not floor                                        
         Dictionary<Vector2, HashSet<int>> connectorRegions = new Dictionary<Vector2, HashSet<int>>();
         foreach (Tile tile in grid)
         {
-            Vector2 pos = tile.pos();
+            Vector2 pos = tile.pos(); //goes into key field of connectorRegions
             //this if skips the borders of the grid
             if ((pos.x < 1) || (pos.x > this.width - 2) || (pos.y < 1) || (pos.y > this.height - 2)) continue;
             int x = Mathf.FloorToInt(pos.x);
@@ -235,6 +235,7 @@ public class Stage  {
                 }
             }
             // The sources are no longer in use.
+
                 openRegions.RemoveAll(s => sources.Contains(s));
             
             // Remove any connectors that aren't needed anymore.
@@ -278,8 +279,10 @@ public class Stage  {
 
             foreach (Tile tile in grid)
             {
-                int x = Mathf.FloorToInt(tile.pos().x);
-                int y = Mathf.FloorToInt(tile.pos().y);
+                Vector2 pos = tile.pos();
+                if ((pos.x < 1) || (pos.x > this.width - 2) || (pos.y < 1) || (pos.y > this.height - 2)) continue;
+                int x = Mathf.FloorToInt(pos.x);
+                int y = Mathf.FloorToInt(pos.y);
                 if (grid[x, y].getType() == "Rock") continue;
 
                 // If it only has one exit, it's a dead end.

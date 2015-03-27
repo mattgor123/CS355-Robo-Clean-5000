@@ -68,7 +68,7 @@ public class StageBuilder : MonoBehaviour
         stage._addRooms(NUMBER_ROOM_TRIES);
         stage.PlaceHalls();
         stage.ConnectRegions();
-        //stage.removeDeadEnds();
+        stage.removeDeadEnds();
         stage.Create();
     }
 
@@ -135,7 +135,7 @@ public class StageBuilder : MonoBehaviour
         }
         else
         {
-            Instantiate(enemy_smart, new Vector3(randomRoom.x, 0, randomRoom.y) + Vector3.up * 3, Quaternion.identity);
+            Instantiate(enemy_smart, new Vector3(randomRoom.x, 0, randomRoom.y) + Vector3.up, Quaternion.identity);
         }
     }
 
