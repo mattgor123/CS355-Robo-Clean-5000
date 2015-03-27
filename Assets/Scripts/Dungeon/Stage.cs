@@ -25,7 +25,7 @@ public class Stage  {
         this.width = ensureOdd(width); 
         this.height = ensureOdd(height);
         grid = new Tile[this.width, this.height];
-        currentRegion = -1;
+        currentRegion = 0;
         rooms = new ArrayList(); 
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
@@ -89,12 +89,6 @@ public class Stage  {
         }
     }
     
-          
-          
-
-
-    
-
     public void PlaceHalls()
     {   
         //Calls FloodFill on tiles that can be carved
@@ -180,7 +174,7 @@ public class Stage  {
         {
             Vector2 pos = tile.pos();
             //this if skips the borders of the grid
-            if ((pos.x < 2) || (pos.x > this.width - 3) || (pos.y < 2) || (pos.y > this.height - 3)) continue;
+            if ((pos.x < 1) || (pos.x > this.width - 2) || (pos.y < 1) || (pos.y > this.height - 2)) continue;
             int x = Mathf.FloorToInt(pos.x);
             int y = Mathf.FloorToInt(pos.y);
 
@@ -190,15 +184,14 @@ public class Stage  {
             {
                 int dirx = Mathf.FloorToInt(dir.x);
                 int diry = Mathf.FloorToInt(dir.y);
-                if (inBounds(tile.pos(), dir))
+                if (inBounds2(pos, dir))
                 {
-                    var region = grid[x + dirx, y + diry].getColor();
+                        var region = grid[x + dirx, y + diry].getColor();
                         regions.Add(region);
-                    
                 }
             }
-            if (regions.Count < 2) continue;
 
+            if (regions.Count < 2) continue;
             connectorRegions[pos] = regions;
 
         }
@@ -220,7 +213,7 @@ public class Stage  {
         while (test > 1)
         {
             Debug.Log(openRegions.Count);
-            Vector2 connector = connectors[UnityEngine.Random.Range(0, connectors.Count() - 1)];
+            Vector2 connector = connectors[UnityEngine.Random.Range(0, connectors.Count())];
 
             // Carve the connection.
             addJunction(connector);
@@ -228,8 +221,6 @@ public class Stage  {
             // Merge the connected regions. We'll pick one region (arbitrarily) and
             // map all of the other regions to its index.
             var regions = connectorRegions[connector].Select( region => merged.ElementAt(region));
-
-
             var dest = regions.First();
             var sources = regions.Skip(1).ToList<int>();
 
@@ -243,17 +234,8 @@ public class Stage  {
                     merged[i] = dest;
                 }
             }
-
-
             // The sources are no longer in use.
-
-            for (int i = 0; i < sources.ToList().Count; i++)
-            {
-
-
                 openRegions.RemoveAll(s => sources.Contains(s));
-            }
-
             
             // Remove any connectors that aren't needed anymore.
             connectors.RemoveAll(s =>
@@ -329,6 +311,16 @@ public class Stage  {
     //Specifically used for Municent's code
     private bool inBounds(Vector2 cell, Vector2 dir) {
         var sum = cell + dir * 3; 
+        if (sum.x >= this.width || sum.x < 0 || sum.y > this.height || sum.y < 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private bool inBounds2(Vector2 cell, Vector2 dir)
+    {
+        var sum = cell + dir;
         if (sum.x >= this.width || sum.x < 0 || sum.y > this.height || sum.y < 0)
         {
             return false;
