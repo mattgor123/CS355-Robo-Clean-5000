@@ -14,6 +14,8 @@ public class Room {
     private int startY;
     private GameObject roomObject;
     private string[,] room;
+    private bool isElevator;
+
     public Room(int width, int height, int startX, int startY)
     {
         this.width = width;
@@ -21,6 +23,7 @@ public class Room {
         this.startX = startX;
         this.startY = startY;
         room = new string[width, height];
+        this.isElevator = false;
 
     }
 
@@ -102,5 +105,14 @@ public class Room {
     public string GetTile(int x, int y)
     {
         return this.room[x, y];
+    }
+
+    public void setIsElevator(bool b) {
+        this.isElevator = b;
+    }
+
+    public bool getIsElevator()
+    {
+        return this.isElevator;
     }
 }

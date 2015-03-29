@@ -14,7 +14,10 @@ public class Stage  {
     private Tile[,] grid; //grid of Tile tiles. grid[0,0] is the bottom left of the dungeon
     private ArrayList rooms; //List containing Room objects. The rooms placed in dungeon
     private int currentRegion;  //the color of the region being carved
-    private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 }; 
+    private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
+
+    private int elevatorSize = 3;
+    private Room elevator;
     #endregion
 
 
@@ -35,6 +38,8 @@ public class Stage  {
                 grid[x, y] = new Tile("Rock", new Vector3(x, 0, y), floor, wall);
             }
         }
+
+        spawnExit();
     }
 
 
@@ -491,15 +496,24 @@ public class Stage  {
 
     //Spawns the exit room. This code needs to be changed so the entire room is an exit instead of a 2x2 pad
     private void spawnExit() {
-        Room room = RandomRoom();
-        Vector2 center = room.GetRoomCenter();
-        for (int i = Mathf.FloorToInt(center.x - 1); i < Mathf.FloorToInt(center.x + 1); i++)
+        //adding elevator room
+        if (this.elevator == null)
         {
-            for (int j = Mathf.FloorToInt(center.y - 1); j < Mathf.FloorToInt(center.y + 1); j++)
+            int eStartX = UnityEngine.Random.Range(2, this.width - this.elevatorSize - 2) / 2 * 2 + 1;
+            int eStartY = UnityEngine.Random.Range(2, this.height - this.elevatorSize - 2) / 2 * 2 + 1;
+            this.elevator = new Room(this.elevatorSize, this.elevatorSize, eStartX, eStartY);
+            currentRegion++;
+            for (int x = eStartX; x < eStartX + this.elevatorSize; x++)
             {
-                grid[i, j].setType("Exit");
+                for (int y = eStartY; y < eStartY + this.elevatorSize; y++)
+                {
+                    grid[x, y].Carve();
+                    grid[x, y].setColor(currentRegion);
+                    grid[x, y].setType("Exit");
+                }
             }
         }
+        rooms.Add(this.elevator);
     }
 
     /* Create()
@@ -514,7 +528,7 @@ public class Stage  {
         BoxCollider ground  = Facility.AddComponent<BoxCollider>();
         ground.size = new Vector3(this.width * StageBuilder.scale, 0.25f, this.height * StageBuilder.scale);
         ground.transform.position = new Vector3(this.width / 2 * StageBuilder.scale, -0.125f, this.height / 2 * StageBuilder.scale);
-        spawnExit();
+        //spawnExit();
 
         //Calls each tile's Create function, passes scale downward so they all grow
         for (int x = 0; x < this.width; x++)
