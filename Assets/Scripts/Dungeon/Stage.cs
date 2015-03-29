@@ -410,10 +410,14 @@ public class Stage  {
                     #endregion
                 }
             }
-            if (!hasDoor)
+
+            //gives chance for a second or more door to be added
+
+            if (!hasDoor || (oneIn(2)))
             {
                 Debug.Log("Room at " + room.GetRoomCenter() + " can have a door installed");
                 Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
+                potentialDoors.Remove(randomDoor);
                 int doorx = Mathf.FloorToInt(randomDoor.x);
                 int doory = Mathf.FloorToInt(randomDoor.y);
                 grid[doorx, doory].Carve();
