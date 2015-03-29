@@ -9,16 +9,20 @@ public class CameraController : MonoBehaviour {
 	private Vector3 offset;
     private Vector3 offset2;
     private Vector3 offsetDC;
-
+    private float SC;           //side correction distance variable
     private Vector3 facedown;   //angle facing down
 
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
         offset = new Vector3(0f, 10f, -5f);//transform.position;
         offset2 = new Vector3(0f, 10f, 0f);  //vertical offset for track face
-        offsetDC = offset2 * 0.5f;
         facedown = new Vector3(45f, 0f, 0f);
         TrackFace = true;
+        
+        //Dynamic Camera variables
+        SC = 0.6f;
+        offsetDC = offset2 * 0.5f;
+
 	}
 
 	void LateUpdate () {        		
@@ -39,18 +43,40 @@ public class CameraController : MonoBehaviour {
             float HitDist;
             RaycastHit hit;
 
-            //raycat from player to camera and see if something is in the way
+            //raycat from player to camera and swee if something is in the way
             if (Physics.Raycast(core + axis, axis, out hit, CamDist))
             {
-                //if so, shift forward by sufficient distance to clear      
+                //if so, shift forward by sufficient distance to clear (maximum ~5)
                 HitDist = hit.distance;
                 Vector3 delta = Player.transform.forward * (CamDist - HitDist) / Mathf.Sqrt(3f);
-                transform.position += delta;
+                transform.position += (1.2f)*delta;
 
                 //tilt down to keep player in view 
                 Vector3 tilt = new Vector3 (3f*delta.magnitude, 0f, 0f);
                 transform.Rotate(tilt);
-                Debug.Log(tilt);
+
+                //zoom in slightly
+                Vector3 zoom = new Vector3 (0f, -1f*delta.magnitude, 0f);
+                transform.position += zoom;                
+            }
+            //check to the left/right & shift camera slightly to prevent clipping on the side
+            Vector3 cross = Vector3.Cross(axis, offsetDC.normalized);
+            cross.Normalize();
+
+            if (Physics.Raycast(transform.position - axis, cross, out hit, CamDist)) {                
+                if (hit.distance < SC)
+                {
+                    Vector3 shift = -2.0f * (SC/2 - Mathf.Abs(SC/2 - hit.distance)) * cross;
+                    transform.position += shift;
+                }
+            }
+            else if (Physics.Raycast(transform.position - axis, -1f * cross, out hit, CamDist))
+            {
+                if (hit.distance < SC)
+                {
+                    Vector3 shift = 2.0f * (SC / 2 - Mathf.Abs(SC / 2 - hit.distance)) * cross;
+                    transform.position += shift;
+                }
             }
         }
         else

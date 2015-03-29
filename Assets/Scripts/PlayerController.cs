@@ -340,7 +340,7 @@ public class PlayerController : MonoBehaviour {
             float delta = Input.GetAxis("Mouse X");
 
             //Rotate proportional to mouse movement
-            float angle = transform.eulerAngles.y + (5.0f) * delta;
+            float angle = transform.eulerAngles.y + (4.0f) * delta;
             if (angle > 360)
             {
                 angle -= 360;
