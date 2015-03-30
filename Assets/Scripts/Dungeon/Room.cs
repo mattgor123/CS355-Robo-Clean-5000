@@ -69,6 +69,16 @@ public class Room {
             return list;
     }
 
+    public void setStartX(int x)
+    {
+        this.startX = x;
+    }
+
+    public void setStartY(int y)
+    {
+        this.startX = y;
+    }
+
     //Where each tile exists in the world
     public Vector2 getGridCoordinates(int x, int y)
     {

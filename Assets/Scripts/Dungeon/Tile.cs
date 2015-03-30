@@ -78,7 +78,6 @@ public class Tile
                 tile.transform.SetParent(mother);
                 tile.name = Exit;
                 tile.transform.position = this.position;
-                //GameObject ExitCeiling = CreateCeiling();
                 GameObject exit = CreateExit();
                 break;
         }
@@ -159,12 +158,12 @@ public class Tile
         exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         Renderer Exrend = exit.GetComponent<Renderer>();
         Exrend.material.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
-        //BoxCollider exitBox = exit.AddComponent<BoxCollider>();
-        //exitBox.isTrigger = true;
+        BoxCollider exitBox = exit.AddComponent<BoxCollider>();
+        exitBox.isTrigger = true;
         Light glow = exit.AddComponent<Light>();
         glow.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
-        //var exScript = exit.AddComponent<NewRoomTrigger>();
-        //exScript.setLevel("RampDown");
+        var exScript = exit.AddComponent<NewRoomTrigger>();
+        exScript.setLevel("RampDown");
         exit.transform.SetParent(tile.transform);
         return exit;
     }

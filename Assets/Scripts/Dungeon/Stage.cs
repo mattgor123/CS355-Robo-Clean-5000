@@ -15,9 +15,17 @@ public class Stage  {
     private ArrayList rooms; //List containing Room objects. The rooms placed in dungeon
     private int currentRegion;  //the color of the region being carved
     private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
-
+    private int currentLevel;
+    private ArrayList levels;
+    private ArrayList spawnedRooms;
     private int elevatorSize = 3;
-    private Room elevator;
+    private Room exit;
+    private GameObject exitObject;
+    private Room entrance;
+    private GameObject entranceObject;
+    private GameObject Facility;
+    private Material floorMaterial;
+    private Material wallMaterial;
     #endregion
 
 
@@ -25,11 +33,16 @@ public class Stage  {
     public Stage(int width, int height, Material floor, Material wall) 
     {
         //FloodFill algorithm needs odd-length grid
-        this.width = ensureOdd(width); 
+        currentLevel = 0; //start level
+        levels = new ArrayList();
+        spawnedRooms = new ArrayList();
+        rooms = new ArrayList();
+        this.width = ensureOdd(width);
         this.height = ensureOdd(height);
         grid = new Tile[this.width, this.height];
         currentRegion = -1;
-        rooms = new ArrayList(); 
+        this.floorMaterial = floor;
+        this.wallMaterial = wall;
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
         {
@@ -46,6 +59,7 @@ public class Stage  {
 
     public void _addRooms(int numTries)
     {
+
         for (var i = 0; i < numTries; i++)
         {
             int roomExtraSize = 2;
@@ -501,11 +515,11 @@ public class Stage  {
     //Spawns the exit room. This code needs to be changed so the entire room is an exit instead of a 2x2 pad
     private void spawnExit() {
         //adding elevator room
-        if (this.elevator == null)
+        if (this.exit == null)
         {
             int eStartX = UnityEngine.Random.Range(2, this.width - this.elevatorSize - 2) / 2 * 2 + 1;
             int eStartY = UnityEngine.Random.Range(2, this.height - this.elevatorSize - 2) / 2 * 2 + 1;
-            this.elevator = new Room(this.elevatorSize, this.elevatorSize, eStartX, eStartY);
+            this.exit = new Room(this.elevatorSize, this.elevatorSize, eStartX, eStartY);
             currentRegion++;
             for (int x = eStartX; x < eStartX + this.elevatorSize; x++)
             {
@@ -517,7 +531,7 @@ public class Stage  {
                 }
             }
         }
-        rooms.Add(this.elevator);
+        rooms.Add(this.exit);
     }
 
     /* Create()
@@ -525,8 +539,9 @@ public class Stage  {
      */ 
     public void Create()
     {
+        levels.Add(grid);
         //The empty gameobject that all the tiles are hidden inside (besides rooms)
-        GameObject Facility = new GameObject(); 
+        Facility = new GameObject(); 
         Facility.name = "Research Facility";
         //The collider that spans the floor of the dungeon (saves memory over the floor tiles having them each)
         BoxCollider ground  = Facility.AddComponent<BoxCollider>();
@@ -567,7 +582,10 @@ public class Stage  {
 
                 }
             }
+            spawnedRooms.Add(roomObject);
         }
+        exitObject = (GameObject)spawnedRooms[0];
+
     }
 
 
@@ -630,7 +648,110 @@ public class Stage  {
         return result;
     }
 
+    public void NextLevel()
+    {
+        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        //Destroy Facility
+        GameObject.Destroy(Facility);
 
+        //Destroy Rooms
+        rooms.Clear();
+
+        //Create new grid of new dimensions
+        int newWidth = 50;
+        int newHeight = 50;
+        Tile[,] newGrid = new Tile[newWidth,newHeight];
+        for (int x = 0; x < newWidth; x++)
+        {
+            for (int y = 0; y < newHeight; y++)
+            {
+                newGrid[x, y] = new Tile("Rock", new Vector3(x, 0, y), this.floorMaterial, this.wallMaterial);
+            }
+        }
+
+        //Store new grid in levels array
+        grid = newGrid;
+        this.height = newHeight;
+        this.width = newWidth;
+        currentLevel++;
+
+        //place exit we just came from in new grid
+        int eStartX = UnityEngine.Random.Range(2, newWidth - this.elevatorSize - 2) / 2 * 2 + 1;
+        int eStartY = UnityEngine.Random.Range(2, newHeight - this.elevatorSize - 2) / 2 * 2 + 1;
+        exit.setStartX(eStartX);
+        exit.setStartY(eStartY);
+        for (int x = eStartX; x < eStartX + this.elevatorSize; x++)
+        {
+            for (int y = eStartY; y < eStartY + this.elevatorSize; y++)
+            {
+                grid[x, y].Carve();
+                grid[x, y].setColor(currentRegion);
+                grid[x, y].setType("Exit");
+            }
+        }
+
+        //Move undestroyed old exit to location in grid
+        exitObject.transform.position = new Vector3(eStartX, 0, eStartY);
+
+
+        //Make old exit the new entrance
+        entrance = exit;
+        entranceObject = exitObject;
+
+        //Get new spawn location for player and move him there
+        Vector3 center = entrance.GetRoomCenter();
+        Player.transform.position = center;
+
+
+        //ensuring new exit doesn't overlap entrance
+        int newExitX = UnityEngine.Random.Range(2, newWidth - this.elevatorSize - 2) / 2 * 2 + 1;
+        int newExitY = UnityEngine.Random.Range(2, newHeight - this.elevatorSize - 2) / 2 * 2 + 1;
+        exit = new Room(this.elevatorSize, this.elevatorSize, newExitX, newExitY);
+        var overlaps = false;
+        while (overlaps) {
+            if (exit.DistanceTo((entrance)))
+            {
+                overlaps = true;
+                newExitX = UnityEngine.Random.Range(2, newWidth - this.elevatorSize - 2) / 2 * 2 + 1;
+                newExitY = UnityEngine.Random.Range(2, newHeight - this.elevatorSize - 2) / 2 * 2 + 1;
+                exit.setStartX(newExitX);
+                exit.setStartY(newExitY);
+            }
+            else
+            {
+                overlaps = false;
+            }
+        }
+
+
+      //place new exit in new grid
+        for (int x = newExitX; x < newExitX + this.elevatorSize; x++)
+        {
+            for (int y = newExitY; y < newExitY + this.elevatorSize; y++)
+            {
+                grid[x, y].Carve();
+                grid[x, y].setColor(currentRegion);
+                grid[x, y].setType("Exit");
+            }
+        }
+        rooms.Add(exit);
+        rooms.Add(entrance);
+        //Place Rooms
+        _addRooms(102); //TODO: Reset needs a need an argument to decide numTries
+        //Place Halls
+        PlaceHalls();
+        //Create Doors
+        createDoors();
+        //Remove Dead Ends
+        removeDeadEnds();
+        //
+    }
+
+    public void PreviousLevel()
+    {
+        //TODO: This
+
+    }
 }
 
 
