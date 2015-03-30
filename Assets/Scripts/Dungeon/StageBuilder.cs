@@ -154,4 +154,9 @@ public class StageBuilder : MonoBehaviour
     {
         numEnemies--;
     }
+
+    public void nextLevel()
+    {
+        stage.NextLevel();
+    }
 }
