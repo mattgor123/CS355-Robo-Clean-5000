@@ -20,9 +20,6 @@ public class Stage  {
     private ArrayList spawnedRooms;
     private int elevatorSize = 3;
     private Room exit;
-    private GameObject exitObject;
-    private Room entrance;
-    private GameObject entranceObject;
     private GameObject Facility;
     private Material floorMaterial;
     private Material wallMaterial;
@@ -53,6 +50,7 @@ public class Stage  {
         }
 
         spawnExit();
+
     }
 
 
@@ -63,7 +61,7 @@ public class Stage  {
         for (var i = 0; i < numTries; i++)
         {
             int roomExtraSize = 2;
-            var size = UnityEngine.Random.Range(3, 3 + roomExtraSize) * 2 + 1;
+            var size = UnityEngine.Random.Range(3, 5 + roomExtraSize) + 1;
             var rectangularity = UnityEngine.Random.Range(0, 1 + size / 2) * 2;
             var width = size;
             var height = size;
@@ -179,119 +177,7 @@ public class Stage  {
         }
     }
 
-    /*
- * Part of Munificent's algorithm
- * Finds tiles between regions (rooms and hallways) that could become doors
- */
-    public void ConnectRegions()
-    {
-        int extraConnectorChance = 5;
-        // Find all of the tiles that can connect two (or more) regions.
-        //This means Rock, not floor                                        
-        Dictionary<Vector2, HashSet<int>> connectorRegions = new Dictionary<Vector2, HashSet<int>>();
-        foreach (Tile tile in grid)
-        {
-            Vector2 pos = tile.pos(); //goes into key field of connectorRegions
-            //this if skips the borders of the grid
-            if ((pos.x < 1) || (pos.x > this.width - 2) || (pos.y < 1) || (pos.y > this.height - 2)) continue;
-            int x = Mathf.FloorToInt(pos.x);
-            int y = Mathf.FloorToInt(pos.y);
-
-            if (tile.getType() != "Rock") continue;
-            var regions = new HashSet<int>();
-            foreach (var dir in CARDINAL)
-            {
-                int dirx = Mathf.FloorToInt(dir.x);
-                int diry = Mathf.FloorToInt(dir.y);
-               // if (inBounds2(pos, dir))
-                //{
-                var region = grid[x + dirx, y + diry];
-                if (region.getType() != "Rock")
-                {
-                    regions.Add(region.getColor());
-                }
-                //}
-            }
-
-            if (regions.Count < 2) continue;
-            connectorRegions[pos] = regions;
-
-        }
-        var connectors = connectorRegions.Keys.ToList();
-
-
-        // Keep track of which regions have been merged. This maps an original
-        // region index to the one it has been merged to.
-        var merged = new List<int>(); //these don't need set properites, so just lists
-        var openRegions = new List<int>();
-        for (var i = 0; i <= currentRegion; i++)
-        {
-            merged.Add(i);
-            openRegions.Add(i);
-        }
-
-        // Keep connecting regions until we're down to one.
-        int test = openRegions.Count;
-        while (test > 1)
-        {
-            //Debug.Log(openRegions.Count);
-            Vector2 connector = connectors[UnityEngine.Random.Range(0, connectors.Count())];
-
-            // Carve the connection.
-            addJunction(connector);
-
-            // Merge the connected regions. We'll pick one region (arbitrarily) and
-            // map all of the other regions to its index.
-            var regions = connectorRegions[connector].Select( region => merged[region]).ToList<int>();
-            var dest = regions.First();
-            var sources = regions.Skip(1).ToList<int>();
-
-            // Merge all of the affected regions. We have to look at *all* of the
-            // regions because other regions may have previously been merged with
-            // some of the ones we're merging now.
-            for (var i = 0; i <= currentRegion; i++)
-            {
-                if (sources.Contains(merged[i]))
-                {
-                    merged[i] = dest;
-                }
-            }
-            // The sources are no longer in use.
-
-                openRegions.RemoveAll(s => sources.Contains(s));
-            
-            // Remove any connectors that aren't needed anymore.
-            connectors.RemoveAll(s =>
-            {
-                // Don't allow connectors right next to each other.
-                if ((connector - s).magnitude < 2) return true;
-
-                // If the connector no long spans different regions, we don't need it.
-                var spans = connectorRegions[s].Select((region) => merged[region]);
-
-                if (spans.Count<int>() > 1) return false;
-
-                // This connecter isn't needed, but connect it occasionally so that the
-                // dungeon isn't singly-connected.
-                if (oneIn(extraConnectorChance)) addJunction(s);   
-             
-                return true;
-            });
-            test--;
-        }
-        int max = 0;
-        foreach (var item in openRegions)
-        {
-            max = Mathf.Max(max, item);
-        }
-        foreach (var tile in grid)
-        {
-            tile.passMaxColors(max);
-        }
-
-    }
-
-    
+   
 
 /*
 * Part of Munificent's algorithm
@@ -351,6 +237,7 @@ public class Stage  {
             Debug.Log(borderTiles.Count);
             List<Vector2> potentialDoors = new List<Vector2>();
             bool hasDoor = false;
+            int numDoors = 0;
             for (int i = 0; i < room.getWidth(); i++)
             {
                 if (hasDoor) { break; }
@@ -431,18 +318,20 @@ public class Stage  {
             }
 
             //gives chance for a second or more door to be added
-
-            if (!hasDoor || (oneIn(2)))
+            while ((!hasDoor || oneIn(2)) && numDoors < potentialDoors.Count)
             {
-                Debug.Log("Room at " + room.GetRoomCenter() + " can have a door installed");
+
+                Debug.Log("Room can have " + potentialDoors.Count + " potential doors installed");
                 Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
                 potentialDoors.Remove(randomDoor);
                 int doorx = Mathf.FloorToInt(randomDoor.x);
                 int doory = Mathf.FloorToInt(randomDoor.y);
                 grid[doorx, doory].Carve();
                 Debug.Log("Carving new door at " + new Vector2(doorx, doory));
-                    
+                numDoors++;
+                hasDoor = true;
             }
+
         }
     }
 
@@ -563,21 +452,14 @@ public class Stage  {
         }
 
         //Make tiles that are part of rooms be children of Room gameobject
-        for (int i = 1; i < rooms.Count; i++) 
+        foreach (Room room in this.rooms) 
         {
             //Need to skip the rooms that have already been created (exit/entrance) 
-            Room room = (Room)this.rooms[i];
-            if (room.getIsElevator()) continue;
-            //instantiate roomObject
-            //set position to be the middle of the room
-            //get position of tile from room in global coordinates
-            //Get tile from Stage.tiles
-            //set tile's parent to roomObject
             GameObject roomObject = room.GetRoom();
             roomObject = new GameObject();
             Vector2 center = room.GetRoomCenter();
             roomObject.name = "Room at " + center;
-            roomObject.transform.position = new Vector3(center.x, 0, center.y);
+            roomObject.transform.position = new Vector3(center.x, 0, center.y) * StageBuilder.scale;
             for (int x = 0; x < room.getWidth(); x++)
             {
                 for (int y = 0; y < room.getHeight(); y++)
@@ -591,8 +473,6 @@ public class Stage  {
             }
             spawnedRooms.Add(roomObject);
         }
-        exitObject = (GameObject)spawnedRooms[0];
-
     }
 
 
@@ -626,26 +506,32 @@ public class Stage  {
         return result;
     }
 
-    public void NextLevel()
-    {
-        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+    private void DestroyCurrentLevel() {
         //Destroy Facility
         GameObject.Destroy(Facility);
 
         //Destroy Rooms
         rooms.Clear();
         //Destroy all rooms except for the elevator we are standing in (in this case spawnedRooms(0)
-        for (int i = 1; i < spawnedRooms.Count; i++)
+        for (int i = 0; i < spawnedRooms.Count; i++)
         {
-            GameObject room = (GameObject) spawnedRooms[i];
+            GameObject room = (GameObject)spawnedRooms[i];
             GameObject.Destroy(room);
 
         }
+        spawnedRooms.Clear();
+        //Destroy exit reference
+        exit = null;
 
+        
+    }
+
+    private void CreateNewLevel()
+    {
         //Create new grid of new dimensions
-        int newWidth = 50;
-        int newHeight = 50;
-        Tile[,] newGrid = new Tile[newWidth,newHeight];
+        int newWidth = ensureOdd(this.width);
+        int newHeight = ensureOdd(this.height);
+        Tile[,] newGrid = new Tile[newWidth, newHeight];
         for (int x = 0; x < newWidth; x++)
         {
             for (int y = 0; y < newHeight; y++)
@@ -659,68 +545,26 @@ public class Stage  {
         this.height = newHeight;
         this.width = newWidth;
         currentLevel++;
+        //Create the new exit
+        spawnExit();
+    }
 
-        //place exit we just came from in new grid
-        int eStartX = UnityEngine.Random.Range(2, newWidth - this.elevatorSize - 2) / 2 * 2 + 1;
-        int eStartY = UnityEngine.Random.Range(2, newHeight - this.elevatorSize - 2) / 2 * 2 + 1;
-        exit.setStartX(eStartX);
-        exit.setStartY(eStartY);
-        for (int x = eStartX; x < eStartX + this.elevatorSize; x++)
-        {
-            for (int y = eStartY; y < eStartY + this.elevatorSize; y++)
-            {
-                grid[x, y].Carve();
-                grid[x, y].setColor(currentRegion);
-                grid[x, y].setType("Exit");
-            }
-        }
-
-        //Move undestroyed old exit to location in grid
-        exitObject.transform.position = new Vector3(eStartX, 0, eStartY);
-
-
-        //Make old exit the new entrance
-        entrance = exit;
-        entranceObject = exitObject;
-
+    private void MovePlayerToEntrance()
+    {
         //Get new spawn location for player and move him there
-        Vector3 center = entrance.GetRoomCenter();
-        Player.transform.position = center;
+        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 roomToSpawnInto = ((GameObject)spawnedRooms[1]).transform.position;
+        Player.transform.position = roomToSpawnInto;
+        
+    }
 
 
-        //ensuring new exit doesn't overlap entrance
-        int newExitX = UnityEngine.Random.Range(2, newWidth - this.elevatorSize - 2) / 2 * 2 + 1;
-        int newExitY = UnityEngine.Random.Range(2, newHeight - this.elevatorSize - 2) / 2 * 2 + 1;
-        exit = new Room(this.elevatorSize, this.elevatorSize, newExitX, newExitY);
-        var overlaps = false;
-        while (overlaps) {
-            if (exit.DistanceTo((entrance)))
-            {
-                overlaps = true;
-                newExitX = UnityEngine.Random.Range(2, newWidth - this.elevatorSize - 2) / 2 * 2 + 1;
-                newExitY = UnityEngine.Random.Range(2, newHeight - this.elevatorSize - 2) / 2 * 2 + 1;
-                exit.setStartX(newExitX);
-                exit.setStartY(newExitY);
-            }
-            else
-            {
-                overlaps = false;
-            }
-        }
+    public void NextLevel()
+    {
+        DestroyCurrentLevel();
+        CreateNewLevel(); //equivalent to the constructor method when stage is first made
 
 
-      //place new exit in new grid
-        for (int x = newExitX; x < newExitX + this.elevatorSize; x++)
-        {
-            for (int y = newExitY; y < newExitY + this.elevatorSize; y++)
-            {
-                grid[x, y].Carve();
-                grid[x, y].setColor(currentRegion);
-                grid[x, y].setType("Exit");
-            }
-        }
-        rooms.Add(exit);
-        rooms.Add(entrance);
         //Place Rooms
         _addRooms(102); //TODO: Reset needs a need an argument to decide numTries
         //Place Halls
@@ -731,6 +575,8 @@ public class Stage  {
         removeDeadEnds();
         //Create the dungeon
         Create();
+        //Move player to the entrance
+        MovePlayerToEntrance();
     }
 
     public void PreviousLevel()
@@ -738,7 +584,6 @@ public class Stage  {
         GameObject Player = GameObject.FindGameObjectWithTag("Player");
         //Destroy Facility
         GameObject.Destroy(Facility);
-
         //Destroy Rooms
         rooms.Clear();
         //destroy all rooms but the elevator we're standing in, which in this case is spawnedRooms(1);
@@ -751,9 +596,7 @@ public class Stage  {
         }
         spawnedRooms.Clear();
 
-        //Make exit of current floor the entrance of floor we're coming from
-        exit = this.entrance;
-        exitObject = this.entranceObject;
+
 
 
         //Load previous level's grid
@@ -764,12 +607,7 @@ public class Stage  {
         this.height = this.grid.GetLength(1);
         this.rooms = (ArrayList) level[1];
         Room test = (Room)this.rooms[1];
-        if (test.getIsElevator())
-        {
-            entrance = test;
-        }
-        this.rooms.Add(exit);
-        this.spawnedRooms.Add(exitObject);
+        rooms.Add(exit);
         Create();
 
     }

@@ -62,6 +62,7 @@ public class StageBuilder : MonoBehaviour
     /*Everything related to creating the dungeon itself */
     void Awake()
     {
+        Application.targetFrameRate = 60;   
         scale = Accessiblescale;
         stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
         //TODO: place rooms first. 
