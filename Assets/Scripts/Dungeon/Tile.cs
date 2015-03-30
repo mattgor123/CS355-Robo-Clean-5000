@@ -13,6 +13,7 @@ public class Tile
     private const string Rock  = "Rock";      // 4 walls and ceiling generated
     private const string Floor = "Floor";     // Just a floor is generated
     private const string Exit = "Exit";       //Special Exit tile. TODO: Probably goes away with Connie's elevator
+    private const string Blank = "Blank";
     private Material wallMaterial; //material to assign to walls if the tile has any
     private Material floorMaterial; //material to assign to floor if the tile has one
     private int maxColors;
@@ -81,6 +82,11 @@ public class Tile
 
                 GameObject exit = CreateExit();
                 break;
+
+            case Blank:
+                //Do nothing for now
+                break;
+
         }
 
       

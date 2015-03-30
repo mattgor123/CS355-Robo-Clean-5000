@@ -423,11 +423,35 @@ public class Stage  {
         rooms.Add(this.exit);
     }
 
+    private void TrimRock()
+    {
+        //For each rock tile, look in the cardinal directions for a floor tile. 
+        //if none are found, then that Rock isn't visible anyway and can be destroyed.
+        for (int x = 1; x < this.width - 1; x++)
+        {
+            for (int y = 1; y < this.height - 1; y ++ )
+            {
+                Tile tile = this.grid[x, y];
+                if (tile.getType() == "Floor") continue;
+                if (grid[x - 1, y].getType() == "Floor") continue;
+                if (grid[x + 1, y].getType() == "Floor") continue;
+                if (grid[x, y - 1].getType() == "Floor") continue;
+                if (grid[x, y + 1].getType() == "Floor") continue;
+                //No floor found
+                tile.setType("Blank");
+            }
+        }
+    }
+
     /* Create()
      * Spawn every element of the grid
      */ 
     public void Create()
     {
+        //trim out the things that won't be visible anyway
+        TrimRock();
+
+
         //Store this floor in the array of levels
         System.Object[] level = new System.Object[2];
         level[0] = this.grid;
@@ -465,8 +489,11 @@ public class Stage  {
                 for (int y = 0; y < room.getHeight(); y++)
                 {
                     Vector2 position = room.getGridCoordinates(x, y);
-                    GameObject tile = grid[Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y)].GetTile();
-                    tile.transform.SetParent(roomObject.transform);
+                    if (grid[x, y].getType() == "Floor")
+                    {
+                        GameObject tile = grid[Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y)].GetTile();
+                        tile.transform.SetParent(roomObject.transform);
+                    }
 
 
                 }
