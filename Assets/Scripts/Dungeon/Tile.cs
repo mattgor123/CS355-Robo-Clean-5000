@@ -78,6 +78,7 @@ public class Tile
                 tile.transform.SetParent(mother);
                 tile.name = Exit;
                 tile.transform.position = this.position;
+
                 GameObject exit = CreateExit();
                 break;
         }

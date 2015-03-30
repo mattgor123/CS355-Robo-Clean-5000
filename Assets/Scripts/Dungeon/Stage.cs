@@ -16,7 +16,7 @@ public class Stage  {
     private int currentRegion;  //the color of the region being carved
     private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
     private int currentLevel;
-    private ArrayList levels;
+    private ArrayList levels; //Stores Object pairs, where the first element is the grid and the second is array of rooms
     private ArrayList spawnedRooms;
     private int elevatorSize = 3;
     private Room exit;
@@ -539,7 +539,12 @@ public class Stage  {
      */ 
     public void Create()
     {
-        levels.Add(grid);
+        //Store this floor in the array of levels
+        System.Object[] level = new System.Object[2];
+        level[0] = this.grid;
+        level[1] = this.rooms;
+        levels.Add(level);
+
         //The empty gameobject that all the tiles are hidden inside (besides rooms)
         Facility = new GameObject(); 
         Facility.name = "Research Facility";
@@ -547,7 +552,6 @@ public class Stage  {
         BoxCollider ground  = Facility.AddComponent<BoxCollider>();
         ground.size = new Vector3(this.width * StageBuilder.scale, 0.25f, this.height * StageBuilder.scale);
         ground.transform.position = new Vector3(this.width / 2 * StageBuilder.scale, -0.125f, this.height / 2 * StageBuilder.scale);
-        //spawnExit();
 
         //Calls each tile's Create function, passes scale downward so they all grow
         for (int x = 0; x < this.width; x++)
@@ -559,8 +563,11 @@ public class Stage  {
         }
 
         //Make tiles that are part of rooms be children of Room gameobject
-        foreach (Room room in rooms)
+        for (int i = 1; i < rooms.Count; i++) 
         {
+            //Need to skip the rooms that have already been created (exit/entrance) 
+            Room room = (Room)this.rooms[i];
+            if (room.getIsElevator()) continue;
             //instantiate roomObject
             //set position to be the middle of the room
             //get position of tile from room in global coordinates
@@ -569,7 +576,7 @@ public class Stage  {
             GameObject roomObject = room.GetRoom();
             roomObject = new GameObject();
             Vector2 center = room.GetRoomCenter();
-            roomObject.name ="Room at " + center;
+            roomObject.name = "Room at " + center;
             roomObject.transform.position = new Vector3(center.x, 0, center.y);
             for (int x = 0; x < room.getWidth(); x++)
             {
@@ -605,35 +612,6 @@ public class Stage  {
         }
     }
 
-    private bool CheckPlacement(int roomWidth, int roomHeight, int startX, int startY)
-    {
-        /*
-         * CheckPlacement()
-         * Sees if a room can be generated in a spot. 
-         * Considers whether new room intersects another one or goes outside stage
-         */
-        //check if room can fit into stage at given coordinates
-        if ((startX + roomWidth >= this.width) || (startY + roomHeight >= this.height))
-        {
-            return true;
-        }
-
-        //now check if room will overlap another room.
-        for (int x = startX; x < startX + roomWidth; x++)
-        {
-            for (int y = startY; y < startY + roomHeight; y++)
-            {
-                //During room placement the stage is either Rock tiles or parts of rooms
-                //TODO: Rooms are also going to have Wall tiles, so change this
-                if (this.grid[x, y].getType() == "Floor")
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false; //since the above didn't detect a collision
-    }
 
     private int ensureOdd(int num)
     {
@@ -656,6 +634,13 @@ public class Stage  {
 
         //Destroy Rooms
         rooms.Clear();
+        //Destroy all rooms except for the elevator we are standing in (in this case spawnedRooms(0)
+        for (int i = 1; i < spawnedRooms.Count; i++)
+        {
+            GameObject room = (GameObject) spawnedRooms[i];
+            GameObject.Destroy(room);
+
+        }
 
         //Create new grid of new dimensions
         int newWidth = 50;
@@ -669,8 +654,8 @@ public class Stage  {
             }
         }
 
-        //Store new grid in levels array
-        grid = newGrid;
+        //Switch active grid to current one.
+        this.grid = newGrid;
         this.height = newHeight;
         this.width = newWidth;
         currentLevel++;
@@ -744,12 +729,48 @@ public class Stage  {
         createDoors();
         //Remove Dead Ends
         removeDeadEnds();
-        //
+        //Create the dungeon
+        Create();
     }
 
     public void PreviousLevel()
     {
-        //TODO: This
+        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        //Destroy Facility
+        GameObject.Destroy(Facility);
+
+        //Destroy Rooms
+        rooms.Clear();
+        //destroy all rooms but the elevator we're standing in, which in this case is spawnedRooms(1);
+        for (int i = 0; i < spawnedRooms.Count; i++)
+        {
+            if (i == 1) continue;
+            GameObject room = (GameObject)spawnedRooms[i];
+            GameObject.Destroy(room);
+
+        }
+        spawnedRooms.Clear();
+
+        //Make exit of current floor the entrance of floor we're coming from
+        exit = this.entrance;
+        exitObject = this.entranceObject;
+
+
+        //Load previous level's grid
+        currentLevel--;
+        System.Object[] level = (System.Object[]) levels[currentLevel];
+        this.grid = (Tile[,]) level[0];
+        this.width = this.grid.GetLength(0);
+        this.height = this.grid.GetLength(1);
+        this.rooms = (ArrayList) level[1];
+        Room test = (Room)this.rooms[1];
+        if (test.getIsElevator())
+        {
+            entrance = test;
+        }
+        this.rooms.Add(exit);
+        this.spawnedRooms.Add(exitObject);
+        Create();
 
     }
 }
