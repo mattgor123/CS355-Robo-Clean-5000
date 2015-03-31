@@ -18,7 +18,8 @@ public class Stage  {
     private int currentLevel;
     private ArrayList levels; //Stores Object pairs, where the first element is the grid and the second is array of rooms
     private ArrayList spawnedRooms;
-    private int elevatorSize = 3;
+    private int elevatorSize = 5;
+    private GameObject elevatorObject;
     private Room exit;
     private GameObject Facility;
     private Material floorMaterial;
@@ -318,19 +319,21 @@ public class Stage  {
             }
 
             //gives chance for a second or more door to be added
-            while ((!hasDoor || oneIn(2)) && numDoors < potentialDoors.Count)
-            {
+            
+                while ((!hasDoor || oneIn(2)) && numDoors < potentialDoors.Count)
+                {
 
-                Debug.Log("Room can have " + potentialDoors.Count + " potential doors installed");
-                Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
-                potentialDoors.Remove(randomDoor);
-                int doorx = Mathf.FloorToInt(randomDoor.x);
-                int doory = Mathf.FloorToInt(randomDoor.y);
-                grid[doorx, doory].Carve();
-                Debug.Log("Carving new door at " + new Vector2(doorx, doory));
-                numDoors++;
-                hasDoor = true;
-            }
+                    Debug.Log("Room can have " + potentialDoors.Count + " potential doors installed");
+                    Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
+                    potentialDoors.Remove(randomDoor);
+                    int doorx = Mathf.FloorToInt(randomDoor.x);
+                    int doory = Mathf.FloorToInt(randomDoor.y);
+                    grid[doorx, doory].Carve();
+                    Debug.Log("Carving new door at " + new Vector2(doorx, doory));
+                    numDoors++;
+                    hasDoor = true;
+                }
+            
 
         }
     }
@@ -406,8 +409,8 @@ public class Stage  {
     //Spawns the exit room. This code needs to be changed so the entire room is an exit instead of a 2x2 pad
     private void spawnExit() {
         //adding elevator room
-        if (this.exit == null)
-        {
+        //if (this.exit == null)
+        //{
             int eStartX = UnityEngine.Random.Range(2, this.width - this.elevatorSize - 2) / 2 * 2 + 1;
             int eStartY = UnityEngine.Random.Range(2, this.height - this.elevatorSize - 2) / 2 * 2 + 1;
             this.exit = new Room(this.elevatorSize, this.elevatorSize, eStartX, eStartY);
@@ -421,7 +424,8 @@ public class Stage  {
                     grid[x, y].setType("Exit");
                 }
             }
-        }
+            grid[(int)this.exit.GetRoomCenter().x, (int)this.exit.GetRoomCenter().y].setType("Elevator");
+            this.exit.setIsElevator(true);
         rooms.Add(this.exit);
     }
 
@@ -501,6 +505,11 @@ public class Stage  {
                 }
             }
             spawnedRooms.Add(roomObject);
+
+            if (room.getIsElevator())
+            {
+                elevatorObject = roomObject;
+            }
         }
     }
 
@@ -550,7 +559,7 @@ public class Stage  {
         }
         spawnedRooms.Clear();
         //Destroy exit reference
-        exit = null;
+        //exit = null;
 
         
     }
@@ -576,14 +585,18 @@ public class Stage  {
         currentLevel++;
         //Create the new exit
         spawnExit();
+        
     }
 
     private void MovePlayerToEntrance()
     {
         //Get new spawn location for player and move him there
         GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        Vector3 roomToSpawnInto = ((GameObject)spawnedRooms[1]).transform.position;
-        Player.transform.position = roomToSpawnInto;
+        //Vector3 roomToSpawnInto = ((GameObject)spawnedRooms[1]).transform.position;
+        //Vector2 pos = this.exit.GetRoomCenter();
+        //Vector2 nPos = this.exit.getGridCoordinates((int)pos.x, (int)pos.y);
+        //Vector3 roomToSpawnInto = new Vector3(nPos.x, 0.1f, nPos.y);
+        Player.transform.position = elevatorObject.transform.position - new Vector3(0, 0, StageBuilder.scale * this.elevatorSize/2);
         
     }
 
@@ -606,6 +619,9 @@ public class Stage  {
         Create();
         //Move player to the entrance
         MovePlayerToEntrance();
+
+        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        pc.incrementCurrentFloor();
     }
 
     public void PreviousLevel()
@@ -638,6 +654,9 @@ public class Stage  {
         Room test = (Room)this.rooms[1];
         rooms.Add(exit);
         Create();
+
+        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        pc.decrementCurrentFloor();
 
     }
 }

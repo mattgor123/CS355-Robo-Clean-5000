@@ -12,7 +12,8 @@ public class Tile
     /*Types of Tiles Currently */
     private const string Rock  = "Rock";      // 4 walls and ceiling generated
     private const string Floor = "Floor";     // Just a floor is generated
-    private const string Exit = "Exit";       //Special Exit tile. TODO: Probably goes away with Connie's elevator
+    private const string Exit = "Exit";       //Special Exit tile
+    private const string Elevator = "Elevator"; //Center of Exit that has the trigger.
     private const string Blank = "Blank";
     private Material wallMaterial; //material to assign to walls if the tile has any
     private Material floorMaterial; //material to assign to floor if the tile has one
@@ -81,6 +82,15 @@ public class Tile
                 tile.transform.position = this.position;
 
                 GameObject exit = CreateExit();
+                break;
+
+            case Elevator:
+                tile = new GameObject();
+                tile.transform.SetParent(mother);
+                tile.name = Exit;
+                tile.transform.position = this.position;
+
+                GameObject elevator = CreateElevator();
                 break;
 
             case Blank:
@@ -157,6 +167,24 @@ public class Tile
         return floor;
     }
 
+    private GameObject CreateElevator()
+    {
+        GameObject exit = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        exit.transform.localScale = new Vector3(1, 1, 1) * StageBuilder.scale;
+        exit.transform.position = new Vector3(this.position.x, 0, this.position.z) * StageBuilder.scale;
+        exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+        Renderer Exrend = exit.GetComponent<Renderer>();
+        Exrend.material.color = Color.Lerp(Color.white, Color.green, 1.0f);
+        BoxCollider exitBox = exit.AddComponent<BoxCollider>();
+        exitBox.isTrigger = true;
+        Light glow = exit.AddComponent<Light>();
+        glow.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
+        var exScript = exit.AddComponent<NewRoomTrigger>();
+        //exScript.setLevel("RampDown");
+        exit.transform.SetParent(tile.transform);
+        return exit;
+    }
+
     private GameObject CreateExit()
     {
         GameObject exit = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -165,12 +193,12 @@ public class Tile
         exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         Renderer Exrend = exit.GetComponent<Renderer>();
         Exrend.material.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
-        BoxCollider exitBox = exit.AddComponent<BoxCollider>();
-        exitBox.isTrigger = true;
+        //BoxCollider exitBox = exit.AddComponent<BoxCollider>();
+        //exitBox.isTrigger = true;
         Light glow = exit.AddComponent<Light>();
         glow.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
-        var exScript = exit.AddComponent<NewRoomTrigger>();
-        exScript.setLevel("RampDown");
+        //var exScript = exit.AddComponent<NewRoomTrigger>();
+        //exScript.setLevel("RampDown");
         exit.transform.SetParent(tile.transform);
         return exit;
     }

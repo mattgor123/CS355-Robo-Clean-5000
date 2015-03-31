@@ -129,7 +129,15 @@ public class StageBuilder : MonoBehaviour
      */
     private void spawnEnemies()
     {
-        Vector2 randomRoom = stage.RandomRoom().GetRoomCenter() * StageBuilder.scale;
+        Room room = stage.RandomRoom();
+        while (room.getIsElevator())
+        {
+            //get a different room
+            room = stage.RandomRoom();
+        }
+
+        Vector2 randomRoom = room.GetRoomCenter() * StageBuilder.scale;
+        
         if (Random.Range(0f, 1f) <= .5)
         {
             Instantiate(enemy_aggressive, new Vector3(randomRoom.x, 0, randomRoom.y) + Vector3.up * 3, Quaternion.identity);
