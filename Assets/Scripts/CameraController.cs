@@ -11,6 +11,11 @@ public class CameraController : MonoBehaviour {
     private Vector3 offsetDC;
     private float SC;           //side correction distance variable
     private Vector3 facedown;   //angle facing down
+    private bool isShaking;
+    private Vector3 positionBeforeShake;
+    private int shakeIntensity;
+    private float shakeTime;
+    private float shakeCountdown;
 
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -23,9 +28,26 @@ public class CameraController : MonoBehaviour {
         SC = 0.6f;
         offsetDC = offset2 * 0.5f;
 
+        shakeIntensity = 1;
+        shakeTime = 2;
+
 	}
 
-	void LateUpdate () {        		
+	void LateUpdate () {
+        if (this.isShaking)
+        {
+            transform.position = positionBeforeShake + Random.insideUnitSphere * shakeIntensity;
+            this.shakeCountdown -= Time.deltaTime;
+            if (this.shakeCountdown < 0)
+            {
+                this.isShaking = false;
+                //GameObject.FindObjectOfType<NewRoomTrigger>().nextLevel(); ;
+                //GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
+                //stagebuilder.GetComponent<StageBuilder>().nextLevel();
+            }
+            return;
+        }
+	
         if (TrackFace)
         {
             //Stay behind the player, facing in same direction
@@ -96,4 +118,12 @@ public class CameraController : MonoBehaviour {
     {
         TrackFace = set;
     }
+
+    public void shake()
+    {
+        this.positionBeforeShake = transform.position;
+        this.shakeCountdown = this.shakeTime;
+        this.isShaking = true;
+    }
+        
 }

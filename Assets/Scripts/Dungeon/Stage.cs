@@ -592,17 +592,22 @@ public class Stage  {
     {
         //Get new spawn location for player and move him there
         GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        //Vector3 roomToSpawnInto = ((GameObject)spawnedRooms[1]).transform.position;
-        //Vector2 pos = this.exit.GetRoomCenter();
-        //Vector2 nPos = this.exit.getGridCoordinates((int)pos.x, (int)pos.y);
-        //Vector3 roomToSpawnInto = new Vector3(nPos.x, 0.1f, nPos.y);
-        Player.transform.position = elevatorObject.transform.position - new Vector3(0, 0, StageBuilder.scale * this.elevatorSize/2);
+        Player.transform.position = elevatorObject.transform.position - new Vector3(0, 0, StageBuilder.scale * (int)this.elevatorSize/2);
         
+    }
+
+    private IEnumerator WaitTwoSecs()
+    {
+        yield return new WaitForSeconds(2);
     }
 
 
     public void NextLevel()
     {
+        //CameraShake();
+        //yield new WaitForSeconds (2);
+        //WaitTwoSecs();
+
         DestroyCurrentLevel();
         CreateNewLevel(); //equivalent to the constructor method when stage is first made
 
@@ -658,6 +663,13 @@ public class Stage  {
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         pc.decrementCurrentFloor();
 
+    }
+
+    private void CameraShake()
+    {
+        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+        CameraController cc = camera.GetComponent<CameraController>();
+        cc.shake();
     }
 }
 
