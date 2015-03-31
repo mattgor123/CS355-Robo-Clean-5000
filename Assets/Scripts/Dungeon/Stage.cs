@@ -343,7 +343,7 @@ public class Stage  {
     //Returns a random room that's been placed in the grid
     public Room RandomRoom()
     {
-        return (Room)rooms[UnityEngine.Random.Range(0, rooms.Count)];
+        return (Room)rooms[UnityEngine.Random.Range(1, rooms.Count)];
     }
 
 
@@ -438,7 +438,7 @@ public class Stage  {
             for (int y = 1; y < this.height - 1; y ++ )
             {
                 Tile tile = this.grid[x, y];
-                if (tile.getType() == "Floor") continue;
+                if (tile.getType() == "Floor" || tile.getType() == "Exit") continue;
                 if (grid[x - 1, y].getType() == "Floor" || grid[x - 1, y].getType() == "Exit") continue;
                 if (grid[x + 1, y].getType() == "Floor" || grid[x + 1, y].getType() == "Exit") continue;
                 if (grid[x, y - 1].getType() == "Floor" || grid[x, y - 1].getType() == "Exjt") continue;
