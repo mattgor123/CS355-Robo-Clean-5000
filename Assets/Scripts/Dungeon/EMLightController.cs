@@ -17,9 +17,14 @@ public class EMLightController : MonoBehaviour {
     [SerializeField]
     private float dim;      //intensity of light when not directly triggered
 
+    [SerializeField]
+    private float Ftime;  //minimum time between flickers; does not flicker if == 0
+
     private bool activated; //whether light has been activated
     private Light[] EML;      //the light object children
     private int numLights;      //number of lights
+
+    private float Foffset;  //flicker offset (to keep different lights unaligned)
 
     // Use this for initialization
     void Start()
@@ -27,6 +32,7 @@ public class EMLightController : MonoBehaviour {
         //Attach subcomponent light
         EML = GetComponentsInChildren<Light>();
         numLights = EML.Length;
+        Foffset = Random.value * Ftime;
 
     }
 
@@ -54,6 +60,11 @@ public class EMLightController : MonoBehaviour {
         else
             SetIntensity(0f);
 
+        //flicker 
+        if (Ftime != 0 && Time.time % (Ftime + Foffset + Random.value*3f) <= 0.2) {
+            Flicker();
+        }
+        
 
     }
 
@@ -64,6 +75,22 @@ public class EMLightController : MonoBehaviour {
         {
             EML[i].intensity = intense;
         }
+    }
+
+    //Flicker the lights
+    private void Flicker()
+    {
+        if (Time.time % Random.value <= 0.2)
+        {
+            SetIntensity(0f);
+        }
+
+    }
+
+    //set flicker time externally
+    public void SetFlickerTime(float f)
+    {
+        Ftime = f;
     }
 }
 
