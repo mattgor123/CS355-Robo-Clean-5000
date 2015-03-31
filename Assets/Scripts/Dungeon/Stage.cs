@@ -335,6 +335,8 @@ public class Stage  {
         }
     }
 
+
+
     //Returns a random room that's been placed in the grid
     public Room RandomRoom()
     {
@@ -433,10 +435,10 @@ public class Stage  {
             {
                 Tile tile = this.grid[x, y];
                 if (tile.getType() == "Floor") continue;
-                if (grid[x - 1, y].getType() == "Floor") continue;
-                if (grid[x + 1, y].getType() == "Floor") continue;
-                if (grid[x, y - 1].getType() == "Floor") continue;
-                if (grid[x, y + 1].getType() == "Floor") continue;
+                if (grid[x - 1, y].getType() == "Floor" || grid[x - 1, y].getType() == "Exit") continue;
+                if (grid[x + 1, y].getType() == "Floor" || grid[x + 1, y].getType() == "Exit") continue;
+                if (grid[x, y - 1].getType() == "Floor" || grid[x, y - 1].getType() == "Exjt") continue;
+                if (grid[x, y + 1].getType() == "Floor" || grid[x, y + 1].getType() == "Exit") continue;
                 //No floor found
                 tile.setType("Blank");
             }
