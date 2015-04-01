@@ -15,7 +15,7 @@ public class NewRoomTrigger : MonoBehaviour {
     private int countdown;
     private float nextLevelCountdown;
 
-    private bool shake;
+    private bool trigger;
 
     //private GameObject elevatorCanvas;
 
@@ -24,7 +24,7 @@ public class NewRoomTrigger : MonoBehaviour {
         //player = GameObject.FindGameObjectWithTag("Player");
         countdown = 2;
         nextLevelCountdown = 0;
-        shake = false;
+        trigger = false;
         elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
         elevatorCanvas.SetActive(false);
     }
@@ -57,7 +57,7 @@ public class NewRoomTrigger : MonoBehaviour {
      
     void OnTriggerEnter(Collider other)
     {
-        if (!shake)
+        if (!trigger)
         {
 
             //if this object hits Player
@@ -81,7 +81,7 @@ public class NewRoomTrigger : MonoBehaviour {
                 
                 //nextLevelCountdown = countdown;
 
-                shake = true;
+                trigger = true;
 
                 //GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
                 //stagebuilder.GetComponent<StageBuilder>().nextLevel();
@@ -93,5 +93,19 @@ public class NewRoomTrigger : MonoBehaviour {
     {
         GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
         stagebuilder.GetComponent<StageBuilder>().nextLevel();
+    }
+
+    public void cancelElevator()
+    {
+        //trigger = false;
+        elevatorCanvas.SetActive(false);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            trigger = false;
+        }
     }
 }

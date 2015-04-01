@@ -13,13 +13,35 @@ public class ElevatorController : MonoBehaviour {
     [SerializeField]
     private int maxLevels;
 
+    [SerializeField]
+    private int buttonGap;
+
+    private int countdown;
+    private float nextLevelCountdown;
+
 	// Use this for initialization
 	void Start () {
         //gameObject.SetActive(false);
+        countdown = 2;
+        nextLevelCountdown = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if (nextLevelCountdown == 0)
+        {
+            return;
+        }
+        else if (nextLevelCountdown > 0)
+        {
+            nextLevelCountdown -= Time.deltaTime;
+        }
+        else
+        {
+            //nextLevelCountdown = 0;
+            GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
+            stagebuilder.GetComponent<StageBuilder>().nextLevel();
+        }
 	
 	}
 
@@ -35,23 +57,49 @@ public class ElevatorController : MonoBehaviour {
 
         for (int i = 0; i <= dfv + 1; i++)
         {
-            GameObject button = Instantiate(eButton);
-            button.GetComponentInChildren<Text>().text = "B"+i;
-            button.transform.SetParent(ePanel.transform);
+            if (pc.getCurrentFloor() != i)
+            {
 
-            Vector3 change = new Vector3(0, i * 45 + (maxLevels/2) * 45, 0);
+                GameObject button = Instantiate(eButton);
+                button.GetComponentInChildren<Text>().text = "B" + i;
+                button.transform.SetParent(ePanel.transform);
 
-            Vector3 pos = ePanel.transform.position + change;
+                Vector3 change = new Vector3(0, -(i * buttonGap) + (maxLevels / 2) * buttonGap, 0);
 
-            button.transform.position = pos;
+                Vector3 pos = ePanel.transform.position + change;
+
+                button.transform.position = pos;
+
+                button.GetComponent<Button>().onClick.AddListener(
+                    () => shake(i)
+                    );
+            }
         }
 
+        GameObject cancelButton = Instantiate(eButton);
+        cancelButton.GetComponentInChildren<Text>().text = "Cancel";
+        cancelButton.transform.SetParent(ePanel.transform);
+
+        Vector3 cChange = new Vector3(0, -(maxLevels / 2) * buttonGap, 0);
+
+        Vector3 cPos = ePanel.transform.position + cChange;
+
+        cancelButton.transform.position = cPos;
+        cancelButton.GetComponent<Button>().onClick.AddListener(
+                    () => cancel()
+                    );
     }
 
-    private void shake()
+    private void shake(int level)
     {
         GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
         CameraController cc = camera.GetComponent<CameraController>();
         cc.shake();
+        nextLevelCountdown = countdown;
+    }
+
+    private void cancel()
+    {
+
     }
 }
