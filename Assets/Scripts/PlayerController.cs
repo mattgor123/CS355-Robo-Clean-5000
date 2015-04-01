@@ -307,6 +307,11 @@ public class PlayerController : MonoBehaviour {
         currentFloor -= 1;
     }
 
+    public void setCurrentFloor(int floor)
+    {
+        currentFloor = floor;
+    }
+
     public void incrementDialogueLevel()
     {
         dialogueLevel += 1;

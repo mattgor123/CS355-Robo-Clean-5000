@@ -590,6 +590,14 @@ public class Stage  {
         currentLevel++;
         //Create the new exit
         spawnExit();
+        //Place Rooms
+        _addRooms(102); //TODO: Reset needs a need an argument to decide numTries
+        //Place Halls
+        PlaceHalls();
+        //Create Doors
+        createDoors();
+        //Remove Dead Ends
+        removeDeadEnds();
         
     }
 
@@ -607,66 +615,44 @@ public class Stage  {
     }
 
 
-    public void NextLevel()
+    public void NextLevel(int level)
     {
         //CameraShake();
         //yield new WaitForSeconds (2);
         //WaitTwoSecs();
 
-        DestroyCurrentLevel();
-        CreateNewLevel(); //equivalent to the constructor method when stage is first made
+        if (level == levels.Count) //level is exactly one deeper than previous depth
+        {
+            DestroyCurrentLevel();
+            CreateNewLevel(); //equivalent to the constructor method when stage is first made
+
+        }
+        else if (level < levels.Count) //level has already been made. Must be loaded
+        {
+            DestroyCurrentLevel();
+            LoadLevel(level);
+        }
 
 
-        //Place Rooms
-        _addRooms(102); //TODO: Reset needs a need an argument to decide numTries
-        //Place Halls
-        PlaceHalls();
-        //Create Doors
-        createDoors();
-        //Remove Dead Ends
-        removeDeadEnds();
         //Create the dungeon
         Create();
         //Move player to the entrance
         MovePlayerToEntrance();
 
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        pc.incrementCurrentFloor();
+        pc.setCurrentFloor(level);
     }
 
-    public void PreviousLevel()
+    public void LoadLevel(int toLoad)
     {
-        GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        //Destroy Facility
-        GameObject.Destroy(Facility);
-        //Destroy Rooms
-        rooms.Clear();
-        //destroy all rooms but the elevator we're standing in, which in this case is spawnedRooms(1);
-        for (int i = 0; i < spawnedRooms.Count; i++)
-        {
-            if (i == 1) continue;
-            GameObject room = (GameObject)spawnedRooms[i];
-            GameObject.Destroy(room);
-
-        }
-        spawnedRooms.Clear();
-
-
-
-
         //Load previous level's grid
-        currentLevel--;
-        System.Object[] level = (System.Object[]) levels[currentLevel];
+        currentLevel = toLoad;
+        System.Object[] level = (System.Object[]) levels[toLoad];
         this.grid = (Tile[,]) level[0];
         this.width = this.grid.GetLength(0);
         this.height = this.grid.GetLength(1);
         this.rooms = (ArrayList) level[1];
-        Room test = (Room)this.rooms[1];
-        rooms.Add(exit);
-        Create();
-
-        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        pc.decrementCurrentFloor();
+        
 
     }
 

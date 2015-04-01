@@ -1,45 +1,45 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-
-
 public class HUDController : MonoBehaviour {
   [SerializeField] private float message_display_time;
   [SerializeField] private int max_messages;
-  [SerializeField] private string health_text;
-  [SerializeField] private string ammo_text;
+  [SerializeField] private Text ammo_text;
+  [SerializeField] private Text notification_text;
+  [SerializeField] private Text level_text;
+
   private List<Message> messages;
   private GameObject player;
 
-  private void Start () {
+  private void Awake () {
     player = GameObject.FindGameObjectWithTag("Player");
   }
     
   private void LateUpdate () {
-    UpdateMessages();
-    UpdateHealth();
     UpdateAmmo();
-  }
-
-  private void UpdateMessages () {
-    var time = Time.time;
-    if(messages.Count > 0 || messages.Count > max_messages) {
-      while(time - messages.Last().getCreation() > message_display_time) {
-        messages.RemoveAt(messages.Count - 1);
-      }
-    }
-  }
-
-  private void UpdateHealth () {
-    health_text = player.GetComponent<HealthController>()
-                             .GetCurrentHealth().ToString();
+    UpdateNotification();
   }
 
   private void UpdateAmmo () {
-    ammo_text = player.GetComponent<WeaponBackpackController>()
+    ammo_text.text = player.GetComponent<WeaponBackpackController>()
                            .GetAmmo().ToString();
+  }
+
+  private void UpdateNotification () {
+    var time = Time.time;
+    while(time - messages.Last().getCreation() > message_display_time) {
+      messages.RemoveAt(messages.Count - 1);
+    }
+    string result = "";
+    for(var i = 0; i < messages.Count; ++i) {
+      if(i < max_messages) {
+        result += "\n" + messages[i].getText();
+      }
+    }
+    notification_text.text = result;
   }
 
   public void AddMessage (string text) {
