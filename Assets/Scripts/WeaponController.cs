@@ -20,6 +20,8 @@ public class WeaponController : MonoBehaviour {
 
     private void Start()
     {
+        //var collider = this.GetComponent<BoxCollider>();
+        //collider.enabled = false;
         owner = transform.parent.parent;
         backpack_controller = owner.GetComponent<WeaponBackpackController>();        
     }
@@ -72,6 +74,7 @@ public class WeaponController : MonoBehaviour {
 	}
 
 	public void StopFiring () {
+        
 		firing = false;
 	}
 

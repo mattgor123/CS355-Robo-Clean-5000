@@ -339,7 +339,6 @@ public class Stage  {
     }
 
 
-
     //Returns a random room that's been placed in the grid
     public Room RandomRoom()
     {
@@ -631,7 +630,7 @@ public class Stage  {
 
     public void PreviousLevel()
     {
-        
+        GameObject Player = GameObject.FindGameObjectWithTag("Player");
         //Destroy Facility
         GameObject.Destroy(Facility);
         //Destroy Rooms

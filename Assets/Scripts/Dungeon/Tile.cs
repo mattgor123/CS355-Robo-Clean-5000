@@ -169,8 +169,9 @@ public class Tile
         floor.transform.position = new Vector3(this.position.x, 0, this.position.z) * StageBuilder.scale;
         floor.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         Renderer Frend = floor.GetComponent<Renderer>();
-        GameObject.DestroyImmediate(floor.GetComponent<BoxCollider>());
+        //GameObject.Destroy(floor.GetComponent<MeshCollider>());
         Frend.material = floorMaterial;
+        floor.layer = LayerMask.NameToLayer("EnemySpawnable");   
         floor.transform.SetParent(tile.transform);
         return floor;
     }
