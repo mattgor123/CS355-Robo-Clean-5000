@@ -151,8 +151,7 @@ public class Tile
         PhysicMaterial physics = new PhysicMaterial();
         physics.staticFriction = 0;
         physics.dynamicFriction = 0;
-        physics.bounceCombine = PhysicMaterialCombine.Average;
-        physics.bounciness = 1;
+
         collider.material = physics;
         Renderer rend = wall.GetComponent<Renderer>();
         rend.material = this.wallMaterial;
@@ -192,6 +191,7 @@ public class Tile
         light.type = LightType.Spot;
         light.spotAngle = 60f;
         light.intensity = 8f;
+        lightObject.transform.SetParent(exit.transform);
         
         
         lightObject.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
