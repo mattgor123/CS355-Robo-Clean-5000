@@ -53,11 +53,13 @@ public class PlayerController : MonoBehaviour {
     private int currentFloor;
     private int deepestLevelVisited;
     private int dialogueLevel;
+    private Animator anim;
 
 	private void Start () {
         GameObject MC = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
         camera = MC.GetComponent<Camera>();                             //Attach camera and controller components
         CamControl = MC.GetComponent<CameraController>();
+        anim = GetComponent<Animator>();
 
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
@@ -85,12 +87,21 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void Update () {
-		if(Input.GetMouseButtonDown(0)) {
-			weapon_backpack_controller.StartFiring();
-		}
-		else if(Input.GetMouseButtonUp(0)) {
-			weapon_backpack_controller.StopFiring();
-		}
+        if (Input.GetMouseButton(1)) {
+            if (anim.GetBool("isIdle")) {
+                anim.SetLayerWeight(1, 1);
+            }// else {
+              //  anim.SetLayerWeight(1, 0);
+           // }    
+            if(Input.GetMouseButtonDown(0)) {
+                weapon_backpack_controller.StartFiring();
+            }
+            else if(Input.GetMouseButtonUp(0)) {
+                weapon_backpack_controller.StopFiring();
+            }
+        } else if (Input.GetMouseButtonUp(1)) {
+            anim.SetLayerWeight(1, 0);
+        }   
 
 		if(Input.GetKeyDown("r")) {
 			weapon_backpack_controller.NextWeapon();

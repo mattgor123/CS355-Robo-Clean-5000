@@ -18,9 +18,9 @@ public class MovementController : MonoBehaviour {
 
 	private void Awake() {
 		anim = GetComponent<Animator>();
-		if (anim.layerCount >= 2) {
-			anim.SetLayerWeight(1, 1);
-		}
+		//if (anim.layerCount >= 2) {
+		//	anim.SetLayerWeight(1, 1);
+		//}
 		healthController = GetComponent<HealthController>();
 	}
 
@@ -39,6 +39,7 @@ public class MovementController : MonoBehaviour {
             // if the object is not standing still, move object
             if (z_axis != 0f || x_axis != 0f)
             {
+            	anim.SetBool("isIdle", false);
                 var force = walk_force;
                 Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
                 if (ControlScheme)
@@ -63,6 +64,7 @@ public class MovementController : MonoBehaviour {
             }
             else
             {
+            	anim.SetBool("isIdle", true);
                 anim.SetFloat("Speed", 0f);
             }
         }
