@@ -21,7 +21,7 @@ public class BulletController : MonoBehaviour {
 
 	private void Start () {
 		creation_time = Time.time;
-
+        layerMask = 1 << LayerMask.NameToLayer("Wall");
         //Following is from http://wiki.unity3d.com/index.php?title=DontGoThroughThings
         myRigidbody = GetComponent<Rigidbody>();
         previousPosition = myRigidbody.position;
@@ -102,6 +102,8 @@ public class BulletController : MonoBehaviour {
                {
                    victim_health.ChangeHealth(-damage);
                }
+               if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
+                   myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
                Destroy(gameObject);
            }
 	   } 

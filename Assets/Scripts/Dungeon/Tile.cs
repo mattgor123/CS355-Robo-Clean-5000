@@ -156,6 +156,7 @@ public class Tile
         collider.material = physics;
         Renderer rend = wall.GetComponent<Renderer>();
         rend.material = this.wallMaterial;
+        wall.layer = LayerMask.NameToLayer("Wall");
         wall.transform.localScale = new Vector3(1, 2, 1) * StageBuilder.scale;
         wall.transform.position = new Vector3(this.position.x + x, 1, this.position.z + z) * StageBuilder.scale;
         return wall;
