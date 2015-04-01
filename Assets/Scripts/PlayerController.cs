@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour {
     private int[] count;
 
     private int currentFloor;
-    
+    private int deepestLevelVisited;
     private int dialogueLevel;
 
 	private void Start () {
@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour {
 
         currentFloor = 0;
         dialogueLevel = 0;
+        deepestLevelVisited = 0;
 	}
 
 	private void Update () {
@@ -267,12 +268,12 @@ public class PlayerController : MonoBehaviour {
     public void incrementCurrentFloor()
     {
         currentFloor += 1;
-        /*
-        if (currentFloor > dialogueLevel)
+        
+        if (currentFloor > deepestLevelVisited)
         {
-            dialogueLevel = currentFloor;
+            deepestLevelVisited = currentFloor;
         }
-         * */
+         
     }
 
     public void decrementCurrentFloor()
@@ -293,6 +294,16 @@ public class PlayerController : MonoBehaviour {
     public int getDialogueLevel()
     {
         return dialogueLevel;
+    }
+
+    public int getDeepestLevelVisited()
+    {
+        return deepestLevelVisited;
+    }
+
+    private void incrementDeepestLevelVisited()
+    {
+        deepestLevelVisited += 1;
     }
 
     public bool GetFlashlightActive()

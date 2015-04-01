@@ -631,7 +631,7 @@ public class Stage  {
 
     public void PreviousLevel()
     {
-        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        
         //Destroy Facility
         GameObject.Destroy(Facility);
         //Destroy Rooms

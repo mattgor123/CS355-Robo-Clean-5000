@@ -1,18 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class NewRoomTrigger : MonoBehaviour {
 
     //The scene name that this trigger leads to
-    [SerializeField]
-    string level = "RampDown";
+    //[SerializeField]
+    //string level = "RampDown";
 
     //private GameObject player;
+
+    private GameObject elevatorCanvas;
 
     private int countdown;
     private float nextLevelCountdown;
 
     private bool shake;
+
+    //private GameObject elevatorCanvas;
 
     void Start()
     {
@@ -20,6 +25,8 @@ public class NewRoomTrigger : MonoBehaviour {
         countdown = 2;
         nextLevelCountdown = 0;
         shake = false;
+        elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
+        elevatorCanvas.SetActive(false);
     }
 
     void Update()
@@ -41,11 +48,13 @@ public class NewRoomTrigger : MonoBehaviour {
 
     }
 
+    /*
     public void setLevel(string s)
     {
         level = s;
     }
-
+    */
+     
     void OnTriggerEnter(Collider other)
     {
         if (!shake)
@@ -54,14 +63,23 @@ public class NewRoomTrigger : MonoBehaviour {
             //if this object hits Player
             if (other.gameObject.tag == "Player")
             {
-                //load next scene
-                //Application.LoadLevel(level);
+                //PlayerController pc = other.gameObject.GetComponent<PlayerController>();
+                //int dfv = pc.getDeepestLevelVisited();
 
-                GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
-                CameraController cc = camera.GetComponent<CameraController>();
-                cc.shake();
+                //GameObject ep = GameObject.FindGameObjectWithTag("ElevatorPanel");
 
-                nextLevelCountdown = countdown;
+
+                //TODO pause everything
+                ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
+                ec.makeButtons();
+
+                elevatorCanvas.SetActive(true);
+
+                //GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+                //CameraController cc = camera.GetComponent<CameraController>();
+                //cc.shake();
+                
+                //nextLevelCountdown = countdown;
 
                 shake = true;
 

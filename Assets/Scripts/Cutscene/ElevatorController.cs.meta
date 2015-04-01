@@ -1,11 +1,10 @@
 fileFormatVersion: 2
-guid: 3278f5a9787b6d545a2f6634be44c012
-timeCreated: 1427858321
+guid: 5eb4faa9fd97ece43b45268b32bcc7bf
+timeCreated: 1427858582
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences:
-  - eButton: {fileID: 126808, guid: b2e3593fd4f80554c882d27720f1d162, type: 2}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
