@@ -11,11 +11,12 @@ public class HUDController : MonoBehaviour {
   [SerializeField] private Text notification_text;
   [SerializeField] private Text level_text;
 
-  private List<Message> messages;
-  private GameObject player;
+  private List<Message> messages = new List<Message>();
+  private WeaponBackpackController weapon_backpack_controller;
 
-  private void Awake () {
-    player = GameObject.FindGameObjectWithTag("Player");
+  private void Start () {
+    GameObject player = GameObject.FindWithTag("Player");
+    weapon_backpack_controller = player.GetComponent<WeaponBackpackController>();
   }
     
   private void LateUpdate () {
@@ -24,19 +25,20 @@ public class HUDController : MonoBehaviour {
   }
 
   private void UpdateAmmo () {
-    ammo_text.text = player.GetComponent<WeaponBackpackController>()
-                           .GetAmmo().ToString();
+    ammo_text.text = weapon_backpack_controller.GetAmmo().ToString() + " / ∞";
   }
 
   private void UpdateNotification () {
     var time = Time.time;
-    while(time - messages.Last().getCreation() > message_display_time) {
-      messages.RemoveAt(messages.Count - 1);
-    }
     string result = "";
-    for(var i = 0; i < messages.Count; ++i) {
-      if(i < max_messages) {
-        result += "\n" + messages[i].getText();
+    if(messages.Count > 0) {
+      while(time - messages.Last().getCreation() > message_display_time) {
+        messages.RemoveAt(messages.Count - 1);
+      }
+      for(var i = 0; i < messages.Count; ++i) {
+        if(i < max_messages) {
+          result += "\n" + messages[i].getText();
+        }
       }
     }
     notification_text.text = result;

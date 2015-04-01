@@ -15,11 +15,7 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private Transform Player;
     [SerializeField]
-    private Transform WeaponCanvas;
-    [SerializeField]
-    private Transform HealthCanvas;
-    [SerializeField]
-    private Transform AmmoCanvas;
+    private Transform HUD;
     [SerializeField]
     private Transform NotificationCanvas;
     [SerializeField]
@@ -110,17 +106,13 @@ public class StageBuilder : MonoBehaviour
 
         Vector3 spawnpoint = new Vector3(roomCenter.x - 1, 1f, roomCenter.y - 1);
         Transform player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
-        Transform weaponCanvasInstance = Instantiate(WeaponCanvas) as Transform;
-        Transform healthCanvasInstance = Instantiate(HealthCanvas) as Transform;
-        Transform ammoCanvasInstance = Instantiate(AmmoCanvas) as Transform;
+        Transform hudInstance = Instantiate(HUD) as Transform;
         Transform notificationCanvasInstance = Instantiate(NotificationCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
-        DontDestroyOnLoad(weaponCanvasInstance);
-        DontDestroyOnLoad(healthCanvasInstance);
-        DontDestroyOnLoad(ammoCanvasInstance);
+        DontDestroyOnLoad(hudInstance);
         DontDestroyOnLoad(notificationCanvasInstance);
         DontDestroyOnLoad(cameraInstance);
     }
