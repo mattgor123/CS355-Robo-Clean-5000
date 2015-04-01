@@ -6,7 +6,7 @@ using System;
 
 public class Stage  {
 
-    #region Stage's private members
+    #region Stages private members
     [SerializeField]
     private int width;
     [SerializeField]
@@ -28,7 +28,7 @@ public class Stage  {
 
 
 
-    public Stage(int width, int height, Material floor, Material wall) 
+    public Stage(int width, int height, Material[] floors, Material[] walls) 
     {
         //FloodFill algorithm needs odd-length grid
         currentLevel = 0; //start level
@@ -39,19 +39,25 @@ public class Stage  {
         this.height = ensureOdd(height);
         grid = new Tile[this.width, this.height];
         currentRegion = -1;
-        this.floorMaterial = floor;
-        this.wallMaterial = wall;
+        int i = RandomizeMaterials(floors.Length);
+        this.floorMaterial = floors[i];
+        this.wallMaterial = walls[i];
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
         {
             for (int y = 0; y < this.height; y++)
             {
-                grid[x, y] = new Tile("Rock", new Vector3(x, 0, y), floor, wall);
+                grid[x, y] = new Tile("Rock", new Vector3(x, 0, y),
+                 this.floorMaterial, this.wallMaterial);
             }
         }
 
         spawnExit();
 
+    }
+
+    private int RandomizeMaterials(int size) {
+        return UnityEngine.Random.Range(0, size);
     }
 
 

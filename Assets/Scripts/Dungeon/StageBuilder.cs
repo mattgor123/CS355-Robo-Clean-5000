@@ -4,7 +4,7 @@ using System.Collections;
 public class StageBuilder : MonoBehaviour
 {
 
-    #region StageBuilder's private variables
+    #region StageBuilders private variables
     private Stage stage;
     [SerializeField]
     private int WIDTH_MUST_BE_ODD;
@@ -12,10 +12,6 @@ public class StageBuilder : MonoBehaviour
     private int HEIGHT_MUST_BE_ODD;
     [SerializeField]
     private int NUMBER_ROOM_TRIES;
-    [SerializeField]
-    private Material wallMaterial;
-    [SerializeField]
-    private Material floorMaterial;
     [SerializeField]
     private Transform Player;
     [SerializeField]
@@ -56,6 +52,10 @@ public class StageBuilder : MonoBehaviour
     private int maxEnemies; //max enemies to be in dungeon at any one time;
     private static int numEnemies;
     public static float scale; //static and public so its reachable across classes
+    [SerializeField]
+    private Material[] floorMaterials;
+    [SerializeField]
+    private Material[] wallMaterials;
     #endregion
 
 
@@ -65,7 +65,7 @@ public class StageBuilder : MonoBehaviour
         Application.targetFrameRate = 60    ;
         QualitySettings.vSyncCount = 0;
         scale = Accessiblescale;
-        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
+        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterials, wallMaterials);
         //TODO: place rooms first. 
         stage._addRooms(NUMBER_ROOM_TRIES);
         stage.PlaceHalls();
