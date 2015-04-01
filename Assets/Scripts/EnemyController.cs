@@ -116,7 +116,9 @@ public class EnemyController : MonoBehaviour {
 
         //Perform attack & face player if aggroed
         if (AggroState) { 
-            transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);       
+           
+            transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
+            transform.LookAt(player.transform);
         }
 
         //Apply animations

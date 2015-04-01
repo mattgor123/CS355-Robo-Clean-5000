@@ -4,7 +4,7 @@ using System.Collections;
 public class StageBuilder : MonoBehaviour
 {
 
-    #region StageBuilder's private variables
+    #region StageBuilders private variables
     private Stage stage;
     [SerializeField]
     private int WIDTH_MUST_BE_ODD;
@@ -62,7 +62,8 @@ public class StageBuilder : MonoBehaviour
     /*Everything related to creating the dungeon itself */
     void Awake()
     {
-        Application.targetFrameRate = 60;   
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
         scale = Accessiblescale;
         stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
         //TODO: place rooms first. 
@@ -144,7 +145,7 @@ public class StageBuilder : MonoBehaviour
         }
         else
         {
-            Instantiate(enemy_smart, new Vector3(randomRoom.x, 0, randomRoom.y) + Vector3.up, Quaternion.identity);
+            Instantiate(enemy_smart, new Vector3(randomRoom.x, 0, randomRoom.y), Quaternion.identity);
         }
     }
 
@@ -158,7 +159,7 @@ public class StageBuilder : MonoBehaviour
         audio.Play();
     }
 
-    /*Global method that let's EnemyController inform StageBuilder when an enemy dies */
+    /*Global method that lets EnemyController inform StageBuilder when an enemy dies */
     public static void EnemyDied()
     {
         numEnemies--;
