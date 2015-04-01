@@ -59,7 +59,7 @@ public class Tile
                 tile.transform.SetParent(mother);
                 tile.transform.position = this.position;
                 tile.name = Rock;
-                GameObject ceiling = CreateCeiling();
+                //GameObject ceiling = CreateCeiling();
                 GameObject NorthWall = CreateWall("NorthWall", 180, 0f, 0.5f);
                 GameObject SouthWall = CreateWall("SouthWall", 0, 0, -0.5f);
                 GameObject WestWall = CreateWall("WestWall", 90, -0.5f, 0);
@@ -73,6 +73,7 @@ public class Tile
                 tile.name = Floor;
                 tile.transform.position = this.position;
                 GameObject floor = CreateFloor();
+                floor.layer = LayerMask.NameToLayer("EnemySpawnable");
                 break;
 
             case Exit:
@@ -80,7 +81,7 @@ public class Tile
                 tile.transform.SetParent(mother);
                 tile.name = Exit;
                 tile.transform.position = this.position;
-
+                GameObject ceiling = CreateCeiling();
                 GameObject exit = CreateExit();
                 break;
 
@@ -134,8 +135,8 @@ public class Tile
         ceiling.transform.position = new Vector3(this.position.x, 2, this.position.z) * StageBuilder.scale;
         ceiling.transform.SetParent(tile.transform);
         Renderer ceilRend = ceiling.GetComponent<Renderer>();
-        ceilRend.material.color = Color.black;
-        ceiling.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+        ceilRend.material.color = Color.yellow;
+        ceiling.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         ceiling.name = "Ceiling";
         return ceiling;
     }
@@ -174,11 +175,20 @@ public class Tile
         exit.transform.position = new Vector3(this.position.x, 0, this.position.z) * StageBuilder.scale;
         exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         Renderer Exrend = exit.GetComponent<Renderer>();
-        Exrend.material.color = Color.Lerp(Color.white, Color.green, 1.0f);
+        Exrend.material.color = Color.green;
         BoxCollider exitBox = exit.AddComponent<BoxCollider>();
+        GameObject lightObject = new GameObject();
+        Light light = lightObject.AddComponent<Light>();
+        light.type = LightType.Spot;
+        light.spotAngle = 60f;
+        light.intensity = 8f;
+        
+        
+        lightObject.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+
+        lightObject.transform.position = new Vector3(this.position.x, 1, this.position.z) * StageBuilder.scale;
+        
         exitBox.isTrigger = true;
-        Light glow = exit.AddComponent<Light>();
-        glow.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
         var exScript = exit.AddComponent<NewRoomTrigger>();
         //exScript.setLevel("RampDown");
         exit.transform.SetParent(tile.transform);
@@ -192,11 +202,12 @@ public class Tile
         exit.transform.position = new Vector3(this.position.x, 0, this.position.z) * StageBuilder.scale;
         exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         Renderer Exrend = exit.GetComponent<Renderer>();
-        Exrend.material.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
+        Exrend.material.color = Color.yellow;
+        exit.layer = LayerMask.NameToLayer("Exit");   
         //BoxCollider exitBox = exit.AddComponent<BoxCollider>();
         //exitBox.isTrigger = true;
-        Light glow = exit.AddComponent<Light>();
-        glow.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
+        //Light glow = exit.AddComponent<Light>();
+        //glow.color = Color.Lerp(Color.white, Color.yellow, 1.0f);
         //var exScript = exit.AddComponent<NewRoomTrigger>();
         //exScript.setLevel("RampDown");
         exit.transform.SetParent(tile.transform);
