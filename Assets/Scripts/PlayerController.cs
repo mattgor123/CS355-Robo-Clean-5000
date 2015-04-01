@@ -134,31 +134,9 @@ public class PlayerController : MonoBehaviour {
         {
 			GameObject nlog = GameObject.FindWithTag("Log");
 			NotificationLog log = nlog.GetComponent<NotificationLog>(); 
-            if (ControlScheme)
-            {
-                ControlScheme = false;  
-				log.PassMessage("cardinal controls");
-            }
-            else
-            {
-                ControlScheme = true;
-				log.PassMessage("mouse oriented controls");
-            }
+
         }
 
-        //Track Facing toggle
-        if (Input.GetKeyDown("k"))
-        {
-            if (TrackFace)
-            {
-                TrackFace = false;
-            }
-            else
-            {
-                TrackFace = true;
-            }
-            CamControl.SetTrackFace(TrackFace);
-        }
 
         //Flashlight Toggle
         if (Input.GetKeyDown("f"))
@@ -371,11 +349,11 @@ public class PlayerController : MonoBehaviour {
         {
             var z_axis = Input.GetAxis("Vertical");
             var x_axis = Input.GetAxis("Horizontal");
-            movement_controller.UpdateMovement(z_axis, x_axis, ControlScheme);
+            movement_controller.UpdateMovement(z_axis, x_axis);
         }
         else if (dashCountdown > 0)
         {
-            movement_controller.UpdateMovement(dashDirection.x, dashDirection.y, ControlScheme);
+            movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
             dashCountdown = dashCountdown - Time.deltaTime;
             //Debug.Log(Time.deltaTime);
         }

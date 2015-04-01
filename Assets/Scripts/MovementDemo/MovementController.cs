@@ -31,7 +31,7 @@ public class MovementController : MonoBehaviour {
 		last_rotation = -rotation_delay;
 	}
 
-	public void UpdateMovement (float z_axis, float x_axis, bool ControlScheme) {        
+	public void UpdateMovement (float z_axis, float x_axis) {        
 		// if the player is still alive, apply movement logic
         Vector3 resulting_force;
         if (healthController.GetCurrentHealth() > 0)
@@ -42,21 +42,15 @@ public class MovementController : MonoBehaviour {
             	anim.SetBool("isIdle", false);
                 var force = walk_force;
                 Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
-                if (ControlScheme)
+                
+                var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
+                var x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
+                if (z_axis <= 0f)
                 {
-                    var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
-                    var x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
-                    if (z_axis <= 0f)
-                        counteraction = transform.forward * -7.5f;
-                    resulting_force = z_force + x_force;
+                    counteraction = transform.forward * -4.0f;
                 }
-                else
-                {
-                    var z_force = new Vector3(0f, 0f, z_axis);
-                    var x_force = new Vector3(x_axis, 0f, 0f);
-                    counteraction = transform.forward * -6.5f;
-                    resulting_force = force * Time.deltaTime * 3.0f * (z_force + x_force).normalized;
-                }
+                resulting_force = z_force + x_force;
+            
                 anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
                 GetComponent<Rigidbody>().AddForce(resulting_force, ForceMode.Impulse);
                 GetComponent<Rigidbody>().AddForce(counteraction, ForceMode.Impulse);

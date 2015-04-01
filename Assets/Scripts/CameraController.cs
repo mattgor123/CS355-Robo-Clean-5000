@@ -49,70 +49,56 @@ public class CameraController : MonoBehaviour {
             return;
         }
 	
-        if (TrackFace)
+        //Stay behind the player, facing in same direction
+        transform.position = Player.transform.position;
+        transform.forward = Player.transform.forward;
+        transform.position += offset2 - Player.transform.forward * (5f);
+        transform.Rotate(facedown);
+
+        //Dynamic Camera zoom (to prevent clipping through walls)
+        //setup connecting axis
+        Vector3 core = Player.transform.position + offsetDC;
+        Vector3 axis = transform.position - core;
+        axis.Normalize();
+        float CamDist = Vector3.Distance(transform.position, core);
+        float HitDist;
+        RaycastHit hit;
+
+        //raycat from player to camera and swee if something is in the way
+        if (Physics.Raycast(core + axis, axis, out hit, CamDist))
         {
-            //Stay behind the player, facing in same direction
-            transform.position = Player.transform.position;
-            transform.forward = Player.transform.forward;
-            transform.position += offset2 - Player.transform.forward * (5f);
-            transform.Rotate(facedown);
+            //if so, shift forward by sufficient distance to clear (maximum ~5)
+            HitDist = hit.distance;
+            Vector3 delta = Player.transform.forward * (CamDist - HitDist) / Mathf.Sqrt(3f);
+            transform.position += (1.2f)*delta;
 
-            //Dynamic Camera zoom (to prevent clipping through walls)
-            //setup connecting axis
-            Vector3 core = Player.transform.position + offsetDC;
-            Vector3 axis = transform.position - core;
-            axis.Normalize();
-            float CamDist = Vector3.Distance(transform.position, core);
-            float HitDist;
-            RaycastHit hit;
+            //tilt down to keep player in view 
+            Vector3 tilt = new Vector3 (3f*delta.magnitude, 0f, 0f);
+            transform.Rotate(tilt);
 
-            //raycat from player to camera and swee if something is in the way
-            if (Physics.Raycast(core + axis, axis, out hit, CamDist))
+            //zoom in slightly
+            Vector3 zoom = new Vector3 (0f, -1f*delta.magnitude, 0f);
+            transform.position += zoom;                
+        }
+        //check to the left/right & shift camera slightly to prevent clipping on the side
+        Vector3 cross = Vector3.Cross(axis, offsetDC.normalized);
+        cross.Normalize();
+
+        if (Physics.Raycast(transform.position - axis, cross, out hit, CamDist)) {                
+            if (hit.distance < SC)
             {
-                //if so, shift forward by sufficient distance to clear (maximum ~5)
-                HitDist = hit.distance;
-                Vector3 delta = Player.transform.forward * (CamDist - HitDist) / Mathf.Sqrt(3f);
-                transform.position += (1.2f)*delta;
-
-                //tilt down to keep player in view 
-                Vector3 tilt = new Vector3 (3f*delta.magnitude, 0f, 0f);
-                transform.Rotate(tilt);
-
-                //zoom in slightly
-                Vector3 zoom = new Vector3 (0f, -1f*delta.magnitude, 0f);
-                transform.position += zoom;                
-            }
-            //check to the left/right & shift camera slightly to prevent clipping on the side
-            Vector3 cross = Vector3.Cross(axis, offsetDC.normalized);
-            cross.Normalize();
-
-            if (Physics.Raycast(transform.position - axis, cross, out hit, CamDist)) {                
-                if (hit.distance < SC)
-                {
-                    Vector3 shift = -2.0f * (SC/2 - Mathf.Abs(SC/2 - hit.distance)) * cross;
-                    transform.position += shift;
-                }
-            }
-            else if (Physics.Raycast(transform.position - axis, -1f * cross, out hit, CamDist))
-            {
-                if (hit.distance < SC)
-                {
-                    Vector3 shift = 2.0f * (SC / 2 - Mathf.Abs(SC / 2 - hit.distance)) * cross;
-                    transform.position += shift;
-                }
+                Vector3 shift = -2.0f * (SC/2 - Mathf.Abs(SC/2 - hit.distance)) * cross;
+                transform.position += shift;
             }
         }
-        else
+        else if (Physics.Raycast(transform.position - axis, -1f * cross, out hit, CamDist))
         {
-            transform.position = Player.transform.position + offset;
-            //this.transform.forward = Player.transform.position.x;
-            transform.LookAt(Player.transform);
-            transform.Translate(Vector3.right * Time.deltaTime);
-            transform.forward = Player.transform.forward;
-            transform.rotation = Quaternion.AngleAxis(60f, Vector3.right);
-        }
-
-
+            if (hit.distance < SC)
+            {
+                Vector3 shift = 2.0f * (SC / 2 - Mathf.Abs(SC / 2 - hit.distance)) * cross;
+                transform.position += shift;
+            }
+        }        
 	}
 
     public void SetTrackFace(bool set)
