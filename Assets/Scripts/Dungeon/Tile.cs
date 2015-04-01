@@ -185,6 +185,7 @@ public class Tile
         Renderer Exrend = exit.GetComponent<Renderer>();
         Exrend.material.color = Color.green;
         BoxCollider exitBox = exit.AddComponent<BoxCollider>();
+        exitBox.size = new Vector3(1f, 1f, 2f);
         GameObject lightObject = new GameObject();
         Light light = lightObject.AddComponent<Light>();
         light.type = LightType.Spot;

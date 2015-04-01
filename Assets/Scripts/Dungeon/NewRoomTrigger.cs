@@ -27,6 +27,8 @@ public class NewRoomTrigger : MonoBehaviour {
         trigger = false;
         elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
         elevatorCanvas.SetActive(false);
+        ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
+        ec.makeButtons();
     }
 
     void Update()
@@ -70,9 +72,8 @@ public class NewRoomTrigger : MonoBehaviour {
 
 
                 //TODO pause everything
-                ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
-                ec.makeButtons();
 
+                Debug.Log("SET PANEL ");
                 elevatorCanvas.SetActive(true);
 
                 //GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -106,6 +107,7 @@ public class NewRoomTrigger : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
             trigger = false;
+            elevatorCanvas.SetActive(false);
         }
     }
 }

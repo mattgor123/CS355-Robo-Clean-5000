@@ -41,6 +41,7 @@ public class ElevatorController : MonoBehaviour {
             //nextLevelCountdown = 0;
             GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
             stagebuilder.GetComponent<StageBuilder>().nextLevel();
+            nextLevelCountdown = 0;
         }
 	
 	}
@@ -96,6 +97,16 @@ public class ElevatorController : MonoBehaviour {
         CameraController cc = camera.GetComponent<CameraController>();
         cc.shake();
         nextLevelCountdown = countdown;
+
+        //foreach (Transform child in ePanel) {
+        //    Destroy(child.gameObject);
+        //}
+
+        int children = ePanel.transform.childCount;
+        for (int i = 0; i < children; i++)
+        {
+            GameObject.Destroy(ePanel.transform.GetChild(i).gameObject);
+        }
     }
 
     private void cancel()
