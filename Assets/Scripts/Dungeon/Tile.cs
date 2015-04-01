@@ -147,6 +147,13 @@ public class Tile
         wall.transform.rotation = Quaternion.Euler(new Vector3(0, rotation, 0));
         wall.transform.SetParent(tile.transform);
         wall.name = wallName;
+        var collider = wall.GetComponent<MeshCollider>();
+        PhysicMaterial physics = new PhysicMaterial();
+        physics.staticFriction = 0;
+        physics.dynamicFriction = 0;
+        physics.bounceCombine = PhysicMaterialCombine.Maximum;
+        physics.bounciness = 1;
+        collider.material = physics;
         Renderer rend = wall.GetComponent<Renderer>();
         rend.material = this.wallMaterial;
         wall.transform.localScale = new Vector3(1, 2, 1) * StageBuilder.scale;
