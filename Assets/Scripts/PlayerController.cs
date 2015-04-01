@@ -310,6 +310,10 @@ public class PlayerController : MonoBehaviour {
     public void setCurrentFloor(int floor)
     {
         currentFloor = floor;
+        if (currentFloor > deepestLevelVisited)
+        {
+            deepestLevelVisited = currentFloor;
+        }
     }
 
     public void incrementDialogueLevel()
