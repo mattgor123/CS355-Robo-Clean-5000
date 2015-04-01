@@ -7,6 +7,7 @@ using System.Linq;
 public class HUDController : MonoBehaviour {
   [SerializeField] private float message_display_time;
   [SerializeField] private int max_messages;
+  [SerializeField] private Text weapon_text;
   [SerializeField] private Text ammo_text;
   [SerializeField] private Text notification_text;
   [SerializeField] private Text level_text;
@@ -20,8 +21,13 @@ public class HUDController : MonoBehaviour {
   }
     
   private void LateUpdate () {
+    UpdateWeapon();
     UpdateAmmo();
     UpdateNotification();
+  }
+
+  private void UpdateWeapon () {
+    weapon_text.text = weapon_backpack_controller.GetWeaponName().ToString();
   }
 
   private void UpdateAmmo () {
