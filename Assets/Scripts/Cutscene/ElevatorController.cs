@@ -20,6 +20,8 @@ public class ElevatorController : MonoBehaviour {
     private float nextLevelCountdown;
     private GameObject blackScreen;
 
+    private int levelToLoad;
+
 	// Use this for initialization
 	void Start () {
         //gameObject.SetActive(false);
@@ -41,7 +43,7 @@ public class ElevatorController : MonoBehaviour {
             //TODO
             //during this time make player invincible? so he doesn't get hurt during shaking
             GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
-            stagebuilder.GetComponent<StageBuilder>().nextLevel();
+            stagebuilder.GetComponent<StageBuilder>().nextLevel(levelToLoad);
             nextLevelCountdown = 0;
         }
         //else
@@ -106,6 +108,7 @@ public class ElevatorController : MonoBehaviour {
         CameraController cc = camera.GetComponent<CameraController>();
         cc.shake();
         nextLevelCountdown = countdown + Time.realtimeSinceStartup;
+        levelToLoad = level;
 
         //foreach (Transform child in ePanel) {
         //    Destroy(child.gameObject);

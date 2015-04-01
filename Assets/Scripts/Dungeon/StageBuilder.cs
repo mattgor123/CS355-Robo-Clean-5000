@@ -160,8 +160,8 @@ public class StageBuilder : MonoBehaviour
         numEnemies--;
     }
 
-    public void nextLevel()
+    public void nextLevel(int level)
     {
-        stage.NextLevel();
+        stage.NextLevel(level);
     }
 }

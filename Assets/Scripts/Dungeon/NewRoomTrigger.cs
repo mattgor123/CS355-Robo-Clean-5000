@@ -24,7 +24,7 @@ public class NewRoomTrigger : MonoBehaviour {
     void Start()
     {
         Time.timeScale = 1;
-        //player = GameObject.FindGameObjectWithTag("Player");
+
         countdown = 2;
         nextLevelCountdown = 0;
         trigger = false;
@@ -106,11 +106,13 @@ public class NewRoomTrigger : MonoBehaviour {
         }
     }
 
+    /*
     public void nextLevel()
     {
         GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
         stagebuilder.GetComponent<StageBuilder>().nextLevel();
     }
+     * */
 
     public void cancelElevator()
     {
