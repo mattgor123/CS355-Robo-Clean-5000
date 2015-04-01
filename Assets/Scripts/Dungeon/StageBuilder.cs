@@ -4,7 +4,7 @@ using System.Collections;
 public class StageBuilder : MonoBehaviour
 {
 
-    #region StageBuilders private variables
+    #region StageBuilder's private variables
     private Stage stage;
     [SerializeField]
     private int WIDTH_MUST_BE_ODD;
@@ -62,7 +62,7 @@ public class StageBuilder : MonoBehaviour
     /*Everything related to creating the dungeon itself */
     void Awake()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60    ;
         QualitySettings.vSyncCount = 0;
         scale = Accessiblescale;
         stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterial, wallMaterial);
@@ -130,22 +130,17 @@ public class StageBuilder : MonoBehaviour
      */
     private void spawnEnemies()
     {
-        Room room = stage.RandomRoom();
-        while (room.getIsElevator())
-        {
-            //get a different room
-            room = stage.RandomRoom();
-        }
 
-        Vector2 randomRoom = room.GetRoomCenter() * StageBuilder.scale;
+        var spawnableTiles = Physics.OverlapSphere(Player.position, 50 * StageBuilder.scale, 1 << LayerMask.NameToLayer("EnemySpawnable"));
+        var randomLocation = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length)].transform.position;
         
         if (Random.Range(0f, 1f) <= .5)
         {
-            Instantiate(enemy_aggressive, new Vector3(randomRoom.x, 0, randomRoom.y) + Vector3.up * 3, Quaternion.identity);
+            Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 3, Quaternion.identity);
         }
         else
         {
-            Instantiate(enemy_smart, new Vector3(randomRoom.x, 0, randomRoom.y), Quaternion.identity);
+            Instantiate(enemy_smart, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
         }
     }
 
@@ -159,7 +154,7 @@ public class StageBuilder : MonoBehaviour
         audio.Play();
     }
 
-    /*Global method that lets EnemyController inform StageBuilder when an enemy dies */
+    /*Global method that let's EnemyController inform StageBuilder when an enemy dies */
     public static void EnemyDied()
     {
         numEnemies--;
