@@ -14,10 +14,13 @@ public class HUDController : MonoBehaviour {
 
   private List<Message> messages = new List<Message>();
   private WeaponBackpackController weapon_backpack_controller;
+  private NotificationLog notification_log;
 
   private void Start () {
     GameObject player = GameObject.FindWithTag("Player");
     weapon_backpack_controller = player.GetComponent<WeaponBackpackController>();
+    GameObject log = GameObject.FindWithTag("Log");
+    notification_log = log.GetComponent<NotificationLog>();
   }
     
   private void LateUpdate () {
@@ -35,19 +38,20 @@ public class HUDController : MonoBehaviour {
   }
 
   private void UpdateNotification () {
-    var time = Time.time;
-    string result = "";
-    if(messages.Count > 0) {
-      while(time - messages.Last().getCreation() > message_display_time) {
-        messages.RemoveAt(messages.Count - 1);
-      }
-      for(var i = 0; i < messages.Count; ++i) {
-        if(i < max_messages) {
-          result += "\n" + messages[i].getText();
-        }
-      }
-    }
-    notification_text.text = result;
+    notification_text.text = "" + notification_log.getCurrentNotification();
+//    var time = Time.time;
+//    string result = "";
+//    if(messages.Count > 0) {
+//      while(time - messages.Last().getCreation() > message_display_time) {
+//        messages.RemoveAt(messages.Count - 1);
+//      }
+//      for(var i = 0; i < messages.Count; ++i) {
+//        if(i < max_messages) {
+//          result += "\n" + messages[i].getText();
+//        }
+//      }
+//    }
+//    notification_text.text = result;
   }
 
   public void AddMessage (string text) {
