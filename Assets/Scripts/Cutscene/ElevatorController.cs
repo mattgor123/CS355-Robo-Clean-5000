@@ -80,8 +80,9 @@ public class ElevatorController : MonoBehaviour {
 
                 button.transform.position = pos;
 
+                int icopy = i;
                 button.GetComponent<Button>().onClick.AddListener(
-                    () => shake(i)
+                    () => shake(icopy)
                     );
             }
         }
@@ -109,7 +110,7 @@ public class ElevatorController : MonoBehaviour {
         cc.shake();
         nextLevelCountdown = countdown + Time.realtimeSinceStartup;
         levelToLoad = level;
-
+        Debug.Log("NEXT LEVEL " + level);
         //foreach (Transform child in ePanel) {
         //    Destroy(child.gameObject);
         //}
