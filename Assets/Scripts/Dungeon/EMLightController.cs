@@ -20,6 +20,14 @@ public class EMLightController : MonoBehaviour {
     [SerializeField]
     private float Ftime;  //minimum time between flickers; does not flicker if == 0
 
+    [SerializeField]
+    private float red;      //input light color
+    [SerializeField]
+    private float green;
+    [SerializeField]
+    private float blue;
+
+    private Color LC;
     private bool activated; //whether light has been activated
     private Light[] EML;      //the light object children
     private int numLights;      //number of lights
@@ -33,7 +41,7 @@ public class EMLightController : MonoBehaviour {
         EML = GetComponentsInChildren<Light>();
         numLights = EML.Length;
         Foffset = Random.value * Ftime;
-
+        LC = new Color(red, blue, green);
     }
 
     // Link a trigger tile
@@ -91,6 +99,18 @@ public class EMLightController : MonoBehaviour {
     public void SetFlickerTime(float f)
     {
         Ftime = f;
+    }
+
+    //Set color (with rgb values)
+    public void SetColor(float r, float g, float b)
+    {
+        LC = new Color(r, g, b);
+    }
+
+    //Set color (with color object)
+    public void SetColor(Color c)
+    {
+        LC = c;
     }
 }
 
