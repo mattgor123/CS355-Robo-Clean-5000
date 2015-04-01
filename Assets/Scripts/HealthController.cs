@@ -47,4 +47,7 @@ public class HealthController : MonoBehaviour {
 
 		return false;
 	}
+	public float GetMaxHealth() {
+		return max_health;
+	}
 }
