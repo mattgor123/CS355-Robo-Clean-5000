@@ -37,10 +37,11 @@ public class CameraController : MonoBehaviour {
         if (this.isShaking)
         {
             transform.position = positionBeforeShake + Random.insideUnitSphere * shakeIntensity;
-            this.shakeCountdown -= Time.deltaTime;
-            if (this.shakeCountdown < 0)
+            //this.shakeCountdown -= Time.deltaTime;
+            if (Time.realtimeSinceStartup > this.shakeCountdown)
             {
                 this.isShaking = false;
+                this.shakeCountdown = 0;
                 //GameObject.FindObjectOfType<NewRoomTrigger>().nextLevel(); ;
                 //GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
                 //stagebuilder.GetComponent<StageBuilder>().nextLevel();
@@ -122,7 +123,7 @@ public class CameraController : MonoBehaviour {
     public void shake()
     {
         this.positionBeforeShake = transform.position;
-        this.shakeCountdown = this.shakeTime;
+        this.shakeCountdown = this.shakeTime + Time.realtimeSinceStartup;
         this.isShaking = true;
     }
         

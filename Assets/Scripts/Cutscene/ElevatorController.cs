@@ -18,12 +18,15 @@ public class ElevatorController : MonoBehaviour {
 
     private int countdown;
     private float nextLevelCountdown;
+    private GameObject blackScreen;
 
 	// Use this for initialization
 	void Start () {
         //gameObject.SetActive(false);
         countdown = 2;
         nextLevelCountdown = 0;
+
+        blackScreen = GameObject.Find("BlackScreen");
 	}
 	
 	// Update is called once per frame
@@ -32,17 +35,21 @@ public class ElevatorController : MonoBehaviour {
         {
             return;
         }
-        else if (nextLevelCountdown > 0)
+        else if (Time.realtimeSinceStartup > nextLevelCountdown)
         {
-            nextLevelCountdown -= Time.deltaTime;
-        }
-        else
-        {
-            //nextLevelCountdown = 0;
+            //nextLevelCountdown -= Time.deltaTime;
+            //TODO
+            //during this time make player invincible? so he doesn't get hurt during shaking
             GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
             stagebuilder.GetComponent<StageBuilder>().nextLevel();
             nextLevelCountdown = 0;
         }
+        //else
+        //{
+        //    GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
+        //    stagebuilder.GetComponent<StageBuilder>().nextLevel();
+        //    nextLevelCountdown = 0;
+        //}
 	
 	}
 
@@ -93,24 +100,32 @@ public class ElevatorController : MonoBehaviour {
 
     private void shake(int level)
     {
+
+        Time.timeScale = 0;
         GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
         CameraController cc = camera.GetComponent<CameraController>();
         cc.shake();
-        nextLevelCountdown = countdown;
+        nextLevelCountdown = countdown + Time.realtimeSinceStartup;
 
         //foreach (Transform child in ePanel) {
         //    Destroy(child.gameObject);
         //}
 
+        //moved to NewRoomTrigger constructor
+        /*
         int children = ePanel.transform.childCount;
         for (int i = 0; i < children; i++)
         {
             GameObject.Destroy(ePanel.transform.GetChild(i).gameObject);
         }
+         * */
+
+        //start fading out
+
     }
 
     private void cancel()
     {
-
+        gameObject.SetActive(false);
     }
 }

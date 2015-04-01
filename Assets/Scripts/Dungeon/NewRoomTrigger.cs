@@ -11,6 +11,8 @@ public class NewRoomTrigger : MonoBehaviour {
     //private GameObject player;
 
     private GameObject elevatorCanvas;
+    private GameObject elevatorPanel;
+    private GameObject blackScreen;
 
     private int countdown;
     private float nextLevelCountdown;
@@ -21,16 +23,30 @@ public class NewRoomTrigger : MonoBehaviour {
 
     void Start()
     {
+        Time.timeScale = 1;
         //player = GameObject.FindGameObjectWithTag("Player");
         countdown = 2;
         nextLevelCountdown = 0;
         trigger = false;
         elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
-        elevatorCanvas.SetActive(false);
         ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
+
+        //remove any buttons that are on the panel
+        elevatorPanel = GameObject.FindGameObjectWithTag("ElevatorPanel");
+        int children = elevatorPanel.transform.childCount;
+        for (int i = 0; i < children; i++)
+        {
+            GameObject.Destroy(elevatorPanel.transform.GetChild(i).gameObject);
+        }
+
         ec.makeButtons();
+
+        //blackScreen = GameObject.Find("BlackScreen");
+
+        elevatorCanvas.SetActive(false);
     }
 
+    /*
     void Update()
     {
         if (nextLevelCountdown == 0)
@@ -49,6 +65,7 @@ public class NewRoomTrigger : MonoBehaviour {
         }
 
     }
+     * */
 
     /*
     public void setLevel(string s)
@@ -71,9 +88,8 @@ public class NewRoomTrigger : MonoBehaviour {
                 //GameObject ep = GameObject.FindGameObjectWithTag("ElevatorPanel");
 
 
-                //TODO pause everything
+                //TODO pause everything maybe?
 
-                Debug.Log("SET PANEL ");
                 elevatorCanvas.SetActive(true);
 
                 //GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
