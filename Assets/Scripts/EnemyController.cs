@@ -64,6 +64,8 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update 
 	void LateUpdate () {
+        if (Time.timeScale == 0) return;
+
         //Die if at zero hp
         if (health_controller.GetCurrentHealth() == 0)
         {

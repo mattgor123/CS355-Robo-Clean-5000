@@ -89,6 +89,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void Update () {
+        if (Time.timeScale == 0)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true; 
+            return;
+        }
 
         if (Input.GetMouseButtonDown(1)) {
             if (this.toggle_movement) {
@@ -264,6 +270,7 @@ public class PlayerController : MonoBehaviour {
 
     private void LateUpdate()
     {
+        if (Time.timeScale == 0) return;
         //Drop if drop flag is on (not colliding and thus floating)
         if (Drop)
         {
