@@ -30,7 +30,6 @@ public class NewRoomTrigger : MonoBehaviour {
         trigger = false;
         elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
         ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
-
         //remove any buttons that are on the panel
         elevatorPanel = GameObject.FindGameObjectWithTag("ElevatorPanel");
         int children = elevatorPanel.transform.childCount;

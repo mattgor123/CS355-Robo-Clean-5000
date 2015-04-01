@@ -168,7 +168,6 @@ public class Tile
         PhysicMaterial physics = new PhysicMaterial();
         physics.staticFriction = 0;
         physics.dynamicFriction = 0;
-
         collider.material = physics;
         Renderer rend = wall.GetComponent<Renderer>();
         rend.material = this.wallMaterial;

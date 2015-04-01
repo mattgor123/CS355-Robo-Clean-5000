@@ -147,7 +147,7 @@ public class Stage  {
     private void growMaze(Vector2 start)
     {
         var lastdir = Vector2.zero; //the direction the path last took
-        int windingPercent = 50; //chance that the path will turn
+        int windingPercent = 80; //chance that the path will turn
         var cells = new List<Vector2>(); //carries x and y 
         int x = Mathf.FloorToInt(start.x);
         int y = Mathf.FloorToInt(start.y);
@@ -339,7 +339,7 @@ public class Stage  {
 
             //gives chance for a second or more door to be added
             
-                while ((!hasDoor || oneIn(2)) && numDoors < potentialDoors.Count)
+                while ((!hasDoor || UnityEngine.Random.Range(0, 100) > 25) && numDoors < potentialDoors.Count)
                 {
 
                     Debug.Log("Room can have " + potentialDoors.Count + " potential doors installed");
@@ -459,7 +459,7 @@ public class Stage  {
                 if (tile.getType() == "Floor" || tile.getType() == "Exit") continue;
                 if (grid[x - 1, y].getType() == "Floor" || grid[x - 1, y].getType() == "Exit") continue;
                 if (grid[x + 1, y].getType() == "Floor" || grid[x + 1, y].getType() == "Exit") continue;
-                if (grid[x, y - 1].getType() == "Floor" || grid[x, y - 1].getType() == "Exjt") continue;
+                if (grid[x, y - 1].getType() == "Floor" || grid[x, y - 1].getType() == "Exit") continue;
                 if (grid[x, y + 1].getType() == "Floor" || grid[x, y + 1].getType() == "Exit") continue;
                 //No floor found
                 tile.setType("Blank");
@@ -542,7 +542,7 @@ public class Stage  {
             for (int y = startY; y < startY + height; y++)
             {
                 grid[x, y].Carve();
-                                grid[x, y].setColor(currentRegion);
+                grid[x, y].setColor(currentRegion);
 
             }
         }
@@ -618,7 +618,7 @@ public class Stage  {
     {
         //Get new spawn location for player and move him there
         GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        Player.transform.position = elevatorObject.transform.position - new Vector3(0, 0, StageBuilder.scale * (int)this.elevatorSize/2);
+        Player.transform.position = elevatorObject.transform.position;
         
     }
 
@@ -667,6 +667,7 @@ public class Stage  {
         this.width = this.grid.GetLength(0);
         this.height = this.grid.GetLength(1);
         this.rooms = (ArrayList) level[1];
+        Debug.Log(this.rooms.Count);
         
 
     }
