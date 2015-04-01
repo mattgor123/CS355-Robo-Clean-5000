@@ -41,19 +41,14 @@ public class MovementController : MonoBehaviour {
             {
             	anim.SetBool("isIdle", false);
                 var force = walk_force;
-                Vector3 counteraction = new Vector3(0f, 0f, 0f);      //counteracts animator applied force
-                
+
                 var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
                 var x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
-                if (z_axis <= 0f)
-                {
-                    counteraction = transform.forward * -4.0f;
-                }
+
                 resulting_force = z_force + x_force;
             
                 anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
                 GetComponent<Rigidbody>().AddForce(resulting_force, ForceMode.Impulse);
-                GetComponent<Rigidbody>().AddForce(counteraction, ForceMode.Impulse);
                 last_force = Time.time;
             }
             else
