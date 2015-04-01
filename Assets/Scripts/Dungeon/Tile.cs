@@ -151,7 +151,7 @@ public class Tile
         PhysicMaterial physics = new PhysicMaterial();
         physics.staticFriction = 0;
         physics.dynamicFriction = 0;
-        physics.bounceCombine = PhysicMaterialCombine.Maximum;
+        physics.bounceCombine = PhysicMaterialCombine.Average;
         physics.bounciness = 1;
         collider.material = physics;
         Renderer rend = wall.GetComponent<Renderer>();
