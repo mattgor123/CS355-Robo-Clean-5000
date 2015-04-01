@@ -623,12 +623,14 @@ public class Stage  {
 
         if (level == levels.Count) //level is exactly one deeper than previous depth
         {
+            Debug.Log("Creating new Level");
             DestroyCurrentLevel();
             CreateNewLevel(); //equivalent to the constructor method when stage is first made
 
         }
         else if (level < levels.Count) //level has already been made. Must be loaded
         {
+            Debug.Log("Loading old Level");
             DestroyCurrentLevel();
             LoadLevel(level);
         }

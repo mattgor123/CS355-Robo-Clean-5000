@@ -72,13 +72,14 @@ public class StageBuilder : MonoBehaviour
         stage.createDoors();
         stage.removeDeadEnds();
         stage.Create();
+        spawnPlayer();
+        Player = GameObject.FindWithTag("Player").transform;
     }
 
 	/*Spawning the player and game elements besides dungeon and enemies */
 	void Start () {
 
-        spawnPlayer();
-        Player = GameObject.FindWithTag("Player").transform;
+
 
         float lastSpawn = Time.time;
         //Randomly choose which audio clip to play for this dungeon
