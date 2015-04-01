@@ -81,8 +81,11 @@ public class Tile
                 tile = new GameObject();
                 tile.transform.SetParent(mother);
                 tile.name = Column;
-                tile.transform.position = this.position;
-                GameObject wall = CreateWall("OneWall", 180, 0f, 0.5f);
+                tile.transform.position = this.position;                
+                GameObject NorthCol = CreateWall("NorthWall", 180, 0f, 0.5f);
+                GameObject SouthCol = CreateWall("SouthWall", 0, 0, -0.5f);
+                GameObject WestCol = CreateWall("WestWall", 90, -0.5f, 0);
+                GameObject EastCol = CreateWall("EastWall", 270, 0.5f, 0);
                 break;
 
             case Exit:
