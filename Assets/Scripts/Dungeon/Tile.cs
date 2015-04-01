@@ -15,6 +15,7 @@ public class Tile
     private const string Exit = "Exit";       //Special Exit tile
     private const string Elevator = "Elevator"; //Center of Exit that has the trigger.
     private const string Blank = "Blank";
+    private const string Column = "Column";     //Creates a column tile
     private Material wallMaterial; //material to assign to walls if the tile has any
     private Material floorMaterial; //material to assign to floor if the tile has one
     private int maxColors;
@@ -74,6 +75,14 @@ public class Tile
                 tile.transform.position = this.position;
                 GameObject floor = CreateFloor();
                 floor.layer = LayerMask.NameToLayer("EnemySpawnable");
+                break;
+
+            case Column:
+                tile = new GameObject();
+                tile.transform.SetParent(mother);
+                tile.name = Column;
+                tile.transform.position = this.position;
+                GameObject wall = CreateWall("OneWall", 180, 0f, 0.5f);
                 break;
 
             case Exit:
