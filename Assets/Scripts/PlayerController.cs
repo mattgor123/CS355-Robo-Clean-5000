@@ -92,7 +92,8 @@ public class PlayerController : MonoBehaviour {
         if (Time.timeScale == 0)
         {
             Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true; 
+            Cursor.visible = true;
+            Drop = false;
             return;
         }
 
