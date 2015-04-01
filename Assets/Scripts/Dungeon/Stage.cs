@@ -104,12 +104,15 @@ public class Stage  {
             rooms.Add(room);
 
             currentRegion++;
-            for (int x = startx; x < startx + width; x++)
+            var max_x = startx + width;
+            var max_y = starty + height;
+
+            for (int x = startx; x < max_x; x++)
             {
-                for (int y = starty; y < starty + height; y++)
+                for (int y = starty; y < max_y; y++)
                 {
                     var shouldCarveColumn = UnityEngine.Random.Range(0f, 1f);
-                    if (shouldCarveColumn < columnFrequency)
+                    if (shouldCarveColumn < columnFrequency && x < max_x - 1 && y < max_y - 1 && x > startx && y > starty)
                     {
                         grid[x, y].CarveColumn();
                     }
