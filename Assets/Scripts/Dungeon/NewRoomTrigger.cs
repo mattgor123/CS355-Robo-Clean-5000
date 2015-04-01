@@ -89,7 +89,7 @@ public class NewRoomTrigger : MonoBehaviour {
 
 
                 //TODO pause everything maybe?
-
+                Cursor.lockState = CursorLockMode.None;
                 elevatorCanvas.SetActive(true);
 
                 //GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -124,8 +124,10 @@ public class NewRoomTrigger : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
+            Cursor.lockState = CursorLockMode.Locked;
             trigger = false;
             elevatorCanvas.SetActive(false);
+
         }
     }
 }

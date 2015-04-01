@@ -253,7 +253,7 @@ public class PlayerController : MonoBehaviour {
         if (TrackFace)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            //Cursor.visible = false;  //keep cursor on screen for testing
+            Cursor.visible = false;  //keep cursor on screen for testing
         }
         else
         {
