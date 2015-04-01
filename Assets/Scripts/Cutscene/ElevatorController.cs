@@ -19,6 +19,7 @@ public class ElevatorController : MonoBehaviour {
     private int countdown;
     private float nextLevelCountdown;
     private GameObject blackScreen;
+    private Image black;
 
     private int levelToLoad;
 
@@ -28,7 +29,9 @@ public class ElevatorController : MonoBehaviour {
         countdown = 2;
         nextLevelCountdown = 0;
 
-        blackScreen = GameObject.Find("BlackScreen");
+        blackScreen = GameObject.Find("BlackScreenCanvas");
+        black = blackScreen.GetComponentInChildren<Image>();
+        blackScreen.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -45,6 +48,7 @@ public class ElevatorController : MonoBehaviour {
             GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
             stagebuilder.GetComponent<StageBuilder>().nextLevel(levelToLoad);
             nextLevelCountdown = 0;
+            black.CrossFadeAlpha(0.0f, 2, true);
         }
         //else
         //{
@@ -124,6 +128,11 @@ public class ElevatorController : MonoBehaviour {
          * */
 
         //start fading out
+        black.canvasRenderer.SetAlpha(0f);
+        blackScreen.SetActive(true);
+
+        //start fading to black
+        black.CrossFadeAlpha(1.0f, 2, true);
 
     }
 
