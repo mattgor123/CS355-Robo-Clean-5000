@@ -48,6 +48,11 @@ public class Tile
         this.type = Floor;
     }
 
+    public void CarveColumn()
+    {
+        this.type = Column;
+    }
+
     //Creates the tile according to its type. 
     //TODO: Refactor more into lots of methods
     public void Create(Transform mother, float scale)

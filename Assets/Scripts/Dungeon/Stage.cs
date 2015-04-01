@@ -24,11 +24,12 @@ public class Stage  {
     private GameObject Facility;
     private Material floorMaterial;
     private Material wallMaterial;
+    private float columnFrequency;
     #endregion
 
 
 
-    public Stage(int width, int height, Material[] floors, Material[] walls) 
+    public Stage(int width, int height, Material[] floors, Material[] walls, float frequency) 
     {
         //FloodFill algorithm needs odd-length grid
         currentLevel = 0; //start level
@@ -42,6 +43,7 @@ public class Stage  {
         int i = RandomizeMaterials(floors.Length);
         this.floorMaterial = floors[i];
         this.wallMaterial = walls[i];
+        this.columnFrequency = frequency;
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
         {
@@ -106,7 +108,15 @@ public class Stage  {
             {
                 for (int y = starty; y < starty + height; y++)
                 {
-                    grid[x, y].Carve();
+                    var shouldCarveColumn = UnityEngine.Random.Range(0f, 1f);
+                    if (shouldCarveColumn < columnFrequency)
+                    {
+                        grid[x, y].CarveColumn();
+                    }
+                    else
+                    {
+                        grid[x, y].Carve();
+                    }
                     grid[x, y].setColor(currentRegion);
                 }
             }
