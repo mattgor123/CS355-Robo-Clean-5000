@@ -14,7 +14,7 @@ public class HealthBarController : MonoBehaviour {
 	void Start () {
 		GameObject player = GameObject.FindWithTag("Player");
 		health_controller = player.GetComponent<HealthController>();
-		slider = GameObject.FindWithTag ("HealthCanvas").GetComponent<Slider>();
+		slider = GameObject.FindWithTag ("HealthSlider").GetComponent<Slider>();
 		slider.minValue = 0;
 		slider.maxValue = 0;
 	}
