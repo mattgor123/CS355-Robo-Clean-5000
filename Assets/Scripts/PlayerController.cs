@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour {
     private int currentFloor;
     private int deepestLevelVisited;
     private int dialogueLevel;
+    private bool toggle_movement;
     private Animator anim;
 
 	private void Start () {
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour {
         ControlScheme = true;
         Drop = false;
         TrackFace = true;
+        this.toggle_movement = false;
         CamControl.SetTrackFace(TrackFace);
 
         ScreenSize = new Vector3(Screen.width, Screen.height);
@@ -87,21 +89,34 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void Update () {
-        if (Input.GetMouseButton(1)) {
-            if (anim.GetBool("isIdle")) {
-                anim.SetLayerWeight(1, 1);
-            }// else {
-              //  anim.SetLayerWeight(1, 0);
-           // }    
-            if(Input.GetMouseButtonDown(0)) {
+
+        if (Input.GetMouseButtonDown(1)) {
+            if (this.toggle_movement) {
+                this.toggle_movement = false;
+            } else {
+                this.toggle_movement = true;
+            }
+
+            if (this.toggle_movement) {
+                if (anim.GetBool("isIdle")) {
+                    anim.SetLayerWeight(1, 1);   
+                } 
+            } else {
+                anim.SetLayerWeight(1, 0);
+            }    
+
+        }
+
+        if(Input.GetMouseButtonDown(0)) {
+            if (anim.GetBool("isIdle") && toggle_movement ||
+                !(anim.GetBool("isIdle")) {
                 weapon_backpack_controller.StartFiring();
             }
-            else if(Input.GetMouseButtonUp(0)) {
-                weapon_backpack_controller.StopFiring();
-            }
-        } else if (Input.GetMouseButtonUp(1)) {
-            anim.SetLayerWeight(1, 0);
-        }   
+        }
+        else if(Input.GetMouseButtonUp(0)) {
+            weapon_backpack_controller.StopFiring();
+        }
+
 
 		if(Input.GetKeyDown("r")) {
 			weapon_backpack_controller.NextWeapon();
