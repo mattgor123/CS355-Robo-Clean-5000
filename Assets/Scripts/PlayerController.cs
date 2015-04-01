@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour {
 
         if(Input.GetMouseButtonDown(0)) {
             if (anim.GetBool("isIdle") && toggle_movement ||
-                !(anim.GetBool("isIdle")) {
+                !(anim.GetBool("isIdle"))) {
                 weapon_backpack_controller.StartFiring();
             }
         }
