@@ -115,8 +115,6 @@ public class StageBuilder : MonoBehaviour
             {
                 Transform wall_light = Instantiate(WallLight);
                 wall_light.transform.position += LightPos + new Vector3(0f, 0f, hit.distance + 5f);
-                Debug.Log("h:" + hit.distance + "; p:" + wall_light.transform.position + "; lp:" + LightPos);
-
             }
         }
     }
