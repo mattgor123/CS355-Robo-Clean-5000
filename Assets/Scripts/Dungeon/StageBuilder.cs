@@ -19,6 +19,8 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private Transform HUD;
     [SerializeField]
+    private Transform NotificationCanvas;
+    [SerializeField]
     private Transform Camera;
     [SerializeField]
     private Transform Gun;
@@ -35,7 +37,9 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private AudioSource audio;
     [SerializeField]
-    private Transform roomLight;
+    private Transform WallLight;
+    [SerializeField]
+    private Transform CornerLight;
     [SerializeField]
     private Transform trigger;
     [SerializeField]
@@ -69,6 +73,7 @@ public class StageBuilder : MonoBehaviour
         stage.removeDeadEnds();
         stage.Create();
         spawnPlayer();
+        spawnLights(stage.GetRooms());
         Player = GameObject.FindWithTag("Player").transform;
     }
 
@@ -94,6 +99,28 @@ public class StageBuilder : MonoBehaviour
 
     }
 
+    //spawns the lights
+    void spawnLights(ArrayList rooms)
+    {
+        foreach (Room room in rooms)
+        {
+            Vector2 position = room.GetRoomCenter() * scale;
+            //make a light 
+
+            //position with raycast
+            RaycastHit hit;
+
+            Vector3 LightPos = new Vector3(position.x, 0f, position.y);
+            if (Physics.Raycast(LightPos + new Vector3(0f, 3f, 0f), new Vector3(0f, 0f, 1f), out hit, 100f))
+            {
+                Transform wall_light = Instantiate(WallLight);
+                wall_light.transform.position += LightPos + new Vector3(0f, 0f, hit.distance + 5f);
+                Debug.Log("h:" + hit.distance + "; p:" + wall_light.transform.position + "; lp:" + LightPos);
+
+            }
+        }
+    }
+
     /*Spawns player, camera, HUD and others */
     private void spawnPlayer()
     {
@@ -107,11 +134,13 @@ public class StageBuilder : MonoBehaviour
         Vector3 spawnpoint = new Vector3(roomCenter.x - 1, 1f, roomCenter.y - 1);
         Transform player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
         Transform hudInstance = Instantiate(HUD) as Transform;
+        Transform notificationCanvasInstance = Instantiate(NotificationCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
         DontDestroyOnLoad(hudInstance);
+        DontDestroyOnLoad(notificationCanvasInstance);
         DontDestroyOnLoad(cameraInstance);
     }
 

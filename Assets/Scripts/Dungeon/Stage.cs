@@ -674,6 +674,12 @@ public class Stage  {
         CameraController cc = camera.GetComponent<CameraController>();
         cc.shake();
     }
+
+    //save lights from stage builder
+    public ArrayList GetRooms()
+    {
+        return rooms;
+    }
 }
 
 
