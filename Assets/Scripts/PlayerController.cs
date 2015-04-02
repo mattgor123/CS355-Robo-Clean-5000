@@ -365,32 +365,18 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void UpdateRotation () {
+        float delta = Input.GetAxis("Mouse X");
 
-        //player-fixed camera
-        if (TrackFace)
+        //Rotate proportional to mouse movement
+        float angle = transform.eulerAngles.y + (4.0f) * delta;
+        if (angle > 360)
         {
-            float delta = Input.GetAxis("Mouse X");
-
-            //Rotate proportional to mouse movement
-            float angle = transform.eulerAngles.y + (4.0f) * delta;
-            if (angle > 360)
-            {
-                angle -= 360;
-            }
-            else if (angle < 0)
-            {
-                angle += 360;
-            }
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+            angle -= 360;
         }
-        //map-fixed camera
-        else
+        else if (angle < 0)
         {
-            var forward = transform.forward;
-            var vector = camera.WorldToScreenPoint(transform.position) - Input.mousePosition;
-            var angle = 90 - Mathf.Atan2(forward.y - vector.y, forward.x - vector.x) * Mathf.Rad2Deg;
-            var new_rotation = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
-            movement_controller.UpdateRotation(new_rotation);
+            angle += 360;
         }
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);      
 	}
 }
