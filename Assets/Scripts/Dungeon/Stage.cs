@@ -147,7 +147,7 @@ public class Stage  {
     private void growMaze(Vector2 start)
     {
         var lastdir = Vector2.zero; //the direction the path last took
-        int windingPercent = 80; //chance that the path will turn
+        int windingPercent = 20; //chance that the path will turn
         var cells = new List<Vector2>(); //carries x and y 
         int x = Mathf.FloorToInt(start.x);
         int y = Mathf.FloorToInt(start.y);
@@ -648,14 +648,14 @@ public class Stage  {
             LoadLevel(level);
         }
 
-
+        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        pc.setCurrentFloor(level);
         //Create the dungeon
         Create();
         //Move player to the entrance
         MovePlayerToEntrance();
 
-        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        pc.setCurrentFloor(level);
+
     }
 
     public void LoadLevel(int toLoad)
