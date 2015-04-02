@@ -28,6 +28,26 @@ public class LMHelper {
         return false;
     }
 
+    //Checks whether target can be shot
+    public static bool CanShoot(EnemyController enemy, GameObject player)
+    {
+        float dist = GetDistance(enemy, player);
+        if (IsInRange(enemy, player))
+        {
+            //Only shoot if in range and in sight
+            RaycastHit hit;
+            Vector3 dir = player.transform.position - enemy.transform.position;
+            if (Physics.Raycast(enemy.transform.position, dir, out hit, dist))
+            {
+                if (hit.transform.tag == "Player")
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //Gets the distance
     public static float GetDistance(EnemyController enemy, GameObject player)
     {

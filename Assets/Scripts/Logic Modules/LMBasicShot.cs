@@ -7,7 +7,7 @@ public class LMBasicShot : MonoBehaviour, LMAttack {
     public Vector3 AttackLogic(EnemyController enemy, GameObject player)
     {
         // Start firing if timer has elapsed & player is in aggro range
-        if (LMHelper.CheckAttackTimer(enemy) && LMHelper.IsInRange(enemy, player))
+        if (LMHelper.CheckAttackTimer(enemy) && LMHelper.CanShoot(enemy, player))
         {
             enemy.GetComponent<WeaponBackpackController>().StartFiring();
         }
