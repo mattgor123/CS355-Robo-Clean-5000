@@ -18,7 +18,7 @@ public class EMLightController : MonoBehaviour {
     private float dim;      //intensity of light when not directly triggered
 
     [SerializeField]
-    private float Ftime;  //minimum time between flickers; does not flicker if == 0
+    private float Ftime;  //minimum time between flickers; does not flicker if == 0; if negative, stays off and flickers on
 
     [SerializeField]
     private float red;      //input light color
@@ -53,6 +53,7 @@ public class EMLightController : MonoBehaviour {
     // Update is called once per frame
     void LateUpdate()
     {
+        if (Time.timeScale == 0) return;
         //If no tile attached, or active but not triggered, keep dim
         if (TTile == null || activated) 
         {
@@ -68,8 +69,14 @@ public class EMLightController : MonoBehaviour {
         else
             SetIntensity(0f);
 
+        //If flickertime is negative, stay off but flickers on
+        if (Ftime < 0)
+        {
+            SetIntensity(0f);
+        }
+
         //flicker 
-        if (Ftime != 0 && Time.time % (Ftime + Foffset + Random.value*3f) <= 0.2) {
+        if (Ftime != 0 && Time.time % (Mathf.Abs(Ftime) + Foffset + Random.value*3f) <= 0.2) {
             Flicker();
         }
         
@@ -90,7 +97,10 @@ public class EMLightController : MonoBehaviour {
     {
         if (Time.time % Random.value <= 0.2)
         {
-            SetIntensity(0f);
+            if (Ftime > 0)
+                SetIntensity(0f);
+            else if (Ftime < 0)
+                SetIntensity(dim);
         }
 
     }
