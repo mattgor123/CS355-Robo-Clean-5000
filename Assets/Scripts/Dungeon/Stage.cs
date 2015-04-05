@@ -679,11 +679,11 @@ public class Stage  {
         cc.shake();
     }
 
-    //save lights from stage builder
-    public ArrayList GetRooms()
+    public Tile[,] GetGrid()
     {
-        return rooms;
+        return grid;
     }
+
 }
 
 

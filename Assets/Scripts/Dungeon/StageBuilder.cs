@@ -56,6 +56,8 @@ public class StageBuilder : MonoBehaviour
     private Material[] floorMaterials;
     [SerializeField]
     private Material[] wallMaterials;
+    [SerializeField]
+    private FluffBuilder FBuilder;
     #endregion
 
 
@@ -73,7 +75,7 @@ public class StageBuilder : MonoBehaviour
         stage.removeDeadEnds();
         stage.Create();
         spawnPlayer();
-        spawnLights(stage.GetRooms());
+        FBuilder.BuildFluff(stage.GetGrid(), scale);
         Player = GameObject.FindWithTag("Player").transform;
     }
 
@@ -97,26 +99,6 @@ public class StageBuilder : MonoBehaviour
 
         }
 
-    }
-
-    //spawns the lights
-    void spawnLights(ArrayList rooms)
-    {
-        foreach (Room room in rooms)
-        {
-            Vector2 position = room.GetRoomCenter() * scale;
-            //make a light 
-
-            //position with raycast
-            RaycastHit hit;
-
-            Vector3 LightPos = new Vector3(position.x, 0f, position.y);
-            if (Physics.Raycast(LightPos + new Vector3(0f, 3f, 0f), new Vector3(0f, 0f, 1f), out hit, 100f))
-            {
-                Transform wall_light = Instantiate(WallLight);
-                wall_light.transform.position += LightPos + new Vector3(0f, 0f, hit.distance + 5f);
-            }
-        }
     }
 
     /*Spawns player, camera, HUD and others */
