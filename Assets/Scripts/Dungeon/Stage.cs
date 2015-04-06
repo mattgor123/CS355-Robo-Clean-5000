@@ -472,11 +472,24 @@ public class Stage  {
         TrimRock();
 
 
-        //Store this floor in the array of levels
-        System.Object[] level = new System.Object[2];
-        level[0] = this.grid;
-        level[1] = this.rooms;
-        levels.Add(level);
+        //Store this floor in the array of levels 
+		//ONLY if this is the first time on this floor
+		if (currentLevel == levels.Count) {
+			ArrayList level = new ArrayList ();
+			Tile[,] savedGrid = new  Tile[this.width, this.height];
+			for (int i = 0; i < this.width; i++) {
+				for (int j = 0; j < this.height; j++) {
+					savedGrid [i, j] = new Tile (this.grid [i, j]);
+				}
+			}
+			ArrayList savedRooms = new ArrayList ();
+			for (int i = 0; i < this.rooms.Count; i++) {
+				savedRooms.Add (new Room ((Room)this.rooms [i]));
+			}
+			level.Add(savedGrid);
+			level.Add(savedRooms);
+			levels.Add(level);
+		}
         
 
         //The empty gameobject that all the tiles are hidden inside (besides rooms)
@@ -616,7 +629,6 @@ public class Stage  {
     {
         //Get new spawn location for player and move him there
         GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log(this.rooms.Count);
         Room room = this.rooms[0] as Room;
         var center = room.GetRoomCenter() * StageBuilder.scale;
         Player.transform.position = new Vector3(center.x, 0, center.y);
@@ -633,7 +645,6 @@ public class Stage  {
     {
         //CameraShake();
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        Debug.Log(levels.Count);
         if (level == levels.Count) //level is exactly one deeper than previous depth
         {
             DestroyCurrentLevel();
@@ -643,7 +654,6 @@ public class Stage  {
         }
         else //level has already been made. Must be loaded
         {
-            Debug.Log("Should reach here");
             DestroyCurrentLevel();
             LoadLevel(level);
         }
@@ -653,6 +663,7 @@ public class Stage  {
         Create();
         //Move player to the entrance
         WaitTwoSecs();
+		this.currentLevel = level;
 
         MovePlayerToEntrance();
 
@@ -663,15 +674,24 @@ public class Stage  {
     {
         //Load previous level's grid
         currentLevel = toLoad;
-        System.Object[] level = (System.Object[]) levels[toLoad];
-        this.grid =  level[0] as Tile[,];
-        this.width = this.grid.GetLength(0);
-        this.height = this.grid.GetLength(1);
-        this.rooms =  level[1] as ArrayList;
-        Debug.Log(this.rooms);
-        
-
-    }
+        ArrayList level = levels[toLoad] as ArrayList;
+		Tile[,] loadedGrid =  level[0] as Tile[,];
+		int loadedWidth = loadedGrid.GetLength(0);
+		int loadedHeight = loadedGrid.GetLength (1);
+		this.grid = new Tile[loadedWidth,loadedHeight];
+		this.width = loadedWidth;
+		this.height = loadedHeight;
+		for (int i = 0; i < this.width; i++) {
+			for (int j = 0; j < this.height; j++) {
+				this.grid [i, j] = new Tile (loadedGrid [i, j]);
+			}
+		}
+		ArrayList loadedRooms = level[1] as ArrayList;
+		this.rooms = new ArrayList ();
+		for (int i = 0; i < loadedRooms.Count; i++) {
+			this.rooms.Add (new Room ((Room)loadedRooms [i]));
+		}
+	}
 
     private void CameraShake()
     {

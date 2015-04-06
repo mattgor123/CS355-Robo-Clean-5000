@@ -18,7 +18,6 @@ public class Tile
     private const string Column = "Column";     //Creates a column tile
     private Material wallMaterial; //material to assign to walls if the tile has any
     private Material floorMaterial; //material to assign to floor if the tile has one
-    private int maxColors;
     #endregion
 
     /*Tile Constructor */ 
@@ -33,16 +32,28 @@ public class Tile
         
 	}
 
+	/*Deep copy constructor */
+	public Tile(Tile other) {
+		this.color = other.color;
+		this.floorMaterial = other.floorMaterial;
+		this.position = other.position;
+		this.type = other.type;
+		this.wallMaterial = other.wallMaterial;
+
+
+	}
+
+
+
+
+
     //Returns the position relative to the grid (scale has not multipled the position)
     public Vector2 pos()
     {
         return new Vector2(this.position.x, this.position.z);
     }
 
-    public void passMaxColors(int max) {
-        this.maxColors = max;
-    }
-    
+
     public void Carve()
     {
         this.type = Floor;
@@ -53,8 +64,7 @@ public class Tile
         this.type = Column;
     }
 
-    //Creates the tile according to its type. 
-    //TODO: Refactor more into lots of methods
+
     public void Create(Transform mother, float scale)
     {
         switch (this.type)

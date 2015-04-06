@@ -27,6 +27,16 @@ public class Room {
 
     }
 
+	/*Deep Copy Constructor */
+	public Room(Room other) {
+		this.width = other.width;
+		this.height = other.height;
+		this.startX = other.startX;
+		this.startY = other.startY;
+		this.isElevator = other.isElevator;
+
+	}
+
     public bool DistanceTo(Room room)
     {
         //http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
