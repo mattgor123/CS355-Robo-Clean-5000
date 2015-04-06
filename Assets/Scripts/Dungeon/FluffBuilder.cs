@@ -30,6 +30,11 @@ public class FluffBuilder : MonoBehaviour
     [SerializeField]
     private float DustProb;
 
+    [SerializeField]
+    private Transform VolumeSteam;  //steam low on ground; Prefab taken from WaterFX Pack by Unity
+    [SerializeField]
+    private float VolumeSteamProb;
+
     /*
     [SerializeField]
     private Transform 
@@ -215,13 +220,19 @@ public class FluffBuilder : MonoBehaviour
             MakeSmoke(pos);
         }
 
+        //VolumeSteam; mutually exclusive with smoke
+        else if (Random.value <= VolumeSteamProb)
+        {
+            Vector3 pos = new Vector3(i * Scale, 0f, j * Scale);
+            MakeVolumeSteam(pos);
+        }
+
         //Dust
         if (Random.value <= DustProb)
         {
             Vector3 pos = new Vector3(i * Scale, 0f, j * Scale);
             MakeDust(pos);
         }
-
      
     }
     void MakeSmoke(Vector3 pos)
@@ -233,6 +244,12 @@ public class FluffBuilder : MonoBehaviour
     void MakeDust(Vector3 pos)
     {
         Transform thing = Instantiate(Dust);
+        thing.transform.position += pos;
+        thing.SetParent(this.transform);
+    }
+    void MakeVolumeSteam(Vector3 pos)
+    {
+        Transform thing = Instantiate(VolumeSteam);
         thing.transform.position += pos;
         thing.SetParent(this.transform);
     }
