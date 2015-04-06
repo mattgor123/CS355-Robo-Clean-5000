@@ -15,6 +15,7 @@ public class MovementController : MonoBehaviour {
 
 	private Animator anim;
 	private HealthController healthController;
+    private Rigidbody RG;
 
 	private void Awake() {
 		anim = GetComponent<Animator>();
@@ -22,6 +23,7 @@ public class MovementController : MonoBehaviour {
 		//	anim.SetLayerWeight(1, 1);
 		//}
 		healthController = GetComponent<HealthController>();
+        RG = GetComponent<Rigidbody>();
 	}
 
 	private void Start () {
@@ -39,28 +41,35 @@ public class MovementController : MonoBehaviour {
             // if the object is not standing still, move object
             if (z_axis != 0f || x_axis != 0f)
             {
-            	anim.SetBool("isIdle", false);
+           // 	anim.SetBool("isIdle", false);
                 var force = walk_force;
 
                 var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
-                var x_force = transform.right * x_axis * force * Time.deltaTime * 2.5f;
+                var x_force = transform.right * x_axis * force * Time.deltaTime * 2f;
 
                 resulting_force = z_force + x_force;
             
-                anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
-                GetComponent<Rigidbody>().AddForce(resulting_force, ForceMode.Impulse);
+        //        anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
+                RG.AddForce(resulting_force, ForceMode.Impulse);
                 last_force = Time.time;
             }
             else
             {
-            	anim.SetBool("isIdle", true);
-                anim.SetFloat("Speed", 0f);
+//            	anim.SetBool("isIdle", true);
+     //           anim.SetFloat("Speed", 0f);
+                RG.velocity *= 0.5f;
+            }
+
+            //Keep velocity bounded
+            if (RG.velocity.magnitude >= 5.5f)
+            {
+                RG.velocity = RG.velocity.normalized * 10f;
             }
         }
         else
         {
-            anim.SetBool("isDead", true);
-            anim.SetLayerWeight(1, 0);
+    //        anim.SetBool("isDead", true);
+     //       anim.SetLayerWeight(1, 0);
         }	
 	}
 
