@@ -25,6 +25,31 @@ public class HealthBarController : MonoBehaviour {
 		if (health_controller != null) {
 			slider.maxValue = health_controller.GetMaxHealth();
 			slider.value = health_controller.GetCurrentHealth();
+			//update color here, using RGBA values
 		}
+	}
+	private float getR() {
+		if (slider.value < (slider.maxValue / 2)) {
+			return 1;
+		} else {
+			float f = slider.value - (slider.maxValue / 2);
+			f = (f / (slider.maxValue / 2));
+			return (1 - f);
+		}
+	}
+	private float getG() {
+		if (slider.value > (slider.maxValue / 2)) {
+			return 1;
+		} else {
+			float f = slider.value;
+			f = (f / (slider.maxValue / 2));
+			return f;
+		}
+	}
+	private float getB() {
+		return 0;
+	}
+	private float getA() {
+		return 1;
 	}
 }
