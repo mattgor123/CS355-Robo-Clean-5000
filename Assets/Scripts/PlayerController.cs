@@ -129,15 +129,6 @@ public class PlayerController : MonoBehaviour {
 			weapon_backpack_controller.NextWeapon();
 		}
 
-        //Control scheme toggle
-        if (Input.GetKeyDown("c"))
-        {
-			GameObject nlog = GameObject.FindWithTag("Log");
-			NotificationLog log = nlog.GetComponent<NotificationLog>(); 
-
-        }
-
-
         //Flashlight Toggle
         if (Input.GetKeyDown("f"))
         {
