@@ -101,7 +101,7 @@ public class Stage  {
 
             if (overlaps) continue;
 
-            rooms.Add(room);
+            this.rooms.Add(room);
 
             currentRegion++;
             var max_x = startx + width;
@@ -253,8 +253,6 @@ public class Stage  {
         foreach (Room room in this.rooms)
         {
             List<Vector2> borderTiles = room.getBorderTiles();
-            Debug.Log(room.getWidth() * 2 + room.getHeight() * 2);
-            Debug.Log(borderTiles.Count);
             List<Vector2> potentialDoors = new List<Vector2>();
             bool hasDoor = false;
             int numDoors = 0;
@@ -342,13 +340,11 @@ public class Stage  {
                 while ((!hasDoor || UnityEngine.Random.Range(0, 100) > 25) && numDoors < potentialDoors.Count)
                 {
 
-                    Debug.Log("Room can have " + potentialDoors.Count + " potential doors installed");
                     Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
                     potentialDoors.Remove(randomDoor);
                     int doorx = Mathf.FloorToInt(randomDoor.x);
                     int doory = Mathf.FloorToInt(randomDoor.y);
                     grid[doorx, doory].Carve();
-                    Debug.Log("Carving new door at " + new Vector2(doorx, doory));
                     numDoors++;
                     hasDoor = true;
                 }
@@ -481,6 +477,7 @@ public class Stage  {
         level[0] = this.grid;
         level[1] = this.rooms;
         levels.Add(level);
+        
 
         //The empty gameobject that all the tiles are hidden inside (besides rooms)
         Facility = new GameObject(); 
@@ -527,6 +524,7 @@ public class Stage  {
             if (room.getIsElevator())
             {
                 elevatorObject = roomObject;
+                elevatorObject.transform.position = roomObject.transform.position;
             }
         }
     }
@@ -618,7 +616,10 @@ public class Stage  {
     {
         //Get new spawn location for player and move him there
         GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        Player.transform.position = elevatorObject.transform.position;
+        Debug.Log(this.rooms.Count);
+        Room room = this.rooms[0] as Room;
+        var center = room.GetRoomCenter() * StageBuilder.scale;
+        Player.transform.position = new Vector3(center.x, 0, center.y);
         
     }
 
@@ -631,28 +632,28 @@ public class Stage  {
     public void NextLevel(int level)
     {
         //CameraShake();
-        //yield new WaitForSeconds (2);
-        //WaitTwoSecs();
-
+        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        Debug.Log(levels.Count);
         if (level == levels.Count) //level is exactly one deeper than previous depth
         {
-            Debug.Log("Creating new Level");
             DestroyCurrentLevel();
             CreateNewLevel(); //equivalent to the constructor method when stage is first made
+            pc.incrementDeepestLevelVisited();
 
         }
-        else if (level < levels.Count) //level has already been made. Must be loaded
+        else //level has already been made. Must be loaded
         {
-            Debug.Log("Loading old Level");
+            Debug.Log("Should reach here");
             DestroyCurrentLevel();
             LoadLevel(level);
         }
 
-        PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         pc.setCurrentFloor(level);
         //Create the dungeon
         Create();
         //Move player to the entrance
+        WaitTwoSecs();
+
         MovePlayerToEntrance();
 
 
@@ -663,11 +664,11 @@ public class Stage  {
         //Load previous level's grid
         currentLevel = toLoad;
         System.Object[] level = (System.Object[]) levels[toLoad];
-        this.grid = (Tile[,]) level[0];
+        this.grid =  level[0] as Tile[,];
         this.width = this.grid.GetLength(0);
         this.height = this.grid.GetLength(1);
-        this.rooms = (ArrayList) level[1];
-        Debug.Log(this.rooms.Count);
+        this.rooms =  level[1] as ArrayList;
+        Debug.Log(this.rooms);
         
 
     }

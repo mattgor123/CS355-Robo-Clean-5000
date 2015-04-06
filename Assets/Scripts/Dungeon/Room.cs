@@ -98,8 +98,8 @@ public class Room {
 
     public Vector2 GetRoomCenter()
     {
-        int x = startX + this.width / 2;
-        int y = startY + this.height / 2;
+        float x = (float) startX + this.width / 2f;
+        float y = (float) startY + this.height / 2f;
         return new Vector2(x, y);
     }
 

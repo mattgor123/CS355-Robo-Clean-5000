@@ -22,7 +22,7 @@ public class WeaponController : MonoBehaviour {
     {
         //var collider = this.GetComponent<BoxCollider>();
         //collider.enabled = false;
-        owner = transform.parent.parent;
+        owner = transform.parent.root;
         backpack_controller = owner.GetComponent<WeaponBackpackController>();        
     }
 

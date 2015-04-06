@@ -15,6 +15,8 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private float ColumnFrequency;
     [SerializeField]
+    private float[] parameters;
+    [SerializeField]
     private Transform Player;
     [SerializeField]
     private Transform HUD;
@@ -111,7 +113,8 @@ public class StageBuilder : MonoBehaviour
         var roomCenter = room.GetRoomCenter() * scale;
 
 
-        Vector3 spawnpoint = new Vector3(roomCenter.x - 1, 1f, roomCenter.y - 1);
+        var spawnableTiles = Physics.OverlapSphere(Player.position, 50 * StageBuilder.scale, 1 << LayerMask.NameToLayer("EnemySpawnable"));
+        var spawnpoint = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length)].transform.position;
         Transform player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
         Transform hudInstance = Instantiate(HUD) as Transform;
         Transform notificationCanvasInstance = Instantiate(NotificationCanvas) as Transform;

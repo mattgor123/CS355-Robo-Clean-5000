@@ -313,7 +313,7 @@ public class PlayerController : MonoBehaviour {
         return deepestLevelVisited;
     }
 
-    private void incrementDeepestLevelVisited()
+    public void incrementDeepestLevelVisited()
     {
         deepestLevelVisited += 1;
     }
