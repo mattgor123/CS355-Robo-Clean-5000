@@ -63,7 +63,7 @@ public class ElevatorController : MonoBehaviour {
     {
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         int dfv = pc.getDeepestLevelVisited();
-
+		int currentLevel = pc.getCurrentFloor ();
 
         //GameObject button; // = Instantiate(eButton);
         //button.transform.SetParent(ePanel.transform);
@@ -71,25 +71,24 @@ public class ElevatorController : MonoBehaviour {
 
         for (int i = 0; i <= dfv + 1; i++)
         {
-            if (pc.getCurrentFloor() != i)
-            {
 
-                GameObject button = Instantiate(eButton);
-                button.GetComponentInChildren<Text>().text = "B" + i;
-                button.transform.SetParent(ePanel.transform);
 
-                Vector3 change = new Vector3(0, -(i * buttonGap) + (maxLevels / 2) * buttonGap, 0);
-
-                Vector3 pos = ePanel.transform.position + change;
-
-                button.transform.position = pos;
-
+            GameObject button = Instantiate(eButton);
+            button.GetComponentInChildren<Text>().text = "B" + i;
+            button.transform.SetParent(ePanel.transform);
+			Vector3 change = new Vector3(0, -(i * buttonGap) + (maxLevels / 2) * buttonGap, 0);
+			Vector3 pos = ePanel.transform.position + change;
+			button.transform.position = pos;
+			if (currentLevel == i) {
+				button.GetComponent<Button>().interactable = false;
+			}
+			else {
                 int icopy = i;
                 button.GetComponent<Button>().onClick.AddListener(
                     () => shake(icopy)
                     );
-            }
-        }
+			}
+		}
 
         GameObject cancelButton = Instantiate(eButton);
         cancelButton.GetComponentInChildren<Text>().text = "Cancel";

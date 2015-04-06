@@ -74,8 +74,9 @@ public class Tile
                 tile = new GameObject();
                 tile.transform.SetParent(mother);
                 tile.transform.position = this.position;
+			    GameObject RockRoof = CreateCeiling(Color.black);
+
                 tile.name = Rock;
-                //GameObject ceiling = CreateCeiling();
                 GameObject NorthWall = CreateWall("NorthWall", 180, 0f, 0.5f);
                 GameObject SouthWall = CreateWall("SouthWall", 0, 0, -0.5f);
                 GameObject WestWall = CreateWall("WestWall", 90, -0.5f, 0);
@@ -85,10 +86,13 @@ public class Tile
             //Just a floor
             case Floor:
                 tile = new GameObject();
+
                 tile.transform.SetParent(mother);
                 tile.name = Floor;
                 tile.transform.position = this.position;
                 GameObject floor = CreateFloor();
+			    GameObject roof = CreateCeiling(Color.white);
+
                 floor.layer = LayerMask.NameToLayer("EnemySpawnable");
                 break;
 
@@ -96,7 +100,8 @@ public class Tile
                 tile = new GameObject();
                 tile.transform.SetParent(mother);
                 tile.name = Column;
-                tile.transform.position = this.position;                
+                tile.transform.position = this.position;  
+				GameObject Columnroof = CreateCeiling(Color.black);
                 GameObject NorthCol = CreateWall("NorthWall", 180, 0f, 0.5f);
                 GameObject SouthCol = CreateWall("SouthWall", 0, 0, -0.5f);
                 GameObject WestCol = CreateWall("WestWall", 90, -0.5f, 0);
@@ -108,7 +113,7 @@ public class Tile
                 tile.transform.SetParent(mother);
                 tile.name = Exit;
                 tile.transform.position = this.position;
-                GameObject ceiling = CreateCeiling();
+                GameObject ceiling = CreateCeiling(Color.yellow);
                 GameObject exit = CreateExit();
                 break;
 
@@ -155,16 +160,17 @@ public class Tile
         return this.color;
     }
 
-    private GameObject CreateCeiling()
+    private GameObject CreateCeiling(Color color)
     {
         GameObject ceiling = GameObject.CreatePrimitive(PrimitiveType.Quad);
         ceiling.transform.localScale = new Vector3(1, 1, 1) * StageBuilder.scale;
-        ceiling.transform.position = new Vector3(this.position.x, 2, this.position.z) * StageBuilder.scale;
-        ceiling.transform.SetParent(tile.transform);
+        ceiling.transform.position = new Vector3(this.position.x, 5, this.position.z) * StageBuilder.scale;
         Renderer ceilRend = ceiling.GetComponent<Renderer>();
-        ceilRend.material.color = Color.yellow;
-        ceiling.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+        ceilRend.material.color = color;
+        ceiling.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
         ceiling.name = "Ceiling";
+		ceiling.transform.SetParent(tile.transform);
+
         return ceiling;
     }
 
