@@ -5,12 +5,15 @@ using System.Collections;
 public class FluffBuilder : MonoBehaviour
 {
 
-    #region SerializeFields
+    #region Fluff Item Vars
 
     [SerializeField]
     private Transform WallLight;
     [SerializeField]
-    private float WallLightProb;    //probability of wall light
+    private float WallLightProb;                    //probability of wall light
+    private Color WallLightColor = Color.white;     //color of wall light
+    private float WallLightFTime = 5f;              //base flicker time
+    private float WallLightFSign = 0;               //sign preference (1 for all positive, -1 for all negative)
 
     [SerializeField]
     private Transform CornerLight;
@@ -18,10 +21,21 @@ public class FluffBuilder : MonoBehaviour
     private float CornerLightProb;  //probability of corner light
 
     [SerializeField]
-    private Transform GasOne;       //Gas type one
+    private Transform Smoke;       //Smoke w. sparks
     [SerializeField]
-    private float GasOneProb;
+    private float SmokeProb;
 
+    [SerializeField]
+    private Transform Dust;     //small bits of falling dust
+    [SerializeField]
+    private float DustProb;
+
+    /*
+    [SerializeField]
+    private Transform 
+    [SerializeField]
+    private float 
+    */
 
 
 
@@ -59,7 +73,7 @@ public class FluffBuilder : MonoBehaviour
                 if (Grid[i, j].getType() == "Floor")
                 {
                     //AddCornerLight(i, j); not fully functional yet
-                    AddGas(i, j);
+                    AddParticles(i, j);
                 }
             }
         }
@@ -126,9 +140,10 @@ public class FluffBuilder : MonoBehaviour
         wall_light.transform.eulerAngles = new Vector3(0f, rot, 0f);
         wall_light.SetParent(this.transform);
         EMLightController EMLC = wall_light.GetComponent<EMLightController>();
-        float sign = Random.value - 0.5f;
+        float sign = 2*(Random.value - 0.5f) + WallLightFSign;
         sign /= Mathf.Abs(sign);
-        EMLC.SetFlickerTime( (5f + 2f*Random.value) * sign);
+        EMLC.SetFlickerTime( WallLightFTime * (1 + 0.3f*(Random.value - 0.5f) )  * sign);
+        EMLC.SetColor(WallLightColor);
     }
     #endregion
 
@@ -189,26 +204,58 @@ public class FluffBuilder : MonoBehaviour
     }
     #endregion
 
-    #region Gases
-    //Adds gases
-    void AddGas(int i, int j)
+    #region Particle Systems
+    //Adds particle systems
+    void AddParticles(int i, int j)
     {
-        //Type one gas
-        if (Random.value <= GasOneProb)
+        //Smoke
+        if (Random.value <= SmokeProb)
         {
             Vector3 pos = new Vector3(i * Scale, 0f, j * Scale);
-            MakeGasOne(pos);
+            MakeSmoke(pos);
         }
 
-        //Type two gas
+        //Dust
+        if (Random.value <= DustProb)
+        {
+            Vector3 pos = new Vector3(i * Scale, 0f, j * Scale);
+            MakeDust(pos);
+        }
+
+     
     }
-    //Makes the type one gas
-    void MakeGasOne(Vector3 pos)
+    void MakeSmoke(Vector3 pos)
     {
-        Transform g_one = Instantiate(GasOne);
-        g_one.transform.position += pos;
-        g_one.SetParent(this.transform);
+        Transform thing = Instantiate(Smoke);
+        thing.transform.position += pos;
+        thing.SetParent(this.transform);
     }
+    void MakeDust(Vector3 pos)
+    {
+        Transform thing = Instantiate(Dust);
+        thing.transform.position += pos;
+        thing.SetParent(this.transform);
+    }
+
+    #endregion
+
+    #region Setup
+    void SetupWallLights(float prob, Color color, float ftime, float fsign)
+    {
+        WallLightProb = prob;
+        WallLightColor = color;
+        WallLightFTime = ftime;
+        WallLightFSign = fsign;
+    }
+    void SetupSmoke(float prob)
+    {
+        SmokeProb = prob;
+    }
+    void SetupDust(float prob)
+    {
+        DustProb = prob;
+    }
+
     #endregion
 
 }
