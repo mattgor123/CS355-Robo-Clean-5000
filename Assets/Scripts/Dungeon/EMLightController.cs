@@ -27,7 +27,6 @@ public class EMLightController : MonoBehaviour {
     [SerializeField]
     private float blue;
 
-    private Color LC;
     private bool activated; //whether light has been activated
     private Light[] EML;      //the light object children
     private int numLights;      //number of lights
@@ -41,7 +40,7 @@ public class EMLightController : MonoBehaviour {
         EML = GetComponentsInChildren<Light>();
         numLights = EML.Length;
         Foffset = Random.value * Ftime;
-        LC = new Color(red, blue, green);
+        SetColor(red, blue, green);
     }
 
     // Link a trigger tile
@@ -114,13 +113,20 @@ public class EMLightController : MonoBehaviour {
     //Set color (with rgb values)
     public void SetColor(float r, float g, float b)
     {
-        LC = new Color(r, g, b);
+        Color c = new Color(r, g, b);
+        SetColor(c);
     }
 
     //Set color (with color object)
     public void SetColor(Color c)
     {
-        LC = c;
+        red = c.r;
+        green = c.g;
+        blue = c.b;
+        for (int i = 0; i < numLights; i++)
+        {
+            EML[i].color = c;
+        }
     }
 }
 

@@ -240,20 +240,32 @@ public class FluffBuilder : MonoBehaviour
     #endregion
 
     #region Setup
-    void SetupWallLights(float prob, Color color, float ftime, float fsign)
+    public void SetupWallLights(float prob, Color color, float ftime, float fsign)
     {
         WallLightProb = prob;
         WallLightColor = color;
         WallLightFTime = ftime;
         WallLightFSign = fsign;
     }
-    void SetupSmoke(float prob)
+    public void SetupSmoke(float prob)
     {
         SmokeProb = prob;
     }
-    void SetupDust(float prob)
+    public void SetupDust(float prob)
     {
         DustProb = prob;
+    }
+
+    public void SetupPreset(string name)
+    {
+        if (name == "Emergency")
+        {
+            SmokeProb = 0.1f;
+            WallLightColor = Color.red;
+            WallLightFTime = .1f;
+            WallLightProb = 0.75f;
+        }
+
     }
 
     #endregion
