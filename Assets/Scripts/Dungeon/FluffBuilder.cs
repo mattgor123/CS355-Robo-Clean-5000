@@ -43,11 +43,10 @@ public class FluffBuilder : MonoBehaviour
     */
 
 
-
     #endregion
 
 
-    private ArrayList FluffList; //list of fluff spots
+    private GameObject Fluff;
     private Tile[,] Grid;        //the grid of tiles to plop spots down on
     private float Scale;        //scale factor (for coordinates)
     private float Width;        //width (X) of map
@@ -57,7 +56,9 @@ public class FluffBuilder : MonoBehaviour
     public void BuildFluff(Tile [,] gd, float scale)
     {
         //Prep variables
-        FluffList = new ArrayList();
+        Fluff = new GameObject();
+        Fluff.name = "Fluff";
+        Fluff.transform.position = new Vector3(0f, 0f, 0f);
         Grid = gd;
         Scale = scale;
         Width = gd.GetLength(0);
@@ -83,6 +84,12 @@ public class FluffBuilder : MonoBehaviour
             }
         }
 
+    }
+
+    //Destroys the fluff
+    public void DestroyFluff()
+    {
+        GameObject.Destroy(Fluff);
     }
 
     #region Wall Light
@@ -143,7 +150,7 @@ public class FluffBuilder : MonoBehaviour
         Transform wall_light = Instantiate(WallLight);
         wall_light.transform.position += pos;
         wall_light.transform.eulerAngles = new Vector3(0f, rot, 0f);
-        wall_light.SetParent(this.transform);
+        wall_light.SetParent(Fluff.transform);
         EMLightController EMLC = wall_light.GetComponent<EMLightController>();
         float sign = 2*(Random.value - 0.5f) + WallLightFSign;
         sign /= Mathf.Abs(sign);
@@ -239,19 +246,19 @@ public class FluffBuilder : MonoBehaviour
     {
         Transform thing = Instantiate(Smoke);
         thing.transform.position += pos;
-        thing.SetParent(this.transform);
+        thing.SetParent(Fluff.transform);
     }
     void MakeDust(Vector3 pos)
     {
         Transform thing = Instantiate(Dust);
         thing.transform.position += pos;
-        thing.SetParent(this.transform);
+        thing.SetParent(Fluff.transform);
     }
     void MakeVolumeSteam(Vector3 pos)
     {
         Transform thing = Instantiate(VolumeSteam);
         thing.transform.position += pos;
-        thing.SetParent(this.transform);
+        thing.SetParent(Fluff.transform);
     }
 
     #endregion

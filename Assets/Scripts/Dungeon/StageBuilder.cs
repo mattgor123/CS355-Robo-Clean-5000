@@ -69,7 +69,7 @@ public class StageBuilder : MonoBehaviour
         Application.targetFrameRate = 60    ;
         QualitySettings.vSyncCount = 0;
         scale = Accessiblescale;
-        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterials, wallMaterials, ColumnFrequency);
+        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterials, wallMaterials, ColumnFrequency, FBuilder);
         //TODO: place rooms first. 
         stage._addRooms(NUMBER_ROOM_TRIES);
         stage.PlaceHalls();
@@ -77,7 +77,6 @@ public class StageBuilder : MonoBehaviour
         stage.removeDeadEnds();
         stage.Create();
         spawnPlayer();
-        FBuilder.BuildFluff(stage.GetGrid(), scale);
         Player = GameObject.FindWithTag("Player").transform;
     }
 

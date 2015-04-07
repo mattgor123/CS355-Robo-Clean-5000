@@ -25,11 +25,13 @@ public class Stage  {
     private Material floorMaterial;
     private Material wallMaterial;
     private float columnFrequency;
+
+    private FluffBuilder FBuilder;
     #endregion
 
 
 
-    public Stage(int width, int height, Material[] floors, Material[] walls, float frequency) 
+    public Stage(int width, int height, Material[] floors, Material[] walls, float frequency, FluffBuilder fluff) 
     {
         //FloodFill algorithm needs odd-length grid
         currentLevel = 0; //start level
@@ -44,6 +46,7 @@ public class Stage  {
         this.floorMaterial = floors[i];
         this.wallMaterial = walls[i];
         this.columnFrequency = frequency;
+        this.FBuilder = fluff;
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
         {
@@ -540,6 +543,8 @@ public class Stage  {
                 elevatorObject.transform.position = roomObject.transform.position;
             }
         }
+
+        FBuilder.BuildFluff(grid, StageBuilder.scale);
     }
 
 
@@ -590,6 +595,7 @@ public class Stage  {
         //Destroy exit reference
         //exit = null;
 
+        FBuilder.DestroyFluff();
         
     }
 
