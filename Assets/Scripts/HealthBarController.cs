@@ -13,6 +13,7 @@ public class HealthBarController : MonoBehaviour {
 	private float flashFor; //flash for how many seconds after being hit?
 	private float flashUntil; //stop flashing when this time is reached
 	private float mostRecentHealth; //use to check if health has dropped since last frame
+	private Color defaultColor;
 
 	// Use this for initialization
 	void Start () {
@@ -45,6 +46,19 @@ public class HealthBarController : MonoBehaviour {
 			oldColor.r = getR ();
 			oldColor.g = getG();
 			imageFill.color = oldColor;
+			//outline flashing
+			var outline = GameObject.FindWithTag("HealthBROutline");
+			var olImage = outline.GetComponent<Image>();
+			if (getA() == 1) {
+				if (olImage.color != Color.red) {
+					defaultColor = olImage.color;
+				}
+				olImage.color = Color.red;
+			} else {
+				if (defaultColor != null) {
+					olImage.color = defaultColor;
+				}
+			}
 		}
 	}
 	private float getR() {
