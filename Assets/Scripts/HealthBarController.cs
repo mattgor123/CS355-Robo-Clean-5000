@@ -26,6 +26,14 @@ public class HealthBarController : MonoBehaviour {
 			slider.maxValue = health_controller.GetMaxHealth();
 			slider.value = health_controller.GetCurrentHealth();
 			//update color here, using RGBA values
+			var barFill = GameObject.FindWithTag ("HealthBarFill");
+			var imageFill = barFill.GetComponent<Image>();
+			var oldColor = imageFill.color;
+			oldColor.a = getA ();
+			oldColor.b = getB ();
+			oldColor.r = getR ();
+			oldColor.g = getG();
+			imageFill.color = oldColor;
 		}
 	}
 	private float getR() {
