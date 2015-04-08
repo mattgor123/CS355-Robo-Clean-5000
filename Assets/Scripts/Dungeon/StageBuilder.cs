@@ -51,6 +51,7 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private float spawnRadius; //radius around player for picking rooms for enemy spawn.
     [SerializeField]
+    private int enemiesPerLevel;
     private int maxEnemies; //max enemies to be in dungeon at any one time;
     private static int numEnemies;
     public static float scale; //static and public so its reachable across classes
@@ -78,6 +79,7 @@ public class StageBuilder : MonoBehaviour
         stage.Create();
         spawnPlayer();
         Player = GameObject.FindWithTag("Player").transform;
+        maxEnemies = (Player.gameObject.GetComponent<PlayerController>().getCurrentFloor() + 1) * enemiesPerLevel;
     }
 
 	/*Spawning the player and game elements besides dungeon and enemies */
@@ -170,5 +172,6 @@ public class StageBuilder : MonoBehaviour
         }
         numEnemies = 0;
         stage.NextLevel(level);
+        maxEnemies = (Player.gameObject.GetComponent<PlayerController>().getCurrentFloor() + 1) * enemiesPerLevel;
     }
 }
