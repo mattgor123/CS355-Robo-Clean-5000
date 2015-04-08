@@ -673,7 +673,6 @@ public class Stage  {
 
         MovePlayerToEntrance();
 
-
     }
 
     public void LoadLevel(int toLoad)
@@ -694,9 +693,10 @@ public class Stage  {
 		}
 		ArrayList loadedRooms = level[1] as ArrayList;
 		this.rooms = new ArrayList ();
-		for (int i = 0; i < loadedRooms.Count; i++) {
-			this.rooms.Add (new Room ((Room)loadedRooms [i]));
-		}
+        for (int i = 0; i < loadedRooms.Count; i++)
+        {
+            this.rooms.Add(new Room((Room)loadedRooms[i]));
+        }
 	}
 
     private void CameraShake()

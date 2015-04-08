@@ -18,6 +18,7 @@ public class ElevatorController : MonoBehaviour {
 
     private int countdown;
     private float nextLevelCountdown;
+    private float fadeIn;
     private GameObject blackScreen;
     private Image black;
 
@@ -28,6 +29,7 @@ public class ElevatorController : MonoBehaviour {
         //gameObject.SetActive(false);
         countdown = 2;
         nextLevelCountdown = 0;
+        fadeIn = 0;
 
         blackScreen = GameObject.Find("BlackScreenCanvas");
         black = blackScreen.GetComponentInChildren<Image>();
@@ -36,26 +38,23 @@ public class ElevatorController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (nextLevelCountdown == 0)
+
+        if (nextLevelCountdown != 0 && Time.realtimeSinceStartup > nextLevelCountdown)
         {
-            return;
-        }
-        else if (Time.realtimeSinceStartup > nextLevelCountdown)
-        {
-            //nextLevelCountdown -= Time.deltaTime;
             //TODO
             //during this time make player invincible? so he doesn't get hurt during shaking
             GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
             stagebuilder.GetComponent<StageBuilder>().nextLevel(levelToLoad);
             nextLevelCountdown = 0;
+            fadeIn = Time.realtimeSinceStartup + countdown;
             black.CrossFadeAlpha(0.0f, 2, true);
+            //blackScreen.SetActive(false);
         }
-        //else
-        //{
-        //    GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
-        //    stagebuilder.GetComponent<StageBuilder>().nextLevel();
-        //    nextLevelCountdown = 0;
-        //}
+        else if (fadeIn != 0 && Time.realtimeSinceStartup > fadeIn)
+        {
+            blackScreen.SetActive(false);
+            fadeIn = 0;
+        }
 	
 	}
 
@@ -113,18 +112,6 @@ public class ElevatorController : MonoBehaviour {
         cc.shake();
         nextLevelCountdown = countdown + Time.realtimeSinceStartup;
         levelToLoad = level;
-        //foreach (Transform child in ePanel) {
-        //    Destroy(child.gameObject);
-        //}
-
-        //moved to NewRoomTrigger constructor
-        /*
-        int children = ePanel.transform.childCount;
-        for (int i = 0; i < children; i++)
-        {
-            GameObject.Destroy(ePanel.transform.GetChild(i).gameObject);
-        }
-         * */
 
         //start fading out
         black.canvasRenderer.SetAlpha(0f);
