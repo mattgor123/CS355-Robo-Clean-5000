@@ -2,40 +2,26 @@
 using System.Collections;
 
 public class TutorialController : MonoBehaviour {
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject camera;
-    [SerializeField] private Transform weapon_canvas;
-    [SerializeField] private Transform health_canvas;
-    [SerializeField] private Transform ammo_canvas;
 
-    private string message;
-    private float timer;
-    private float delay;
+	[SerializeField] private GameObject player;
+	[SerializeField] private GameObject hud;
+	[SerializeField] private GameObject camera;
+	[SerializeField] private Vector3 spawn_point;
+
+	private Stage stage;
+	private Tile[,] loadedGrid;
+	private ArrayList loadedRooms;
+
+	void Awake () {
+		loadedGrid = new Tile[50,50];
+		loadedRooms = new ArrayList();
+		stage = new Stage(loadedGrid, loadedRooms);
+		stage.Create();
+	}
 
 	void Start () {
-        var player_instance = Instantiate(player, new Vector3(0f, 0.09f, 0f), Quaternion.identity) as GameObject;
-        var camera_instance = Instantiate(camera, camera.transform.position, camera.transform.rotation) as GameObject;
-        var weapon_canvas_instance = Instantiate(weapon_canvas) as Transform;
-        var health_canvas_instance = Instantiate(health_canvas) as Transform;
-        var ammo_canvas_instance = Instantiate(ammo_canvas) as Transform;
-        message = "Press W to follow the mouse";
-        timer = Time.time;
-        delay = 3.0f;
+		var playerInstance = Instantiate(player, spawn_point, Quaternion.identity) as GameObject;
+        var hudInstance = Instantiate(hud) as GameObject;
+        var cameraInstance = Instantiate(camera, camera.transform.position, camera.transform.rotation) as GameObject;
 	}
-	
-	void Update () {
-        if (Time.time - timer > delay) {
-            message = "";
-        }
-	}
-
-    public string GetMessage() {
-        return message;
-    }
-
-    public void SetMessage(string new_message, float new_delay) {
-        message = new_message;
-        timer = Time.time;
-        delay = new_delay;
-    }
 }

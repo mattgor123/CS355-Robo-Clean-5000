@@ -29,7 +29,9 @@ public class Stage  {
     private FluffBuilder FBuilder;
     #endregion
 
-
+    public Stage(Tile[,] loadedGrid, ArrayList loadedRooms) {
+        AddLevel(loadedGrid, loadedRooms);
+    }
 
     public Stage(int width, int height, Material[] floors, Material[] walls, float frequency, FluffBuilder fluff) 
     {
@@ -673,6 +675,26 @@ public class Stage  {
 
         MovePlayerToEntrance();
 
+    }
+
+    public void AddLevel(Tile[,] loadedGrid, ArrayList loadedRooms) {
+        // Load a temporary level
+        currentLevel = -1;
+        int loadedWidth = loadedGrid.GetLength(0);
+        int loadedHeight = loadedGrid.GetLength (1);
+        this.grid = new Tile[loadedWidth, loadedHeight];
+        this.width = loadedWidth;
+        this.height = loadedHeight;
+        for (int i = 0; i < this.width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                this.grid [i, j] = new Tile (loadedGrid [i, j]);
+            }
+        }
+        this.rooms = new ArrayList ();
+        for (int i = 0; i < loadedRooms.Count; i++)
+        {
+            this.rooms.Add(new Room((Room)loadedRooms[i]));
+        }
     }
 
     public void LoadLevel(int toLoad)

@@ -116,13 +116,11 @@ public class StageBuilder : MonoBehaviour
         var spawnpoint = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length)].transform.position;
         Transform player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
         Transform hudInstance = Instantiate(HUD) as Transform;
-        Transform notificationCanvasInstance = Instantiate(NotificationCanvas) as Transform;
         Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
         DontDestroyOnLoad(hudInstance);
-        DontDestroyOnLoad(notificationCanvasInstance);
         DontDestroyOnLoad(cameraInstance);
     }
 
