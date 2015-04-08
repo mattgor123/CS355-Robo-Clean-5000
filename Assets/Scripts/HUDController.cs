@@ -15,18 +15,24 @@ public class HUDController : MonoBehaviour {
   private WeaponBackpackController weapon_backpack_controller;
   private NotificationLog notification_log;
 
+  PlayerController playerC;
+
   private void Start () {
     GameObject player = GameObject.FindWithTag("Player");
+    playerC = player.GetComponent<PlayerController>();
     weapon_backpack_controller = player.GetComponent<WeaponBackpackController>();
     GameObject log = GameObject.FindWithTag("Log");
     notification_log = log.GetComponent<NotificationLog>();
   }
     
-  private void LateUpdate () {
-    UpdateWeapon();
-    UpdateAmmo();
-    UpdateNotification();
-  }
+    private void LateUpdate () {
+        UpdateWeapon();
+        UpdateAmmo();
+        UpdateNotification();
+        string floor = "B" + playerC.getCurrentFloor();
+
+        SetLevelText(floor);
+     }
 
   private void UpdateWeapon () {
     weapon_text.text = weapon_backpack_controller.GetWeaponName().ToString();
