@@ -10,10 +10,12 @@ public class TutorialController : MonoBehaviour {
 	[SerializeField] private Material floor_material;
 	[SerializeField] private Material wall_material;
 	[SerializeField] private float scale;
+	[SerializeField] private FluffBuilder fluff_builder;
 
 	private Stage stage;
 	private Tile[,] loadedGrid;
 	private ArrayList loadedRooms;
+	private NotificationLog log;
 
 	void Awake () {
 		var playerInstance = Instantiate(player, spawn_point, Quaternion.identity) as GameObject;
@@ -21,9 +23,8 @@ public class TutorialController : MonoBehaviour {
         var cameraInstance = Instantiate(camera, camera.transform.position, camera.transform.rotation) as GameObject;
         BuildGridAndRooms();
         StageBuilder.scale = scale;
-		stage = new Stage(loadedGrid, loadedRooms);
+		stage = new Stage(loadedGrid, loadedRooms, fluff_builder);
 		stage.Create();
-		SetGridScales();
 	}
 
 	void BuildGridAndRooms () {
@@ -44,5 +45,12 @@ public class TutorialController : MonoBehaviour {
 		loadedRooms = new ArrayList();
 	}
 
-	void SetGridScales () {}
+	void Start () {
+		var black_screen = GameObject.Find("BlackScreenCanvas");
+		if(black_screen != null) {
+			black_screen.SetActive(false);
+		}
+		log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
+		log.PassMessage("Press WASD to move with\nrespect to the mouse\n\nDouble tap a direction\nto dash\n");
+	}
 }

@@ -12,7 +12,7 @@ public class NotificationLog : MonoBehaviour {
 	private float lastMessageTime;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		loggedNotifications = new List<string> ();
 		currentNotificationString = "";
 		showString = false;

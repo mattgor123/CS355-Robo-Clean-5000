@@ -5,26 +5,15 @@ public class EnemyTrigger1 : MonoBehaviour {
 
 	[SerializeField] private GameObject enemy;
 	[SerializeField] private Vector3 spawn_point;
-	[SerializeField] private GameObject treasure;
-	[SerializeField] private int extra_treasure;
 
 	private bool triggered = false;
-	private GameObject enemy_instance;
 
 	void OnCollisionEnter(Collision collision) {
 		if(!triggered) {
-			enemy_instance = Instantiate(enemy, spawn_point, Quaternion.identity) as GameObject;
+			Instantiate(enemy, spawn_point, Quaternion.identity);
+			var log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
+			log.PassMessage("Click the left mouse\nbutton to shoot\n");
 			triggered = true;
-		}
-	}
-
-	void Update () {
-		if(triggered) {
-			if(enemy_instance.GetComponent<HealthController>().GetCurrentHealth() == 0) {
-				for(int i = 0; i < extra_treasure; ++i) {
-					Instantiate(treasure, enemy_instance.transform.position, enemy_instance.transform.rotation);
-				}
-			}
 		}
 	}
 }

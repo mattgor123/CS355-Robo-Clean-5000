@@ -34,8 +34,6 @@ public class StartingWeapons : MonoBehaviour {
 	}
 
 	public string RandomWeaponPickup() {
-		GameObject nlog = GameObject.FindWithTag("Log");
-		NotificationLog log = nlog.GetComponent<NotificationLog>(); 
 		System.Random rnd = new System.Random ();
 		int pickupNumber = rnd.Next (1, initialNumWeapons+initialNumNullDrops); 
 		if (pickupNumber == 1 && !hasWeapon1) {
@@ -48,5 +46,20 @@ public class StartingWeapons : MonoBehaviour {
 			return ("Picked up " + weapon2.name);
 		}
 		return "";
+	}
+
+	public string PickupAll() {
+		string result = "";
+		if (!hasWeapon1) {
+			weapon_backpack_controller.AddWeapon (weapon1);
+			hasWeapon1 = true;
+			result += "Picked up " + weapon1.name + "\n";
+		}
+		if (!hasWeapon2) {
+			weapon_backpack_controller.AddWeapon(weapon2);
+			hasWeapon2 = true;
+			result += "Picked up " + weapon2.name + "\n";
+		}
+		return result;
 	}
 }

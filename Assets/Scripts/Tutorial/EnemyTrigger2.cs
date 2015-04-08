@@ -15,6 +15,8 @@ public class EnemyTrigger2 : MonoBehaviour {
 			Instantiate(enemy1, spawn_point, Quaternion.identity);
 			Instantiate(enemy2, spawn_point - new Vector3(0, -change_in_height, 5.0f), Quaternion.identity);
 			Instantiate(enemy2, spawn_point + new Vector3(0, change_in_height, 5.0f), Quaternion.identity);
+			var log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
+			log.PassMessage("Watch your health!\nDon't let it run out!\n");
 			triggered = true;
 		}
 	}

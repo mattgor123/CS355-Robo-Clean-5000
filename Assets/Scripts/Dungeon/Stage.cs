@@ -29,10 +29,11 @@ public class Stage  {
     private FluffBuilder FBuilder;
     #endregion
 
-    public Stage(Tile[,] loadedGrid, ArrayList loadedRooms) {
+    public Stage(Tile[,] loadedGrid, ArrayList loadedRooms, FluffBuilder fluff_builder) {
         levels = new ArrayList();
         spawnedRooms = new ArrayList();
         AddLevel(loadedGrid, loadedRooms);
+        FBuilder = fluff_builder;
     }
 
     public Stage(int width, int height, Material[] floors, Material[] walls, float frequency, FluffBuilder fluff) 
