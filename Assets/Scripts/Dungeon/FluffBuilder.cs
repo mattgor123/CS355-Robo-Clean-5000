@@ -295,9 +295,9 @@ public class FluffBuilder : MonoBehaviour
     public void Randomize()
     {
         WallLightProb = Random.value * 0.5f;
-        SmokeProb = Random.value * 0.1f;
+        SmokeProb = Random.value * 0.05f;
         DustProb = Random.value * 0.5f;
-        VolumeSteamProb = Random.value * 0.05f;
+        VolumeSteamProb = Random.value * 0.02f;
         WallLightColor = new Color(Random.value, Random.value, Random.value);
     }
 
