@@ -25,7 +25,7 @@ public class TreasureController : MonoBehaviour {
 			var player = GameObject.FindGameObjectWithTag("StartingWeapons");
 			string pickupMessage = player.GetComponent<StartingWeapons>().RandomWeaponPickup();
 			Destroy(gameObject);
-            message += "Collected " + found_ammo + "ammo\n";
+            message += "Collected " + found_ammo + " ammo\n";
             message += pickupMessage + "\n";
 
 		}

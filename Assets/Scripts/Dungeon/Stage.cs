@@ -30,6 +30,8 @@ public class Stage  {
     #endregion
 
     public Stage(Tile[,] loadedGrid, ArrayList loadedRooms) {
+        levels = new ArrayList();
+        spawnedRooms = new ArrayList();
         AddLevel(loadedGrid, loadedRooms);
     }
 

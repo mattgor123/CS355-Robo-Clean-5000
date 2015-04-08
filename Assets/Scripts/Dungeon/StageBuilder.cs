@@ -70,7 +70,6 @@ public class StageBuilder : MonoBehaviour
     private float[,] enemyWeights; 
     #endregion
 
-
     /*Everything related to creating the dungeon itself */
     void Awake()
     {
