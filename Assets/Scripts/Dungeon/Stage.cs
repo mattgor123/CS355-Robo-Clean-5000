@@ -554,6 +554,7 @@ public class Stage  {
             }
         }
 
+        FBuilder.Randomize();
         FBuilder.BuildFluff(grid, StageBuilder.scale);
     }
 
