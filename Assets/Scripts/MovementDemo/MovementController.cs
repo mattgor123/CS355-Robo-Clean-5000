@@ -8,22 +8,22 @@ public class MovementController : MonoBehaviour {
 	[SerializeField] private float run_force;      // The force to apply when running
 	[SerializeField] private float force_delay;    // How long to wait in between applications of force
 	[SerializeField] private float rotation_delay; // How long to wait in between rotations
+	[SerializeField] private Transform wheel;
 
 	private float last_force;
 	private float last_rotation;
 	private float speedDampTime = 0.1f;
 
-	private Animator anim;
 	private HealthController healthController;
     private Rigidbody RG;
+    private Transform wheelTransform;
 
 	private void Awake() {
-		anim = GetComponent<Animator>();
-		//if (anim.layerCount >= 2) {
-		//	anim.SetLayerWeight(1, 1);
-		//}
+
 		healthController = GetComponent<HealthController>();
         RG = GetComponent<Rigidbody>();
+        wheelTransform = wheel.GetComponent<Transform>();
+
 	}
 
 	private void Start () {
@@ -41,7 +41,6 @@ public class MovementController : MonoBehaviour {
             // if the object is not standing still, move object
             if (z_axis != 0f || x_axis != 0f)
             {
-           // 	anim.SetBool("isIdle", false);
                 var force = walk_force;
 
                 var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
@@ -49,14 +48,14 @@ public class MovementController : MonoBehaviour {
 
                 resulting_force = z_force + x_force;
             
-        //        anim.SetFloat("Speed", 5.5f, speedDampTime, Time.deltaTime);
+            	wheelTransform.Rotate(3 * z_axis * force * Time.deltaTime, 0, 0);
+            	Debug.Log("Rotation: " + wheelTransform.rotation);
+
                 RG.AddForce(resulting_force, ForceMode.Impulse);
                 last_force = Time.time;
             }
             else
             {
-//            	anim.SetBool("isIdle", true);
-     //           anim.SetFloat("Speed", 0f);
                 RG.velocity *= 0.5f;
             }
 
@@ -66,11 +65,6 @@ public class MovementController : MonoBehaviour {
                 RG.velocity = RG.velocity.normalized * 10f;
             }
         }
-        else
-        {
-    //        anim.SetBool("isDead", true);
-     //       anim.SetLayerWeight(1, 0);
-        }	
 	}
 
 	public void UpdateRotation (Vector3 euler_angles) {
