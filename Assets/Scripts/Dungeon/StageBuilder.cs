@@ -135,7 +135,7 @@ public class StageBuilder : MonoBehaviour
 
         var spawnableTiles = Physics.OverlapSphere(Player.position, 50 * StageBuilder.scale, 1 << LayerMask.NameToLayer("EnemySpawnable"));
         var randomLocation = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length - 1)].transform.position;
-        
+
         if (Random.Range(0f, 1f) <= .5)
         {
             Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 3, Quaternion.identity);
@@ -144,6 +144,8 @@ public class StageBuilder : MonoBehaviour
         {
             Instantiate(enemy_smart, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
         }
+
+
     }
 
     /*Pick random background music */
@@ -164,6 +166,11 @@ public class StageBuilder : MonoBehaviour
 
     public void nextLevel(int level)
     {
+        foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            GameObject.Destroy(enemy);
+        }
+        numEnemies = 0;
         stage.NextLevel(level);
     }
 }
