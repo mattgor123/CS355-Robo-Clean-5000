@@ -9,6 +9,9 @@ public class MovementController : MonoBehaviour {
 	[SerializeField] private float force_delay;    // How long to wait in between applications of force
 	[SerializeField] private float rotation_delay; // How long to wait in between rotations
 	[SerializeField] private Transform wheel;
+	[SerializeField] private Transform leftHand;
+	[SerializeField] private Transform rightHand;
+	[SerializeField] private Transform pelvis;
 
 	private float last_force;
 	private float last_rotation;
@@ -16,14 +19,21 @@ public class MovementController : MonoBehaviour {
 
 	private HealthController healthController;
     private Rigidbody RG;
+    // rotation transforms
     private Transform wheelTransform;
+    private Transform leftHandTransform;
+    private Transform rightHandTransform;
+    private Transform pelvisTransform;
+
 
 	private void Awake() {
 
 		healthController = GetComponent<HealthController>();
         RG = GetComponent<Rigidbody>();
         wheelTransform = wheel.GetComponent<Transform>();
-
+        leftHandTransform = leftHand.GetComponent<Transform>();
+        rightHandTransform = rightHand.GetComponent<Transform>();
+        pelvisTransform = pelvis.GetComponent<Transform>();
 	}
 
 	private void Start () {
@@ -47,10 +57,15 @@ public class MovementController : MonoBehaviour {
                 var x_force = transform.right * x_axis * force * Time.deltaTime * 2f;
 
                 resulting_force = z_force + x_force;
-            
-            	wheelTransform.Rotate(3 * z_axis * force * Time.deltaTime, 0, 0);
-            	Debug.Log("Rotation: " + wheelTransform.rotation);
 
+                // rotate hands when moving
+            	leftHandTransform.Rotate(0, 0, 5);
+        		rightHandTransform.Rotate(0, 0, -5);
+        		// rotate wheel to give "rolling" effect
+            	wheelTransform.Rotate(3 * z_axis * force * Time.deltaTime, 0, 0);
+            	// rotate pelvis in direction of movement
+            	Quaternion rotate = Quaternion.LookRotation(resulting_force);
+            	pelvisTransform.rotation = rotate;
                 RG.AddForce(resulting_force, ForceMode.Impulse);
                 last_force = Time.time;
             }
