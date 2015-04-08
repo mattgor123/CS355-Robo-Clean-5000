@@ -3,15 +3,11 @@ using System.Collections;
 
 public class InventoryController : MonoBehaviour {
 
-    private bool[] keys;
+    private bool[] keys = new bool[] {false, false, false, false, false};
 
     void Awake()
     {
-        keys = new bool[5];
-        for (int i = 0; i < keys.Length; i++)
-        {
-            keys[i] = false;
-        }
+
 
     }
 

@@ -16,6 +16,13 @@ public class Stage  {
     private int currentRegion;  //the color of the region being carved
     private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
     private int currentLevel;
+    private int[] Winding = new int[]{60, 30, 40, 50, 60, 80};
+    private int[] RoomAttempts = new int[] { 5, 10, 20, 40, 80, 100 };
+    private int[] RoomExtraSize = new int[] { 0, 3, 5, 2, 10, 6 };
+    private float[] ColumnFrequency = new float[] {0.15f, 0.25f, 0f, 0.50f, 0.15f, 0.25f };
+    private int[] StageWidths = new int[] { 20, 30, 35, 50, 10, 30 };
+    private int[] StageHeights = new int[] { 20, 30, 35, 50, 10, 30 };
+
     private ArrayList levels; //Stores Object pairs, where the first element is the grid and the second is array of rooms
     private ArrayList spawnedRooms;
     private int elevatorSize = 5;
@@ -24,7 +31,6 @@ public class Stage  {
     private GameObject Facility;
     private Material floorMaterial;
     private Material wallMaterial;
-    private float columnFrequency;
 
     private FluffBuilder FBuilder;
     #endregion
@@ -36,21 +42,20 @@ public class Stage  {
         FBuilder = fluff_builder;
     }
 
-    public Stage(int width, int height, Material[] floors, Material[] walls, float frequency, FluffBuilder fluff) 
+    public Stage(Material[] floors, Material[] walls, FluffBuilder fluff) 
     {
         //FloodFill algorithm needs odd-length grid
         currentLevel = 0; //start level
         levels = new ArrayList();
         spawnedRooms = new ArrayList();
         rooms = new ArrayList();
-        this.width = ensureOdd(width);
-        this.height = ensureOdd(height);
+        this.width = ensureOdd(StageWidths[currentLevel]);
+        this.height = ensureOdd(StageHeights[currentLevel]);
         grid = new Tile[this.width, this.height];
         currentRegion = -1;
         int i = RandomizeMaterials(floors.Length);
         this.floorMaterial = floors[i];
         this.wallMaterial = walls[i];
-        this.columnFrequency = frequency;
         this.FBuilder = fluff;
         //Initializing the grid to all Rock. Passes materials to Tile as well.
         for (int x = 0; x < this.width; x++)
@@ -72,12 +77,12 @@ public class Stage  {
 
 
 
-    public void _addRooms(int numTries)
+    public void _addRooms()
     {
 
-        for (var i = 0; i < numTries; i++)
+        for (var i = 0; i < RoomAttempts[currentLevel]; i++)
         {
-            int roomExtraSize = 2;
+            int roomExtraSize = RoomExtraSize[currentLevel];
             var size = UnityEngine.Random.Range(3, 5 + roomExtraSize) + 1;
             var rectangularity = UnityEngine.Random.Range(0, 1 + size / 2) * 2;
             var width = size;
@@ -120,7 +125,7 @@ public class Stage  {
                 for (int y = starty; y < max_y; y++)
                 {
                     var shouldCarveColumn = UnityEngine.Random.Range(0f, 1f);
-                    if (shouldCarveColumn < columnFrequency && x < max_x - 1 && y < max_y - 1 && x > startx && y > starty)
+                    if (shouldCarveColumn < ColumnFrequency[currentLevel] && x < max_x - 1 && y < max_y - 1 && x > startx && y > starty)
                     {
                         grid[x, y].CarveColumn();
                     }
@@ -155,7 +160,7 @@ public class Stage  {
     private void growMaze(Vector2 start)
     {
         var lastdir = Vector2.zero; //the direction the path last took
-        int windingPercent = 20; //chance that the path will turn
+        int windingPercent = Winding[currentLevel]; //chance that the path will turn
         var cells = new List<Vector2>(); //carries x and y 
         int x = Mathf.FloorToInt(start.x);
         int y = Mathf.FloorToInt(start.y);
@@ -345,7 +350,7 @@ public class Stage  {
 
             //gives chance for a second or more door to be added
             
-                while ((!hasDoor || UnityEngine.Random.Range(0, 100) > 25) && numDoors < potentialDoors.Count)
+                while ((!hasDoor || UnityEngine.Random.Range(0, 100) > 40) && numDoors < potentialDoors.Count)
                 {
 
                     Vector2 randomDoor = potentialDoors[UnityEngine.Random.Range(0, potentialDoors.Count)];
@@ -607,8 +612,8 @@ public class Stage  {
     private void CreateNewLevel()
     {
         //Create new grid of new dimensions
-        int newWidth = ensureOdd(this.width);
-        int newHeight = ensureOdd(this.height);
+        int newWidth = ensureOdd(StageWidths[currentLevel]);
+        int newHeight = ensureOdd(StageHeights[currentLevel]);
         Tile[,] newGrid = new Tile[newWidth, newHeight];
         for (int x = 0; x < newWidth; x++)
         {
@@ -626,7 +631,7 @@ public class Stage  {
         //Create the new exit
         spawnExit();
         //Place Rooms
-        _addRooms(102); //TODO: Reset needs a need an argument to decide numTries
+        _addRooms(); //TODO: Reset needs a need an argument to decide numTries
         //Place Halls
         PlaceHalls();
         //Create Doors
@@ -656,6 +661,7 @@ public class Stage  {
     {
         //CameraShake();
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        this.currentLevel = level;
         if (level == levels.Count) //level is exactly one deeper than previous depth
         {
             DestroyCurrentLevel();
@@ -674,7 +680,6 @@ public class Stage  {
         Create();
         //Move player to the entrance
         WaitTwoSecs();
-		this.currentLevel = level;
 
         MovePlayerToEntrance();
 

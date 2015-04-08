@@ -7,16 +7,6 @@ public class StageBuilder : MonoBehaviour
     #region StageBuilders private variables
     private Stage stage;
     [SerializeField]
-    private int WIDTH_MUST_BE_ODD;
-    [SerializeField]
-    private int HEIGHT_MUST_BE_ODD;
-    [SerializeField]
-    private int NUMBER_ROOM_TRIES;
-    [SerializeField]
-    private float ColumnFrequency;
-    [SerializeField]
-    private float[] parameters;
-    [SerializeField]
     private Transform Player;
     [SerializeField]
     private Transform HUD;
@@ -76,9 +66,9 @@ public class StageBuilder : MonoBehaviour
         Application.targetFrameRate = 60    ;
         QualitySettings.vSyncCount = 0;
         scale = Accessiblescale;
-        stage = new Stage(WIDTH_MUST_BE_ODD, HEIGHT_MUST_BE_ODD, floorMaterials, wallMaterials, ColumnFrequency, FBuilder);
+        stage = new Stage(floorMaterials, wallMaterials, FBuilder);
         //TODO: place rooms first. 
-        stage._addRooms(NUMBER_ROOM_TRIES);
+        stage._addRooms();
         stage.PlaceHalls();
         stage.createDoors();
         stage.removeDeadEnds();
