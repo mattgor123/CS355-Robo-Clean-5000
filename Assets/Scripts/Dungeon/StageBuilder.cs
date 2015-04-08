@@ -33,6 +33,8 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private Transform enemy_aggressive;
     [SerializeField]
+    private Transform turret;
+    [SerializeField]
     private GameObject hurt_canvas;
     [SerializeField]
     private AudioClip[] dungeon_backgrounds;
@@ -61,6 +63,11 @@ public class StageBuilder : MonoBehaviour
     private Material[] wallMaterials;
     [SerializeField]
     private FluffBuilder FBuilder;
+    //weights of enemy. row is floor, column is weight in order of aggressive, smart, turret
+    //ex: 0.3, 0.6, 1. if random float is 0-0.3, aggressive
+    //if float is 0.3-0.6, smart
+    //if float is 0.6-1, turret
+    private float[,] enemyWeights; 
     #endregion
 
 
@@ -80,6 +87,32 @@ public class StageBuilder : MonoBehaviour
         spawnPlayer();
         Player = GameObject.FindWithTag("Player").transform;
         maxEnemies = (Player.gameObject.GetComponent<PlayerController>().getCurrentFloor() + 1) * enemiesPerLevel;
+
+        enemyWeights = new float[6, 3];
+
+        enemyWeights[0, 0] = 0.5f;
+        enemyWeights[0, 1] = 1f;
+        enemyWeights[0, 2] = 0;
+
+        enemyWeights[1, 0] = 0.4f;
+        enemyWeights[1, 1] = 0.8f;
+        enemyWeights[1, 2] = 1f;
+
+        enemyWeights[2, 0] = 0.35f;
+        enemyWeights[2, 1] = 0.7f;
+        enemyWeights[2, 2] = 1f;
+
+        enemyWeights[3, 0] = 0.35f;
+        enemyWeights[3, 1] = 0.7f;
+        enemyWeights[3, 2] = 1f;
+
+        enemyWeights[4, 0] = 0.35f;
+        enemyWeights[4, 1] = 0.7f;
+        enemyWeights[4, 2] = 0.3f;
+
+        enemyWeights[5, 0] = 0.35f;
+        enemyWeights[5, 1] = 0.35f;
+        enemyWeights[5, 2] = 0.3f;
     }
 
 	/*Spawning the player and game elements besides dungeon and enemies */
@@ -136,13 +169,21 @@ public class StageBuilder : MonoBehaviour
         var spawnableTiles = Physics.OverlapSphere(Player.position, 50 * StageBuilder.scale, 1 << LayerMask.NameToLayer("EnemySpawnable"));
         var randomLocation = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length - 1)].transform.position;
 
-        if (Random.Range(0f, 1f) <= .5)
+        int floor = Player.gameObject.GetComponent<PlayerController>().getCurrentFloor();
+
+        float chance = Random.Range(0f, 1f);
+
+        if (chance <= enemyWeights[floor, 0])
         {
             Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 3, Quaternion.identity);
         }
-        else
+        else if (chance <= enemyWeights[floor, 1])
         {
             Instantiate(enemy_smart, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
+        }
+        else if (chance <= enemyWeights[floor, 2])
+        {
+            Instantiate(turret, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
         }
 
 
