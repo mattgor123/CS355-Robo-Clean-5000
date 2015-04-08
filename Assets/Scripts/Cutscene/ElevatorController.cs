@@ -63,6 +63,7 @@ public class ElevatorController : MonoBehaviour {
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         int dfv = pc.getDeepestLevelVisited();
 		int currentLevel = pc.getCurrentFloor ();
+        var inventory = pc.GetComponent<InventoryController>();
 
         //GameObject button; // = Instantiate(eButton);
         //button.transform.SetParent(ePanel.transform);
@@ -81,6 +82,20 @@ public class ElevatorController : MonoBehaviour {
 			if (currentLevel == i) {
 				button.GetComponent<Button>().interactable = false;
 			}
+            else if (i > 0 && !inventory.hasKey(i - 1))
+            {
+                button.GetComponentInChildren<Text>().text = "B" + i + ": ACCESS DENIED";
+                button.GetComponent<Button>().interactable = false;
+
+            }
+            else if (i > 0 && inventory.hasKey(i - 1)) {
+                button.GetComponentInChildren<Text>().text = "B" + i;
+                button.GetComponent<Button>().interactable = true;
+                int icopy = i;
+                button.GetComponent<Button>().onClick.AddListener(
+                    () => shake(icopy)
+                    );
+            }
 			else {
                 int icopy = i;
                 button.GetComponent<Button>().onClick.AddListener(

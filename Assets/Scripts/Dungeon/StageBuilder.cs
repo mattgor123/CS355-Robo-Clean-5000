@@ -186,6 +186,7 @@ public class StageBuilder : MonoBehaviour
         }
 
 
+
     }
 
     /*Pick random background music */
@@ -202,6 +203,11 @@ public class StageBuilder : MonoBehaviour
     public static void EnemyDied()
     {
         numEnemies--;
+    }
+
+    public static int NumberEnemies()
+    {
+        return numEnemies;
     }
 
     public void nextLevel(int level)

@@ -29,16 +29,9 @@ public class NewRoomTrigger : MonoBehaviour {
         nextLevelCountdown = 0;
         trigger = false;
         elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
-        ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
-        //remove any buttons that are on the panel
         elevatorPanel = GameObject.FindGameObjectWithTag("ElevatorPanel");
-        int children = elevatorPanel.transform.childCount;
-        for (int i = 0; i < children; i++)
-        {
-            GameObject.Destroy(elevatorPanel.transform.GetChild(i).gameObject);
-        }
 
-        ec.makeButtons();
+
 
         //blackScreen = GameObject.Find("BlackScreen");
 
@@ -47,6 +40,7 @@ public class NewRoomTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
+
         if (!trigger)
         {
 
@@ -54,11 +48,14 @@ public class NewRoomTrigger : MonoBehaviour {
             if (other.gameObject.tag == "Player")
             {
 
+
                 //TODO pause everything maybe?
                 Time.timeScale = 0;
                 //Cursor.lockState = CursorLockMode.None;
                 //Cursor.visible = true;
                 elevatorCanvas.SetActive(true);
+                ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
+                ec.makeButtons();
 
                 trigger = true;
                 Time.timeScale = 0;
@@ -76,7 +73,15 @@ public class NewRoomTrigger : MonoBehaviour {
      * */
 
     void OnTriggerExit(Collider other)
-    {
+    {       
+        //remove any buttons that are on the panel
+        int children = elevatorPanel.transform.childCount;
+        for (int i = 0; i < children; i++)
+        {
+            GameObject.Destroy(elevatorPanel.transform.GetChild(i).gameObject);
+        }
+
+
         if (other.gameObject.tag == "Player")
         {
             //Cursor.lockState = CursorLockMode.Locked;
