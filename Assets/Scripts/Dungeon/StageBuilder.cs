@@ -76,6 +76,7 @@ public class StageBuilder : MonoBehaviour
         spawnPlayer();
         Player = GameObject.FindWithTag("Player").transform;
         maxEnemies = (Player.gameObject.GetComponent<PlayerController>().getCurrentFloor() + 1) * enemiesPerLevel;
+        numEnemies = 0;
 
         enemyWeights = new float[6, 3];
 
