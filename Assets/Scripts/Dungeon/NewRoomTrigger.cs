@@ -45,34 +45,6 @@ public class NewRoomTrigger : MonoBehaviour {
         elevatorCanvas.SetActive(false);
     }
 
-    /*
-    void Update()
-    {
-        if (nextLevelCountdown == 0)
-        {
-            return;
-        }
-        else if (nextLevelCountdown > 0)
-        {
-            nextLevelCountdown -= Time.deltaTime;
-        }
-        else
-        {
-            //nextLevelCountdown = 0;
-            GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
-            stagebuilder.GetComponent<StageBuilder>().nextLevel();
-        }
-
-    }
-     * */
-
-    /*
-    public void setLevel(string s)
-    {
-        level = s;
-    }
-    */
-     
     void OnTriggerEnter(Collider other)
     {
         if (!trigger)
@@ -81,51 +53,36 @@ public class NewRoomTrigger : MonoBehaviour {
             //if this object hits Player
             if (other.gameObject.tag == "Player")
             {
-                //PlayerController pc = other.gameObject.GetComponent<PlayerController>();
-                //int dfv = pc.getDeepestLevelVisited();
-
-                //GameObject ep = GameObject.FindGameObjectWithTag("ElevatorPanel");
-
 
                 //TODO pause everything maybe?
-                Cursor.lockState = CursorLockMode.None;
+                Time.timeScale = 0;
+                //Cursor.lockState = CursorLockMode.None;
+                //Cursor.visible = true;
                 elevatorCanvas.SetActive(true);
 
-                //GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
-                //CameraController cc = camera.GetComponent<CameraController>();
-                //cc.shake();
-                
-                //nextLevelCountdown = countdown;
-
                 trigger = true;
+                Time.timeScale = 0;
 
-                //GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
-                //stagebuilder.GetComponent<StageBuilder>().nextLevel();
             }
         }
     }
 
     /*
-    public void nextLevel()
-    {
-        GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
-        stagebuilder.GetComponent<StageBuilder>().nextLevel();
-    }
-     * */
-
     public void cancelElevator()
     {
-        //trigger = false;
         elevatorCanvas.SetActive(false);
+        Time.timeScale = 1;
     }
+     * */
 
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
             trigger = false;
             elevatorCanvas.SetActive(false);
+            //Time.timeScale = 1;
 
         }
     }

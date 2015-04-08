@@ -134,7 +134,7 @@ public class StageBuilder : MonoBehaviour
     {
 
         var spawnableTiles = Physics.OverlapSphere(Player.position, 50 * StageBuilder.scale, 1 << LayerMask.NameToLayer("EnemySpawnable"));
-        var randomLocation = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length)].transform.position;
+        var randomLocation = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length - 1)].transform.position;
         
         if (Random.Range(0f, 1f) <= .5)
         {

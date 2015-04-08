@@ -125,5 +125,6 @@ public class ElevatorController : MonoBehaviour {
     private void cancel()
     {
         gameObject.SetActive(false);
+        Time.timeScale = 1;
     }
 }
