@@ -62,7 +62,7 @@ public class MovementController : MonoBehaviour {
             	leftHandTransform.Rotate(0, 0, 5);
         		rightHandTransform.Rotate(0, 0, -5);
         		// rotate wheel to give "rolling" effect
-            	wheelTransform.Rotate(3 * z_axis * force * Time.deltaTime, 0, 0);
+            	wheelTransform.Rotate(3 * (z_axis + x_axis) * force * Time.deltaTime, 0, 0);
             	// rotate pelvis in direction of movement
             	Quaternion rotate = Quaternion.LookRotation(resulting_force);
             	pelvisTransform.rotation = rotate;
