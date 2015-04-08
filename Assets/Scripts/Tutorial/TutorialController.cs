@@ -53,4 +53,12 @@ public class TutorialController : MonoBehaviour {
 		log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
 		log.PassMessage("Press WASD to move with\nrespect to the mouse\n\nDouble tap a direction\nto dash\n\nPress space to skip anytime\n");
 	}
+
+	void Update() {
+		if (Input.GetKeyUp(KeyCode.Space))
+		{
+			Application.LoadLevel("Game");
+		} 
+	}
+
 }

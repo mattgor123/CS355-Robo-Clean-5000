@@ -8,7 +8,7 @@ public class ElevatorInfo : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if(!triggered) {
 			var log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
-			log.PassMessage("Find the elevator\nto continue...\n\nThis is your goal - you need\nto go deeper.\n");
+			log.PassMessage("Find the elevator\nto continue...\n\nThis is your goal - you need\nto go kill enemıes to collect\naccess cards and reach the\n Time Machine!");
 		}
 	}
 }
