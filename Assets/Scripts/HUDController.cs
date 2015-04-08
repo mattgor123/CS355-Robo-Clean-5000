@@ -12,7 +12,6 @@ public class HUDController : MonoBehaviour {
   [SerializeField] private Text notification_text;
   [SerializeField] private Text level_text;
 
-  private List<Message> messages = new List<Message>();
   private WeaponBackpackController weapon_backpack_controller;
   private NotificationLog notification_log;
 
@@ -39,54 +38,9 @@ public class HUDController : MonoBehaviour {
 
   private void UpdateNotification () {
     notification_text.text = "" + notification_log.getCurrentNotification();
-//    var time = Time.time;
-//    string result = "";
-//    if(messages.Count > 0) {
-//      while(time - messages.Last().getCreation() > message_display_time) {
-//        messages.RemoveAt(messages.Count - 1);
-//      }
-//      for(var i = 0; i < messages.Count; ++i) {
-//        if(i < max_messages) {
-//          result += "\n" + messages[i].getText();
-//        }
-//      }
-//    }
-//    notification_text.text = result;
   }
 
-  public void AddMessage (string text) {
-    var message = new Message(text, Time.time);
-    messages.Insert(0, message);
+  public void SetLevelText (string new_text) {
+    level_text.text = new_text;
   }
-}
-
-public class Message
-{
-    private string text;
-    private float created_at;
-
-    public Message(string _text, float _created_at)
-    {
-        text = _text;
-        created_at = _created_at;
-    }
-
-    public string getText()
-    {
-        return this.text;
-    }
-    public void setText(string text)
-    {
-        this.text = text;
-    }
-
-    public float getCreation()
-    {
-        return this.created_at;
-    }
-
-    public void setCreation(float time)
-    {
-        this.created_at = time;
-    }
 }
