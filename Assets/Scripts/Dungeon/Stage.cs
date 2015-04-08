@@ -628,7 +628,6 @@ public class Stage  {
         this.grid = newGrid;
         this.height = newHeight;
         this.width = newWidth;
-        currentLevel++;
         //Create the new exit
         spawnExit();
         //Place Rooms
