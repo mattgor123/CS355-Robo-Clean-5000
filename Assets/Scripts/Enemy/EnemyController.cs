@@ -41,6 +41,7 @@ public class EnemyController : MonoBehaviour {
 
     private float AttackTimer;      //Time since last attack
     private bool AggroState;        //Whether enemy is aggroed and chasing player
+    private bool Stationary;        //Whether enemy type is stationary
 
     //Animations
     private Animator anim;
@@ -69,7 +70,8 @@ public class EnemyController : MonoBehaviour {
         //Die if at zero hp
         if (health_controller.GetCurrentHealth() == 0)
         {
-            anim.SetBool("Dead", true);
+            if (anim != null)
+                anim.SetBool("Dead", true);
             // need delay so enemy dying animations can show
             var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
@@ -79,34 +81,44 @@ public class EnemyController : MonoBehaviour {
 
         //Movement
         //call primary movement logic to get movement direction
-        Vector3 mvt = ((LMMove) GetComponent("LMMove")).MoveLogic(this, player);
+        Vector3 mvt = ((LMMove)GetComponent("LMMove")).MoveLogic(this, player);
 
         // If primary movement is zero, and not aggroed, run auxiliary movement pattern
         if (mvt.magnitude == 0 && !AggroState)
         {
             var aux = (LMAuxMove)GetComponent("LMAuxMove");
-            if (aux != null) {
+            if (aux != null)
+            {
                 mvt = aux.AuxMoveLogic(this, player);
             }
         }
 
         //apply the movement
         PrevTime = Time.deltaTime;
-        mvt = mvt * speed * PrevTime;
+        if (Stationary)
+        {
+            mvt = new Vector3(0f, 0f, 0f);
+        }
+        else
+        {
+            mvt = mvt * speed * PrevTime;
+        }
         GetComponent<Rigidbody>().AddForce(mvt);
 
         PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
         PrevPos = transform.position;
 
+
         //Face in the direction of movement
         if (RBody.velocity.magnitude > 0)
             transform.forward = RBody.velocity;
-        
+
         //Do not exceed maximum speed
         if (RBody.velocity.magnitude > SpeedLimit)
         {
-            RBody.velocity = RBody.velocity.normalized*SpeedLimit;
+            RBody.velocity = RBody.velocity.normalized * SpeedLimit;
         }
+        
 
         //decrement wall hit timer
         WallHitTimer -= PrevTime;
@@ -120,14 +132,20 @@ public class EnemyController : MonoBehaviour {
         if (AggroState) { 
            
             transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
-            transform.LookAt(player.transform);
+
+            if (!Stationary)
+            {
+                transform.LookAt(player.transform);
+            }
         }
 
         //Apply animations
         if(RBody.velocity.magnitude > 0) {
-			anim.SetBool("Moving", true);
+            if (anim != null) 
+			    anim.SetBool("Moving", true);
 		} else {
-			anim.SetBool("Moving", false);
+            if (anim != null)
+			    anim.SetBool("Moving", false);
 		}
 	}
   
@@ -203,6 +221,11 @@ public class EnemyController : MonoBehaviour {
     public void SetAggroState(bool state)
     {
         AggroState = state;
+    }
+
+    public void SetStationary(bool state)
+    {
+        Stationary = state;
     }
 
     #endregion
