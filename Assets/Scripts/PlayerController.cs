@@ -31,12 +31,12 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float dashTime;
 
-	[SerializeField]
-	private float dashCooldownTime;
+	//[SerializeField]
+	//private float dashCooldownTime;
 
-    private float dashCountdown;
+    //private float dashCountdown;
 
-    private bool isDodging;
+    private bool isDashing;
 
     private Vector2 dashDirection;
 
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour {
     private float doubleTapCountdown;
 
 	//Time passed since last dash down
-	private float dashCooldownCountdown;
+	//private float dashCooldownCountdown;
 
     //Number of times key is pressed, for double tap
     //in order of W,A, S,D
@@ -76,11 +76,11 @@ public class PlayerController : MonoBehaviour {
         ScreenSize = new Vector3(Screen.width, Screen.height);
 
         doubleTapCountdown = 0;
-        //count = 0;
         count = new int[4];
         resetDoubleTapCount();
         dashDirection = new Vector2(0, 0);
-		dashCooldownCountdown = 0;
+		//dashCooldownCountdown = 0;
+        this.isDashing = false;
 
         currentFloor = 0;
         dialogueLevel = 0;
@@ -135,7 +135,8 @@ public class PlayerController : MonoBehaviour {
         }
 
 		//double tap for dash
-        if (dashCountdown == 0 && dashCooldownCountdown == 0) {
+        //if (!isDashing && dashCooldownCountdown == 0) {
+        if (!isDashing) {
 			if (Input.GetKeyDown ("d") || Input.GetKeyDown (KeyCode.RightArrow)) {
 				if (count [3] == 0) {
 					resetDoubleTapCount ();
@@ -146,11 +147,11 @@ public class PlayerController : MonoBehaviour {
 					//dash
 					//movement_controller.UpdateMovement(0, dashForce, ControlScheme);
 					dashDirection = new Vector2 (0, dashForce);
-
+                    isDashing = true;
 					//count[3] = 0;
 					resetDoubleTapCount ();
 					doubleTapCountdown = 0;
-					dashCountdown = dashTime;
+					//dashCountdown = dashTime;
 				}
 
 			}
@@ -165,10 +166,11 @@ public class PlayerController : MonoBehaviour {
 					//dash
 					//movement_controller.UpdateMovement(-dashForce, 0, ControlScheme);
 					dashDirection = new Vector2 (-dashForce, 0);
+                    isDashing = true;
 					//count[2] = 0;
 					resetDoubleTapCount ();
 					doubleTapCountdown = 0;
-					dashCountdown = dashTime;
+					//dashCountdown = dashTime;
 				}
 
 			}
@@ -183,10 +185,11 @@ public class PlayerController : MonoBehaviour {
 					//dash
 					//movement_controller.UpdateMovement(dashForce, 0, ControlScheme);
 					dashDirection = new Vector2 (dashForce, 0);
+                    isDashing = true;
 					//count[0] = 0;
 					resetDoubleTapCount ();
 					doubleTapCountdown = 0;
-					dashCountdown = dashTime;
+					//dashCountdown = dashTime;
 				}
 
 			}
@@ -201,19 +204,29 @@ public class PlayerController : MonoBehaviour {
 					//dash
 					//movement_controller.UpdateMovement(0, -dashForce, ControlScheme);
 					dashDirection = new Vector2 (0, -dashForce);
+                    isDashing = true;
 					//count[1] = 0;
 					resetDoubleTapCount ();
 					doubleTapCountdown = 0;
-					dashCountdown = dashTime;
+					//dashCountdown = dashTime;
 				}
 
 			}
-		} else if (dashCooldownCountdown > 0) {
-			dashCooldownCountdown = dashCooldownCountdown - Time.deltaTime;
-		} else if (dashCooldownCountdown < 0) {
-			dashCooldownCountdown = 0;
-		}
-        
+		} //else if (dashCooldownCountdown > 0) {
+			//dashCooldownCountdown = dashCooldownCountdown - Time.deltaTime;
+		//} else if (dashCooldownCountdown < 0) {
+		//	dashCooldownCountdown = 0;
+		//}
+        else //isDashing
+        {
+            if (Input.GetKeyUp("w") || Input.GetKeyUp("a") || Input.GetKeyUp("s") || Input.GetKeyUp("d")
+                || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow))
+            {
+                isDashing = false;
+            }
+        }
+
+
         if (doubleTapCountdown > 0)
         {
             doubleTapCountdown = doubleTapCountdown - Time.deltaTime;
@@ -335,23 +348,23 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void UpdateMovement () {
-        if (dashCountdown == 0)
+        if (!isDashing)
         {
             var z_axis = Input.GetAxis("Vertical");
             var x_axis = Input.GetAxis("Horizontal");
             movement_controller.UpdateMovement(z_axis, x_axis);
         }
-        else if (dashCountdown > 0)
-        {
-            movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
-            dashCountdown = dashCountdown - Time.deltaTime;
-            //Debug.Log(Time.deltaTime);
-        }
+        //else if (dashCountdown > 0)
         else
         {
-            dashCountdown = 0;
-			dashCooldownCountdown = dashCooldownTime;
+            movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
+            //dashCountdown = dashCountdown - Time.deltaTime;
         }
+        //else
+        //{
+        //    dashCountdown = 0;
+		//	dashCooldownCountdown = dashCooldownTime;
+        //}
 	}
 
 	private void UpdateRotation () {
