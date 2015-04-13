@@ -72,7 +72,6 @@ public class PlayerController : MonoBehaviour {
         Drop = false;
         TrackFace = true;
         this.toggle_movement = false;
-        CamControl.SetTrackFace(TrackFace);
 
         ScreenSize = new Vector3(Screen.width, Screen.height);
 

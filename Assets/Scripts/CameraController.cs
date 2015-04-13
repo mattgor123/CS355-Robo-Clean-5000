@@ -4,10 +4,8 @@ using System.Collections;
 public class CameraController : MonoBehaviour {
     private GameObject Player;
 
-    private bool TrackFace; //Whether to track player facing (and be behind player) or not
-
-	private Vector3 offset;
-    private Vector3 offset2;
+	private float offsetF;    //Forward axis offset mutiplier
+    private Vector3 offsetV;    //Vertical axis offset
     private Vector3 offsetDC;
     private float SC;           //side correction distance variable
     private Vector3 facedown;   //angle facing down
@@ -19,14 +17,13 @@ public class CameraController : MonoBehaviour {
 
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
-        offset = new Vector3(0f, 10f, -5f);//transform.position;
-        offset2 = new Vector3(0f, 10f, 0f);  //vertical offset for track face
-        facedown = new Vector3(45f, 0f, 0f);
-        TrackFace = true;
+        offsetF = 5.0f;
+        offsetV = new Vector3(0f, 10f, 0f); 
+        facedown = new Vector3(30f, 0f, 0f);
         
         //Dynamic Camera variables
         SC = 0.6f;
-        offsetDC = offset2 * 0.5f;
+        offsetDC = offsetV * 0.5f;
 
         shakeIntensity = 1;
         shakeTime = 2;
@@ -48,11 +45,18 @@ public class CameraController : MonoBehaviour {
             }
             return;
         }
-	
+
+        offsetF = 5.0f;
+        offsetV = new Vector3(0f, 8f, 0f);
+        facedown = new Vector3(30f, 0f, 0f);
+
+        SC = 0.6f;
+        offsetDC = offsetV * 0.5f;
+
         //Stay behind the player, facing in same direction
         transform.position = Player.transform.position;
         transform.forward = Player.transform.forward;
-        transform.position += offset2 - Player.transform.forward * (5f);
+        transform.position += offsetV - Player.transform.forward * (5f);
         transform.Rotate(facedown);
 
         //Dynamic Camera zoom (to prevent clipping through walls)
@@ -73,11 +77,11 @@ public class CameraController : MonoBehaviour {
             transform.position += (1.2f)*delta;
 
             //tilt down to keep player in view 
-            Vector3 tilt = new Vector3 (3f*delta.magnitude, 0f, 0f);
+            Vector3 tilt = new Vector3 (2f*delta.magnitude, 0f, 0f);
             transform.Rotate(tilt);
 
             //zoom in slightly
-            Vector3 zoom = new Vector3 (0f, -1f*delta.magnitude, 0f);
+            Vector3 zoom = new Vector3 (0f, -0.5f*delta.magnitude, 0f);
             transform.position += zoom;                
         }
         //check to the left/right & shift camera slightly to prevent clipping on the side
@@ -100,12 +104,7 @@ public class CameraController : MonoBehaviour {
             }
         }        
 	}
-
-    public void SetTrackFace(bool set)
-    {
-        TrackFace = set;
-    }
-
+    
     public void shake()
     {
         this.positionBeforeShake = transform.position;
