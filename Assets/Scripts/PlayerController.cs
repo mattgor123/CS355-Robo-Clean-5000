@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private int dashSelfDamage;
 
+    [SerializeField]
+    private int dashOtherDamage;
+
     //time since dash started
     //[SerializeField]
     //private float dashTime;
@@ -347,6 +350,16 @@ public class PlayerController : MonoBehaviour {
     public void incrementDeepestLevelVisited()
     {
         deepestLevelVisited += 1;
+    }
+
+    public bool getIsDashing()
+    {
+        return this.isDashing;
+    }
+
+    public int getDashDamage()
+    {
+        return this.dashOtherDamage;
     }
 
     public bool GetFlashlightActive()

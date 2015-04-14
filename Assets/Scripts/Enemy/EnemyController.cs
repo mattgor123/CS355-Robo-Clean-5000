@@ -157,6 +157,14 @@ public class EnemyController : MonoBehaviour {
             WallHit = true;
             WallHitTimer = 1.5f;
         }
+        else if (collision.collider.gameObject.tag == "Player")
+        {
+            PlayerController pc = collision.collider.gameObject.GetComponent<PlayerController>();
+            if (pc.getIsDashing())
+            {
+                health_controller.ChangeHealth(-pc.getDashDamage());
+            }
+        }
     }
 
 
