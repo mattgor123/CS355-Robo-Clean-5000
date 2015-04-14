@@ -27,9 +27,12 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float dashForce;
 
-    //time since dash started
     [SerializeField]
-    private float dashTime;
+    private int dashSelfDamage;
+
+    //time since dash started
+    //[SerializeField]
+    //private float dashTime;
 
 	//[SerializeField]
 	//private float dashCooldownTime;
@@ -48,7 +51,7 @@ public class PlayerController : MonoBehaviour {
 
     //Number of times key is pressed, for double tap
     //in order of W,A, S,D
-    private int[] count;
+    private int[] doubleTapCounts;
 
     private int currentFloor;
     private int deepestLevelVisited;
@@ -76,7 +79,7 @@ public class PlayerController : MonoBehaviour {
         ScreenSize = new Vector3(Screen.width, Screen.height);
 
         doubleTapCountdown = 0;
-        count = new int[4];
+        doubleTapCounts = new int[4];
         resetDoubleTapCount();
         dashDirection = new Vector2(0, 0);
 		//dashCooldownCountdown = 0;
@@ -138,12 +141,12 @@ public class PlayerController : MonoBehaviour {
         //if (!isDashing && dashCooldownCountdown == 0) {
         if (!isDashing) {
 			if (Input.GetKeyDown ("d") || Input.GetKeyDown (KeyCode.RightArrow)) {
-				if (count [3] == 0) {
+				if (doubleTapCounts [3] == 0) {
 					resetDoubleTapCount ();
-					count [3] += 1;
+					doubleTapCounts [3] += 1;
 					doubleTapCountdown = doubleTapTime;
 
-				} else if (count [3] == 1 && doubleTapCountdown > 0) {
+				} else if (doubleTapCounts [3] == 1 && doubleTapCountdown > 0) {
 					//dash
 					//movement_controller.UpdateMovement(0, dashForce, ControlScheme);
 					dashDirection = new Vector2 (0, dashForce);
@@ -157,12 +160,12 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			if (Input.GetKeyDown ("s") || Input.GetKeyDown (KeyCode.DownArrow)) {
-				if (count [2] == 0) {
+				if (doubleTapCounts [2] == 0) {
 					resetDoubleTapCount ();
-					count [2] += 1;
+					doubleTapCounts [2] += 1;
 					doubleTapCountdown = doubleTapTime;
 
-				} else if (count [2] == 1 && doubleTapCountdown > 0) {
+				} else if (doubleTapCounts [2] == 1 && doubleTapCountdown > 0) {
 					//dash
 					//movement_controller.UpdateMovement(-dashForce, 0, ControlScheme);
 					dashDirection = new Vector2 (-dashForce, 0);
@@ -176,12 +179,12 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			if (Input.GetKeyDown ("w") || Input.GetKeyDown (KeyCode.UpArrow)) {
-				if (count [0] == 0) {
+				if (doubleTapCounts [0] == 0) {
 					resetDoubleTapCount ();
-					count [0] += 1;
+					doubleTapCounts [0] += 1;
 					doubleTapCountdown = doubleTapTime;
 
-				} else if (count [0] == 1 && doubleTapCountdown > 0) {
+				} else if (doubleTapCounts [0] == 1 && doubleTapCountdown > 0) {
 					//dash
 					//movement_controller.UpdateMovement(dashForce, 0, ControlScheme);
 					dashDirection = new Vector2 (dashForce, 0);
@@ -195,12 +198,12 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			if (Input.GetKeyDown ("a") || Input.GetKeyDown (KeyCode.LeftArrow)) {
-				if (count [1] == 0) {
+				if (doubleTapCounts [1] == 0) {
 					resetDoubleTapCount ();
-					count [1] += 1;
+					doubleTapCounts [1] += 1;
 					doubleTapCountdown = doubleTapTime;
 
-				} else if (count [1] == 1 && doubleTapCountdown > 0) {
+				} else if (doubleTapCounts [1] == 1 && doubleTapCountdown > 0) {
 					//dash
 					//movement_controller.UpdateMovement(0, -dashForce, ControlScheme);
 					dashDirection = new Vector2 (0, -dashForce);
@@ -274,9 +277,9 @@ public class PlayerController : MonoBehaviour {
 
     private void resetDoubleTapCount()
     {
-        for (int i = 0; i < count.Length; i++)
+        for (int i = 0; i < doubleTapCounts.Length; i++)
         {
-            count[i] = 0;
+            doubleTapCounts[i] = 0;
         }
     }
 
@@ -358,6 +361,7 @@ public class PlayerController : MonoBehaviour {
         else
         {
             movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
+            healthController.ChangeHealth(-dashSelfDamage);
             //dashCountdown = dashCountdown - Time.deltaTime;
         }
         //else
