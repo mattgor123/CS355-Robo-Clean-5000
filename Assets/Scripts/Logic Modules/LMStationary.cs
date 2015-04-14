@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Logic Module: Hold Range 
-// tries to stay within some optimal range band with respect to target
+// Logic Module: Stationary
+// do not move
 public class LMStationary : MonoBehaviour, LMMove {
 
     public Vector3 MoveLogic(EnemyController enemy, GameObject player)
