@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour {
 
     //Number of times key is pressed, for double tap
     //in order of W,A, S,D
-    private int[] doubleTapCounts;
+    //private int[] doubleTapCounts;
+    private int doubleTapCount;
 
     private int currentFloor;
     private int deepestLevelVisited;
@@ -79,8 +80,9 @@ public class PlayerController : MonoBehaviour {
         ScreenSize = new Vector3(Screen.width, Screen.height);
 
         doubleTapCountdown = 0;
-        doubleTapCounts = new int[4];
-        resetDoubleTapCount();
+        //doubleTapCounts = new int[4];
+        doubleTapCount = 0;
+        //resetDoubleTapCount();
         dashDirection = new Vector2(0, 0);
 		//dashCooldownCountdown = 0;
         this.isDashing = false;
@@ -140,6 +142,7 @@ public class PlayerController : MonoBehaviour {
 		//double tap for dash
         //if (!isDashing && dashCooldownCountdown == 0) {
         if (!isDashing) {
+            /*
 			if (Input.GetKeyDown ("d") || Input.GetKeyDown (KeyCode.RightArrow)) {
 				if (doubleTapCounts [3] == 0) {
 					resetDoubleTapCount ();
@@ -178,25 +181,32 @@ public class PlayerController : MonoBehaviour {
 
 			}
 
+             * */
+
 			if (Input.GetKeyDown ("w") || Input.GetKeyDown (KeyCode.UpArrow)) {
-				if (doubleTapCounts [0] == 0) {
-					resetDoubleTapCount ();
-					doubleTapCounts [0] += 1;
+				//if (doubleTapCounts [0] == 0) {
+                if (doubleTapCount == 0) {
+					//resetDoubleTapCount ();
+					//doubleTapCounts [0] += 1;
+                    doubleTapCount += 1;
 					doubleTapCountdown = doubleTapTime;
 
-				} else if (doubleTapCounts [0] == 1 && doubleTapCountdown > 0) {
+				} //else if (doubleTapCounts [0] == 1 && doubleTapCountdown > 0) {
+                else if (doubleTapCount == 1 && doubleTapCountdown > 0) {
 					//dash
 					//movement_controller.UpdateMovement(dashForce, 0, ControlScheme);
 					dashDirection = new Vector2 (dashForce, 0);
                     isDashing = true;
 					//count[0] = 0;
-					resetDoubleTapCount ();
+					//resetDoubleTapCount ();
+                    doubleTapCount = 0;
 					doubleTapCountdown = 0;
 					//dashCountdown = dashTime;
 				}
 
 			}
 
+            /*
 			if (Input.GetKeyDown ("a") || Input.GetKeyDown (KeyCode.LeftArrow)) {
 				if (doubleTapCounts [1] == 0) {
 					resetDoubleTapCount ();
@@ -215,13 +225,16 @@ public class PlayerController : MonoBehaviour {
 				}
 
 			}
-		} //else if (dashCooldownCountdown > 0) {
+             * */
+		} 
+        //else if (dashCooldownCountdown > 0) {
 			//dashCooldownCountdown = dashCooldownCountdown - Time.deltaTime;
 		//} else if (dashCooldownCountdown < 0) {
 		//	dashCooldownCountdown = 0;
 		//}
-        else //isDashing
+        else 
         {
+            //isDashing
             if (Input.GetKeyUp("w") || Input.GetKeyUp("a") || Input.GetKeyUp("s") || Input.GetKeyUp("d")
                 || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow))
             {
@@ -236,8 +249,9 @@ public class PlayerController : MonoBehaviour {
         }
         else if (doubleTapCountdown < 0)
         {
-            resetDoubleTapCount();
+            //resetDoubleTapCount();
             doubleTapCountdown = 0;
+            doubleTapCount = 0;
         }
 
         //Make sure cursor is in the right mode 
@@ -275,6 +289,7 @@ public class PlayerController : MonoBehaviour {
         Drop = false;
     }
 
+    /*
     private void resetDoubleTapCount()
     {
         for (int i = 0; i < doubleTapCounts.Length; i++)
@@ -282,6 +297,7 @@ public class PlayerController : MonoBehaviour {
             doubleTapCounts[i] = 0;
         }
     }
+     * */
 
     public void incrementCurrentFloor()
     {
