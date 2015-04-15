@@ -95,14 +95,6 @@ public class EnemyController : MonoBehaviour {
 
         //apply the movement
         PrevTime = Time.deltaTime;
-        if (Stationary)
-        {
-            mvt = new Vector3(0f, 0f, 0f);
-        }
-        else
-        {
-            mvt = mvt * speed * PrevTime;
-        }
         GetComponent<Rigidbody>().AddForce(mvt);
 
         PrevMvt = transform.position - PrevPos;     //save the net amount of movement done
@@ -118,7 +110,6 @@ public class EnemyController : MonoBehaviour {
         {
             RBody.velocity = RBody.velocity.normalized * SpeedLimit;
         }
-        
 
         //decrement wall hit timer
         WallHitTimer -= PrevTime;
@@ -131,7 +122,10 @@ public class EnemyController : MonoBehaviour {
         //Perform attack & face player if aggroed
         if (AggroState) { 
            
-            transform.forward = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
+            Vector3 face = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
+
+            if (face.magnitude > 0)
+                transform.forward = face;
 
             if (!Stationary)
             {

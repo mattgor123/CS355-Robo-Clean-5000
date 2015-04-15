@@ -107,7 +107,6 @@ public class EnergyBall : MonoBehaviour {
 
     public void SetInitDirection(Vector3 direction)
     {
-        Debug.Log(direction);
         RB.AddForce(direction * MaxSpeed);
         transform.forward = direction;
         

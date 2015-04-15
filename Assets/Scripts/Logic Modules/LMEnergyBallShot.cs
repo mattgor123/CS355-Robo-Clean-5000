@@ -22,6 +22,7 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
 
     private Vector3 OffsetY;                //vertical offset
 
+
     void Start()
     {
         OffsetY = new Vector3(0f, Y, 0f);   
@@ -29,6 +30,8 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
 
     public Vector3 AttackLogic(EnemyController enemy, GameObject player)
     {
+        Vector3 target = LMHelper.BaseMoveLogic(enemy, player);
+
         // Fire a shot if timer elapsed and in range
         if (LMHelper.CheckAttackTimer(enemy) && LMHelper.CanShoot(enemy, player))
         {
@@ -37,15 +40,11 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
             shot.position = enemy.transform.position + enemy.transform.forward * Z + OffsetY + enemy.transform.right * X;
             Vector3 dir = player.transform.position - shot.position;
             dir.Normalize();
-            
+
             EnergyBall eb = shot.GetComponent<EnergyBall>();
             eb.SetInitDirection(dir);
-
         }
 
-        //Face the player
-        Vector3 facing = LMHelper.BaseMoveLogic(enemy, player);
-        facing.Normalize();
-        return facing;
+        return target;
     }
 }
