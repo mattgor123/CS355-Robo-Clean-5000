@@ -165,7 +165,7 @@ public class StageBuilder : MonoBehaviour
 
         if (chance <= enemyWeights[floor, 0])
         {
-            Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 3, Quaternion.identity);
+            Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f, Quaternion.identity);
         }
         else if (chance <= enemyWeights[floor, 1])
         {
