@@ -40,7 +40,7 @@ public class EMLightController : MonoBehaviour {
         EML = GetComponentsInChildren<Light>();
         numLights = EML.Length;
         Foffset = Random.value * Ftime;
-        SetColor(red, blue, green);
+        SetColor(red, green, blue);
     }
 
     // Link a trigger tile
