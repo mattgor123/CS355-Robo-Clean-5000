@@ -84,7 +84,7 @@ public class EnergyBall : MonoBehaviour {
             //If tracking is active, follow player
             if (Timer > TTT)
             {
-                Vector3 mvt = Player.transform.position - this.transform.position;
+                Vector3 mvt = LMHelper.DistNoY(this.gameObject, Player);
                 mvt.Normalize();
                 RB.AddForce(mvt * Accel * Time.deltaTime);
             }
