@@ -38,7 +38,7 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
             //instantiate the shot & position at the end of barrel
             Transform shot = Instantiate(EnergyBall);
             shot.position = enemy.transform.position + enemy.transform.forward * Z + OffsetY + enemy.transform.right * X;
-            Vector3 dir = player.transform.position - shot.position;
+            Vector3 dir = LMHelper.DistNoY(shot.gameObject, player);
             dir.Normalize();
 
             EnergyBall eb = shot.GetComponent<EnergyBall>();

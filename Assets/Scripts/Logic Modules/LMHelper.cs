@@ -9,6 +9,12 @@ public class LMHelper {
     //Calculates the normalized direction to target
     public static Vector3 BaseMoveLogic(EnemyController enemy, GameObject player)
     {
+        return DistNoY(enemy.gameObject, player);
+    }
+
+    //Get distance without any Y
+    public static Vector3 DistNoY(GameObject enemy, GameObject player)
+    {
         float x = player.transform.position.x - enemy.transform.position.x;
         float z = player.transform.position.z - enemy.transform.position.z;
 
