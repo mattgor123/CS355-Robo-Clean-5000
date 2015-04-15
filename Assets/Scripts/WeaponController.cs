@@ -6,6 +6,8 @@ public class WeaponController : MonoBehaviour {
 	[SerializeField] private float speed;         // The speed of the bullets exiting the gun
 	[SerializeField] private float damage;        // The damage of each bullet
 	[SerializeField] private float delay;		  // The delay between shots
+	
+	[SerializeField] private bool is_laser;       // Should the weapon go through enemies
 	[SerializeField] private float cleanup_delay; // The amount of time to wait before deleting bullets
 	[SerializeField] private int ammo_per_shot;   // The amount of ammo used per shot
 	[SerializeField] private Transform muzzle;    // The location of the muzzle
@@ -52,6 +54,7 @@ public class WeaponController : MonoBehaviour {
 			var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
 			bullet_controller.SetDamage(damage);
 			bullet_controller.SetCleanupDelay(cleanup_delay);
+			bullet_controller.SetLaser(is_laser);
         	instantiated_bullet.GetComponent<BulletController>().SetSource(source);
 			last_fired = Time.time;
         	instantiated_bullet.AddComponent<Light>();

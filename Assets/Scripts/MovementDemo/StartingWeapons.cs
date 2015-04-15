@@ -10,10 +10,12 @@ public class StartingWeapons : MonoBehaviour {
 	[SerializeField] private GameObject start_weapon;
 	[SerializeField] private GameObject weapon1;
 	[SerializeField] private GameObject weapon2;
+	[SerializeField] private GameObject weapon3;
 	private int initialNumWeapons; //set equal to number of weapons that exist (other than start_weapon)
 	private int initialNumNullDrops;
 	private bool hasWeapon1;
 	private bool hasWeapon2;
+	private bool hasWeapon3;
 
 	//private GUIText weapon_name;
     //private Text weapon_name;
@@ -22,7 +24,8 @@ public class StartingWeapons : MonoBehaviour {
 		weapon_backpack_controller.AddWeapon(start_weapon);
 		hasWeapon1 = false;
 		hasWeapon2 = false;
-		initialNumWeapons = 2;
+		hasWeapon3 = false;
+		initialNumWeapons = 3;
 		initialNumNullDrops = 2;
 
         //weapon_name = GetComponent<GUIText>();
@@ -41,9 +44,13 @@ public class StartingWeapons : MonoBehaviour {
 			hasWeapon1 = true;
 			return ("Picked up " + weapon1.name);
 		} else if (pickupNumber == 2 && !hasWeapon2) {
-			weapon_backpack_controller.AddWeapon(weapon2);
+			weapon_backpack_controller.AddWeapon (weapon2);
 			hasWeapon2 = true;
 			return ("Picked up " + weapon2.name);
+		} else if (pickupNumber == 3 && !hasWeapon3) {
+			weapon_backpack_controller.AddWeapon (weapon3);
+			hasWeapon3 = true;
+			return ("Picked up " + weapon3.name);
 		}
 		return "";
 	}
@@ -59,6 +66,11 @@ public class StartingWeapons : MonoBehaviour {
 			weapon_backpack_controller.AddWeapon(weapon2);
 			hasWeapon2 = true;
 			result += "Picked up " + weapon2.name + "\n";
+		}
+		if (!hasWeapon3) {
+				weapon_backpack_controller.AddWeapon (weapon3);
+				hasWeapon3 = true;
+				result += "Picked up " + weapon3.name + "\n";
 		}
 		return result;
 	}

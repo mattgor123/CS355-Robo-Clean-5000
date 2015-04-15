@@ -6,6 +6,7 @@ public class BulletController : MonoBehaviour {
 	private float damage;
 	private float cleanup_delay;
 	private float creation_time;
+	private bool is_laser;
 
     private bool source_player;   //whether this is fired by the player (and hits enemies)
 
@@ -49,6 +50,10 @@ public class BulletController : MonoBehaviour {
 		cleanup_delay = delay;
 	}
     
+	public void SetLaser (bool laser) {
+		is_laser = laser;
+	}
+
 	void OnCollisionEnter(Collision collision) {
         //Player-fired bullets do not hit the player
         if (source_player && collision.gameObject.tag == "Player")        
@@ -60,7 +65,12 @@ public class BulletController : MonoBehaviour {
 
 		var victim_health = collision.gameObject.GetComponent<HealthController>();
 		if(victim_health != null) {
+			//this means you're hitting an enemy, not a wall ... if it's a laser then keep going
 			victim_health.ChangeHealth(-damage);
+			//don't let it get destroyed if it collides with an enemy and is a laser, only a wall
+			if (is_laser) {
+				return;
+			}
 		}
         Destroy(gameObject);
 	}    
@@ -101,6 +111,10 @@ public class BulletController : MonoBehaviour {
                if (victim_health != null)
                {
                    victim_health.ChangeHealth(-damage);
+				   if (is_laser) {
+						return;
+				   }
+
                }
                if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
                    myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
