@@ -38,9 +38,8 @@ public class WeaponController : MonoBehaviour {
                 source = false;
 			Fire(source);
 		}
-        //Setup proper weapon position
-        transform.position = owner.transform.position + new Vector3(0f, 2.8f, 0f);
-        transform.position += owner.transform.forward * 1.5f;
+        //Gun position set to position of Gun Location child object
+        transform.position = owner.transform.FindChild("Gun Location").position;
 	}
 
 	private void Fire (bool source) {
