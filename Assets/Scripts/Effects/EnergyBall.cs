@@ -4,24 +4,32 @@ using System.Collections;
 public class EnergyBall : MonoBehaviour {
 
     private float Timer = 0f;       //Life timer
+    [SerializeField]
     private float TTL = 5.0f;       //Time to live: how long until energy ball dissipates
+    [SerializeField]
     private float TTT = 2.0f;       //Time to track: how long after firing for tracking to activate
+    [SerializeField]
     private float TTB = 2.5f;       //Duration of burst sequence
+    [SerializeField]
     private float TTBD = 2.0f;      //Time to burst damage 
 
+    [SerializeField]
     private float MaxSpeed = 3.0f;  //Maximum speed
+    [SerializeField]
     private float Accel = 300f;     //Acceleration
+    [SerializeField]
     private float Damage = -50f;    //Damage
+    [SerializeField]
     private float BurstRadius = 1.5f;// Burst damage radius
 
     private bool bursting = false;  //whether it is bursting (at end of life/on contact)
     private bool damaging = false;   //whether the burst damage is happening
 
-    GameObject Player;              //The player
-    Rigidbody RB;                   //The rigidbody
-    Transform coreEO;               //core effect object
-    Transform sparkEO;              //spark effect object
-    Transform burstEO;              //burst effect object
+    private GameObject Player;              //The player
+    private Rigidbody RB;                   //The rigidbody
+    private Transform coreEO;               //core effect object
+    private Transform sparkEO;              //spark effect object
+    private Transform burstEO;              //burst effect object
 
     [SerializeField]
     private Transform Burst;        //Burst effect
@@ -34,7 +42,7 @@ public class EnergyBall : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake() {
         Player = GameObject.FindGameObjectWithTag("Player");
         RB = GetComponent<Rigidbody>();
 
@@ -81,8 +89,14 @@ public class EnergyBall : MonoBehaviour {
                 RB.AddForce(mvt * Accel * Time.deltaTime);
             }
 
+            //else just keep going forwarde
+            else
+                RB.AddForce(transform.forward * Accel * Time.deltaTime);
+            
+
             // Cap speed and face in direction of movement
-            transform.forward = RB.velocity;
+            if (RB.velocity.magnitude != 0) 
+                transform.forward = RB.velocity.normalized;
             if (RB.velocity.magnitude > MaxSpeed)
             {
                 RB.velocity = RB.velocity.normalized * MaxSpeed;
@@ -91,9 +105,12 @@ public class EnergyBall : MonoBehaviour {
 
 	}
 
-    public void SetInitialVelocity(Vector3 direction)
+    public void SetInitDirection(Vector3 direction)
     {
-        RB.velocity = direction.normalized * MaxSpeed;
+        Debug.Log(direction);
+        RB.AddForce(direction * MaxSpeed);
+        transform.forward = direction;
+        
     }
 
     void OnTriggerEnter(Collider other)

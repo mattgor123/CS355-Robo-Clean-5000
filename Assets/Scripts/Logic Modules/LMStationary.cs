@@ -11,7 +11,7 @@ public class LMStationary : MonoBehaviour, LMMove {
         Vector3 mvt = new Vector3(0f, 0f, 0f);
         enemy.SetStationary(true);
 
-        // If out of range, move into range
+        // Aggro if in range
         if (dist <= enemy.GetAggroRadius())
         {
             enemy.SetAggroState(true);
