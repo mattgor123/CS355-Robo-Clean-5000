@@ -46,12 +46,12 @@ public class CameraController : MonoBehaviour {
             return;
         }
 
-        offsetF = 5.0f;
-        offsetV = new Vector3(0f, 8f, 0f);
+        offsetF = 2.5f;
+        offsetV = new Vector3(0f, 4f, 0f);
         facedown = new Vector3(30f, 0f, 0f);
 
         SC = 0.6f;
-        offsetDC = offsetV * 0.5f;
+        offsetDC = offsetV * 0.25f;
 
         //Stay behind the player, facing in same direction
         transform.position = Player.transform.position;

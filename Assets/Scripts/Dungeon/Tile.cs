@@ -164,7 +164,7 @@ public class Tile
     {
         GameObject ceiling = GameObject.CreatePrimitive(PrimitiveType.Quad);
         ceiling.transform.localScale = new Vector3(1, 1, 1) * StageBuilder.scale;
-        ceiling.transform.position = new Vector3(this.position.x, 5, this.position.z) * StageBuilder.scale;
+        ceiling.transform.position = new Vector3(this.position.x, 2.5f, this.position.z) * StageBuilder.scale;
         Renderer ceilRend = ceiling.GetComponent<Renderer>();
         ceilRend.material.color = color;
         ceiling.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
@@ -188,8 +188,8 @@ public class Tile
         Renderer rend = wall.GetComponent<Renderer>();
         rend.material = this.wallMaterial;
         wall.layer = LayerMask.NameToLayer("Wall");
-        wall.transform.localScale = new Vector3(1, 2, 1) * StageBuilder.scale;
-        wall.transform.position = new Vector3(this.position.x + x, 1, this.position.z + z) * StageBuilder.scale;
+        wall.transform.localScale = new Vector3(1, 1, 1) * StageBuilder.scale;
+        wall.transform.position = new Vector3(this.position.x + x, 0.5f, this.position.z + z) * StageBuilder.scale;
         return wall;
     }
 
