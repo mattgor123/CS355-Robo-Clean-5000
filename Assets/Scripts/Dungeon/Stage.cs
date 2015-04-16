@@ -17,7 +17,7 @@ public class Stage  {
     private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
     private int currentLevel;                         //B0   //B1   //B2   //B3   //B4   //B5 
     private int[] Winding = new             int[]   {   60,     30,    40,    50,    60,    80 };
-    private int[] RoomAttempts = new        int[]   {    5,     10,    20,    40,    80,   100 };
+    private int[] RoomAttempts = new        int[]   {    20,     20,    40,    40,    80,   100 };
     private int[] RoomExtraSize = new       int[]   {    0,      3,     5,     2,    10,     6 };
     private float[] ColumnFrequency = new   float[] { 0.15f, 0.25f, 0.00f, 0.50f, 0.15f, 0.25f };
     private int[] StageWidths = new         int[]   {    20,    30,    35,    50,   100,    30 };
