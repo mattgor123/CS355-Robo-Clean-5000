@@ -6,9 +6,15 @@ public class CameraController : MonoBehaviour {
 
 	private float offsetF;    //Forward axis offset mutiplier
     private Vector3 offsetV;    //Vertical axis offset
-    private Vector3 offsetDC;
-    private float SC;           //side correction distance variable
     private Vector3 facedown;   //angle facing down
+    private Vector3 offsetDC;   //position offset for raycasting from core
+
+    private float SC = 0.6f;           //side correction distance variable
+    private float FC = 1.2f;           //forward correction modifier
+    private float ZC = -0.3f;           //zoom correction modifier
+    private float TC = 3.5f;           //tilt correction modifier 
+
+
     private bool isShaking;
     private Vector3 positionBeforeShake;
     private int shakeIntensity;
@@ -17,12 +23,11 @@ public class CameraController : MonoBehaviour {
 
 	void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
-        offsetF = 5.0f;
-        offsetV = new Vector3(0f, 10f, 0f); 
+        offsetF = 2.5f;
+        offsetV = new Vector3(0f, 4f, 0f); 
         facedown = new Vector3(30f, 0f, 0f);
         
         //Dynamic Camera variables
-        SC = 0.6f;
         offsetDC = offsetV * 0.5f;
 
         shakeIntensity = 1;
@@ -46,20 +51,15 @@ public class CameraController : MonoBehaviour {
             return;
         }
 
-        offsetF = 2.5f;
-        offsetV = new Vector3(0f, 4f, 0f);
-        facedown = new Vector3(30f, 0f, 0f);
-
-        SC = 0.6f;
         offsetDC = offsetV * 0.25f;
 
         //Stay behind the player, facing in same direction
         transform.position = Player.transform.position;
         transform.forward = Player.transform.forward;
-        transform.position += offsetV - Player.transform.forward * (5f);
+        transform.position += offsetV - Player.transform.forward * offsetF;
         transform.Rotate(facedown);
 
-        //Dynamic Camera zoom (to prevent clipping through walls)
+        //Dynamic Camera (to prevent clipping through walls)
         //setup connecting axis
         Vector3 core = Player.transform.position + offsetDC;
         Vector3 axis = transform.position - core;
@@ -68,20 +68,20 @@ public class CameraController : MonoBehaviour {
         float HitDist;
         RaycastHit hit;
 
-        //raycat from player to camera and swee if something is in the way
+        //raycat from player to camera and see if something is in the way
         if (Physics.Raycast(core + axis, axis, out hit, CamDist))
         {
             //if so, shift forward by sufficient distance to clear (maximum ~5)
             HitDist = hit.distance;
             Vector3 delta = Player.transform.forward * (CamDist - HitDist) / Mathf.Sqrt(3f);
-            transform.position += (1.2f)*delta;
+            transform.position += FC*delta;
 
             //tilt down to keep player in view 
-            Vector3 tilt = new Vector3 (2f*delta.magnitude, 0f, 0f);
+            Vector3 tilt = new Vector3 (TC*delta.magnitude, 0f, 0f);
             transform.Rotate(tilt);
 
             //zoom in slightly
-            Vector3 zoom = new Vector3 (0f, -0.5f*delta.magnitude, 0f);
+            Vector3 zoom = new Vector3 (0f, ZC*delta.magnitude, 0f);
             transform.position += zoom;                
         }
         //check to the left/right & shift camera slightly to prevent clipping on the side
