@@ -28,8 +28,6 @@ public class HealthController : MonoBehaviour {
 				current_health = max_health;
 			}
 		}
-
-        Debug.Log(current_health + "," + Shield.GetShield());
 	}
 
 	public float GetCurrentHealth () {
