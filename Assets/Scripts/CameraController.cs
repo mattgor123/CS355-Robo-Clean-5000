@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour {
     private Vector3 offsetDC;   //position offset for raycasting from core
 
     private float SC = 0.6f;           //side correction distance variable
-    private float FC = 1.2f;           //forward correction modifier
+    private float FC = 1.0f;           //forward correction modifier
     private float ZC = -0.3f;           //zoom correction modifier
     private float TC = 3.5f;           //tilt correction modifier 
 

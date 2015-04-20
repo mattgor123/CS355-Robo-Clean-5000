@@ -62,6 +62,9 @@ public class EnergyBall : MonoBehaviour {
 	void Update () {
         Timer += Time.deltaTime;
 
+        //Keep from hitting floor prematurely
+        if (transform.position.y < 1)
+            transform.position += new Vector3(0f, 0.1f, 0f);
         
         //Destroy on burst sequence completion
         if (Timer > TTB && bursting)        
@@ -84,12 +87,12 @@ public class EnergyBall : MonoBehaviour {
             //If tracking is active, follow player
             if (Timer > TTT)
             {
-                Vector3 mvt = LMHelper.DistNoY(this.gameObject, Player);
+                Vector3 mvt = Player.transform.position - this.transform.position;
                 mvt.Normalize();
                 RB.AddForce(mvt * Accel * Time.deltaTime);
             }
 
-            //else just keep going forwarde
+            //else just keep going forward
             else
                 RB.AddForce(transform.forward * Accel * Time.deltaTime);
             
