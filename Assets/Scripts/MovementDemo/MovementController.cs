@@ -12,10 +12,18 @@ public class MovementController : MonoBehaviour {
 	[SerializeField] private Transform leftHand;
 	[SerializeField] private Transform rightHand;
 	[SerializeField] private Transform pelvis;
+    [SerializeField] private Transform leftUpperArm;
+    [SerializeField] private Transform leftForeArm;
+    [SerializeField] private Transform rightUpperArm;
+    [SerializeField] private Transform rightForeArm;
+
 
 	private float last_force;
 	private float last_rotation;
 	private float speedDampTime = 0.1f;
+    private float deltaRotateDash = 0;
+    private float deltaRotateHands = 5;
+
 
 	private HealthController healthController;
     private Rigidbody RG;
@@ -24,6 +32,10 @@ public class MovementController : MonoBehaviour {
     private Transform leftHandTransform;
     private Transform rightHandTransform;
     private Transform pelvisTransform;
+    private Transform leftUpperArmTransform;
+    private Transform leftForeArmTransform;
+    private Transform rightUpperArmTransform;
+    private Transform rightForeArmTransform;
 
 
 	private void Awake() {
@@ -34,6 +46,10 @@ public class MovementController : MonoBehaviour {
         leftHandTransform = leftHand.GetComponent<Transform>();
         rightHandTransform = rightHand.GetComponent<Transform>();
         pelvisTransform = pelvis.GetComponent<Transform>();
+        leftUpperArmTransform = leftUpperArm.GetComponent<Transform>();
+        leftForeArmTransform = leftForeArm.GetComponent<Transform>();
+        rightUpperArmTransform = rightUpperArm.GetComponent<Transform>();
+        rightForeArmTransform = rightForeArm.GetComponent<Transform>();
 	}
 
 	private void Start () {
@@ -58,20 +74,46 @@ public class MovementController : MonoBehaviour {
 
                 resulting_force = z_force + x_force;
 
+                if (Mathf.Abs(z_axis) > 2) {
+                    Vector3 rot = new Vector3(-5, 0f, 0f);
+                    Debug.Log("delta Rotate: " + deltaRotateDash);
+                    if (deltaRotateDash < 90) {
+                        Debug.Log("In rotate");
+                        leftUpperArmTransform.Rotate(rot);
+                        rightUpperArmTransform.Rotate(rot);
+                        leftForeArmTransform.Rotate(-rot);
+                        rightForeArmTransform.Rotate(-rot);
+                        deltaRotateDash += 5;
+                        deltaRotateHands = 30;
+                    }
+                }
+
                 // rotate hands when moving
-            	leftHandTransform.Rotate(0, 0, 5);
-        		rightHandTransform.Rotate(0, 0, -5);
+            	leftHandTransform.Rotate(0, 0, deltaRotateHands);
+        		rightHandTransform.Rotate(0, 0, -deltaRotateHands);
         		// rotate wheel to give "rolling" effect
             	wheelTransform.Rotate(3 * (z_axis + x_axis) * force * Time.deltaTime, 0, 0);
             	// rotate pelvis in direction of movement
             	Quaternion rotate = Quaternion.LookRotation(resulting_force);
             	pelvisTransform.rotation = rotate;
+
                 RG.AddForce(resulting_force, ForceMode.Impulse);
                 last_force = Time.time;
             }
             else
             {
                 RG.velocity *= 0.5f;
+
+                Vector3 rot = new Vector3(5, 0f, 0f);
+                if (deltaRotateDash > 0) {
+                    Debug.Log("In rotate");
+                    leftUpperArmTransform.Rotate(rot);
+                    rightUpperArmTransform.Rotate(rot);
+                    leftForeArmTransform.Rotate(-rot);
+                    rightForeArmTransform.Rotate(-rot);
+                    deltaRotateDash -= 5;
+                }
+                deltaRotateHands = 5;
             }
 
             //Keep velocity bounded
