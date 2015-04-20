@@ -3,15 +3,21 @@ using System.Collections;
 
 public class HealthController : MonoBehaviour {
 
-	[SerializeField] private float max_health;		  // Maximum possible health
-	[SerializeField] private float regeneration_rate; // The regeneration rate of health
+	[SerializeField] protected float max_health;		  // Maximum possible health
+	[SerializeField] protected float regeneration_rate; // The regeneration rate of health
     [SerializeField]
     private AudioSource death_sound; //The audio file to play when they die
-	private float current_health;
-    private bool has_died = false;
+	protected float current_health;
+    protected bool has_died = false;
+
+    private ShieldController Shield;
+    private bool HasShield = false;
 
 	void Awake() {
 		current_health = max_health;
+        Shield = GetComponentInChildren<ShieldController>();
+        if (Shield != null)
+            HasShield = true;
 	}
 	
 	void Update () {
@@ -22,6 +28,8 @@ public class HealthController : MonoBehaviour {
 				current_health = max_health;
 			}
 		}
+
+        Debug.Log(current_health + "," + Shield.GetShield());
 	}
 
 	public float GetCurrentHealth () {
@@ -29,7 +37,14 @@ public class HealthController : MonoBehaviour {
 	}
 
 	public bool ChangeHealth (float change) {
-		current_health += change;
+        float net = change;     
+        
+        //Block damage with shields if applicable
+        if (HasShield && net < 0)
+        {
+            net = Shield.Block(net);
+        }
+		current_health += net;
 
 		if(current_health > max_health) {
 			current_health = max_health;
@@ -47,6 +62,7 @@ public class HealthController : MonoBehaviour {
 
 		return false;
 	}
+
 	public float GetMaxHealth() {
 		return max_health;
 	}
