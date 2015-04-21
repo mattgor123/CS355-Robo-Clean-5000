@@ -401,11 +401,12 @@ public class PlayerController : MonoBehaviour {
         //else if (dashCountdown > 0)
         else
         {
+            Debug.Log("velocity " + GetComponent<Rigidbody>().velocity);
             if (dashForceCurrent < dashForceMax)
             {
                 //float dForce = 0.5f * (Mathf.Pow(dashVelocity + dashAccel, 2) - Mathf.Pow(dashVelocity, 2));
                 //dashVelocity += dashAccel;
-                dashForceCurrent += dashAccel * Mathf.Pow((Time.realtimeSinceStartup - dashStartTime), 2);
+                dashForceCurrent = dashAccel * Mathf.Pow((Time.realtimeSinceStartup - dashStartTime), 2) + 1;
                 //dashForceCurrent += dForce;
             }
             else
