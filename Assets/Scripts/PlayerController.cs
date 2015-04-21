@@ -25,7 +25,10 @@ public class PlayerController : MonoBehaviour {
 
     //Force player moves when dodging
     [SerializeField]
-    private float dashForce;
+    private float dashForceMax;
+
+    [SerializeField]
+    private float dashAccel;
 
     [SerializeField]
     private int dashSelfDamage;
@@ -45,6 +48,10 @@ public class PlayerController : MonoBehaviour {
     private bool isDashing;
 
     private Vector2 dashDirection;
+
+    private float dashForceCurrent;
+
+    private float dashStartTime;
 
     //Time passed since last key down
     private float doubleTapCountdown;
@@ -89,6 +96,8 @@ public class PlayerController : MonoBehaviour {
         dashDirection = new Vector2(0, 0);
 		//dashCooldownCountdown = 0;
         this.isDashing = false;
+        dashForceCurrent = 1;
+        dashStartTime = 0;
 
         currentFloor = 0;
         dialogueLevel = 0;
@@ -198,8 +207,9 @@ public class PlayerController : MonoBehaviour {
                 else if (doubleTapCount == 1 && doubleTapCountdown > 0) {
 					//dash
 					//movement_controller.UpdateMovement(dashForce, 0, ControlScheme);
-					dashDirection = new Vector2 (dashForce, 0);
+					dashDirection = new Vector2 (dashForceMax, 0);
                     isDashing = true;
+                    dashStartTime = Time.realtimeSinceStartup;
 					//count[0] = 0;
 					//resetDoubleTapCount ();
                     doubleTapCount = 0;
@@ -242,6 +252,8 @@ public class PlayerController : MonoBehaviour {
                 || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow))
             {
                 isDashing = false;
+                dashForceCurrent = 1;
+                dashStartTime = 0;
             }
         }
 
@@ -389,7 +401,19 @@ public class PlayerController : MonoBehaviour {
         //else if (dashCountdown > 0)
         else
         {
-            movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
+            if (dashForceCurrent < dashForceMax)
+            {
+                //float dForce = 0.5f * (Mathf.Pow(dashVelocity + dashAccel, 2) - Mathf.Pow(dashVelocity, 2));
+                //dashVelocity += dashAccel;
+                dashForceCurrent += dashAccel * Mathf.Pow((Time.realtimeSinceStartup - dashStartTime), 2);
+                //dashForceCurrent += dForce;
+            }
+            else
+            {
+                Debug.Log("dash above 10");
+            }
+            movement_controller.UpdateMovement(dashForceCurrent, 0);
+            //movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
             healthController.ChangeHealth(-dashSelfDamage);
             //dashCountdown = dashCountdown - Time.deltaTime;
         }
