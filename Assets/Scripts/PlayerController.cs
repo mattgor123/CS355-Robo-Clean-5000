@@ -407,6 +407,7 @@ public class PlayerController : MonoBehaviour {
                 //float dForce = 0.5f * (Mathf.Pow(dashVelocity + dashAccel, 2) - Mathf.Pow(dashVelocity, 2));
                 //dashVelocity += dashAccel;
                 dashForceCurrent = dashAccel * Mathf.Pow((Time.realtimeSinceStartup - dashStartTime), 2) + 1;
+                Debug.Log("Dash current: " + dashForceCurrent);
                 //dashForceCurrent += dForce;
             }
             else

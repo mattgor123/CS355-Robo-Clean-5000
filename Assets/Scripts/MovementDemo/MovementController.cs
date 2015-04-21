@@ -16,6 +16,7 @@ public class MovementController : MonoBehaviour {
     [SerializeField] private Transform leftForeArm;
     [SerializeField] private Transform rightUpperArm;
     [SerializeField] private Transform rightForeArm;
+    [SerializeField] private Transform body;
 
 
 	private float last_force;
@@ -36,6 +37,7 @@ public class MovementController : MonoBehaviour {
     private Transform leftForeArmTransform;
     private Transform rightUpperArmTransform;
     private Transform rightForeArmTransform;
+    private MeshRenderer bodyRenderer;
 
 
 	private void Awake() {
@@ -50,6 +52,7 @@ public class MovementController : MonoBehaviour {
         leftForeArmTransform = leftForeArm.GetComponent<Transform>();
         rightUpperArmTransform = rightUpperArm.GetComponent<Transform>();
         rightForeArmTransform = rightForeArm.GetComponent<Transform>();
+        bodyRenderer = body.GetComponent<MeshRenderer>();
 	}
 
 	private void Start () {
@@ -74,11 +77,9 @@ public class MovementController : MonoBehaviour {
 
                 resulting_force = z_force + x_force;
 
-                if (Mathf.Abs(z_axis) > 2) {
+                if (z_axis > 1) {
                     Vector3 rot = new Vector3(-5, 0f, 0f);
-                    Debug.Log("delta Rotate: " + deltaRotateDash);
                     if (deltaRotateDash < 90) {
-                        Debug.Log("In rotate");
                         leftUpperArmTransform.Rotate(rot);
                         rightUpperArmTransform.Rotate(rot);
                         leftForeArmTransform.Rotate(-rot);
@@ -106,7 +107,6 @@ public class MovementController : MonoBehaviour {
 
                 Vector3 rot = new Vector3(5, 0f, 0f);
                 if (deltaRotateDash > 0) {
-                    Debug.Log("In rotate");
                     leftUpperArmTransform.Rotate(rot);
                     rightUpperArmTransform.Rotate(rot);
                     leftForeArmTransform.Rotate(-rot);
