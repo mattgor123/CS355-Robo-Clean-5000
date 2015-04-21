@@ -36,6 +36,9 @@ public class ShieldController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Regen();
+
+        //Scale number of particles by the strength of the shield
+        PS.maxParticles = Mathf.FloorToInt(10* (CurrShield / MaxShield));
 	}
 
     //Regenerate shields        
