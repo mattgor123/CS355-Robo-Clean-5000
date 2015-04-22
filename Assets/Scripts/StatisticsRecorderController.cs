@@ -8,12 +8,14 @@ public class StatisticsRecorderController : MonoBehaviour {
 	private Text dealtText;
 	private Text takenText;
 	private Text killedText;
+  private Text highestComboText;
 	private float timeAtStart;
 	private float timeNow;
 	private float timeElapsed;
 	private float damageDealt;
 	private float damageTaken;
 	private int enemiesKilled;
+  private int highestCombo;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +25,7 @@ public class StatisticsRecorderController : MonoBehaviour {
 		damageDealt = 0;
 		damageTaken = 0;
 		enemiesKilled = 0;
+    highestCombo = 0;
 	}
 	
 	// Update is called once per frame
@@ -39,6 +42,9 @@ public class StatisticsRecorderController : MonoBehaviour {
 		if (killedText == null) {
 			killedText = GameObject.FindGameObjectWithTag ("KilledText").GetComponent<Text> ();
 		}
+		if (highestComboText == null) {
+			highestComboText = GameObject.FindGameObjectWithTag ("HighestComboText").GetComponent<Text> ();
+		}
 		if (timeText != null) {
 			timeNow = Time.time;
 			timeElapsed = timeNow - timeAtStart;
@@ -53,6 +59,9 @@ public class StatisticsRecorderController : MonoBehaviour {
 		if (killedText != null) {
 			killedText.text = "Enemies Killed: " + enemiesKilled.ToString();
 		}
+		if (highestComboText != null) {
+			highestComboText.text = "Highest Combo: X" + highestCombo.ToString();
+		}
 	}
 	public void takeDamage(float f) {
 		damageTaken += f;
@@ -66,4 +75,9 @@ public class StatisticsRecorderController : MonoBehaviour {
 	public void resetStats() {
 		Start ();
 	}
+  public void setCombo(int combo) {
+    if(combo > highestCombo) {
+      highestCombo = combo;
+    }
+  }
 }
