@@ -53,6 +53,9 @@ public class EnemyController : MonoBehaviour {
         explosion = new_explosion;
     }
 
+    //The global combo controller
+    private ComboController combo_controller;
+
 	// Use this for initialization
 	void Start () {
         //Automatically attach the player & various components
@@ -62,9 +65,7 @@ public class EnemyController : MonoBehaviour {
         AggroState = false;
         RBody = GetComponent<Rigidbody>();
         gun = transform.FindChild("Gun Location");
-
-
-
+        combo_controller = GameObject.FindGameObjectWithTag("Combo").GetComponent<ComboController>();
         //transform.position -= new Vector3(0f, transform.position.y, 0f);
 	}
 	
@@ -93,6 +94,7 @@ public class EnemyController : MonoBehaviour {
             var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
             Destroy(gameObject);
+            combo_controller.IncrementCombo();
             StageBuilder.EnemyDied();
         }
 
