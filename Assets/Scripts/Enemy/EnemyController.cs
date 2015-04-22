@@ -42,6 +42,7 @@ public class EnemyController : MonoBehaviour {
     private float AttackTimer;      //Time since last attack
     private bool AggroState;        //Whether enemy is aggroed and chasing player
     private bool Stationary;        //Whether enemy type is stationary
+    private Transform gun;
 
     //Animations
     private Animator anim;
@@ -59,6 +60,9 @@ public class EnemyController : MonoBehaviour {
         anim = GetComponent<Animator>();
         AggroState = false;
         RBody = GetComponent<Rigidbody>();
+        gun = transform.FindChild("Gun Location");
+
+
 
         //transform.position -= new Vector3(0f, transform.position.y, 0f);
 	}
@@ -102,7 +106,7 @@ public class EnemyController : MonoBehaviour {
 
 
         //Face in the direction of movement
-        if (RBody.velocity.magnitude > 0)
+        if (RBody.velocity.magnitude != 0)
             transform.forward = RBody.velocity;
 
         //Do not exceed maximum speed
@@ -124,12 +128,12 @@ public class EnemyController : MonoBehaviour {
            
             Vector3 face = ((LMAttack)GetComponent("LMAttack")).AttackLogic(this, player);
 
-            if (face.magnitude > 0)
+            if (face.magnitude != 0)
                 transform.forward = face;
 
             if (!Stationary)
             {
-                transform.LookAt(player.transform);
+                gun.LookAt(player.transform);
             }
         }
 

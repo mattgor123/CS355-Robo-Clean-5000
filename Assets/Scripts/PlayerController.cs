@@ -127,6 +127,9 @@ public class PlayerController : MonoBehaviour {
 
         if (healthController.GetCurrentHealth() == 0)
         {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true; 
             GameObject.FindGameObjectWithTag("HUD").SetActive(false);
             Application.LoadLevel("GameOver");
             

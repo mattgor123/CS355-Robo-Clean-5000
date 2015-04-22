@@ -17,6 +17,7 @@ public class BroodmotherController : MonoBehaviour {
     private float animStart = 4.0f; //When hatching animation begins
     private float spawnRate = 5.0f; //When spider is spawned mid-hatch
     private float animEnd = 6.0f; //When hatching animation is finished
+    private float phaseTransition = 2.5f;
     private bool justSpawned;
 
 	// Use this for initialization
@@ -28,7 +29,7 @@ public class BroodmotherController : MonoBehaviour {
         timeSinceSpawn = 0;
         animTimer = 0;
         justSpawned = false;
-
+        PauseAI();
 	}
 	
 
@@ -36,6 +37,11 @@ public class BroodmotherController : MonoBehaviour {
 	void Update () {
         timeSinceSpawn += Time.deltaTime;
         animTimer += Time.deltaTime;
+
+        if (firstPhase && timeSinceSpawn > phaseTransition)
+        {
+            ResumeAI();
+        }
 
         if (firstPhase && health.GetCurrentHealth() < 1600.0)
         {
@@ -46,6 +52,7 @@ public class BroodmotherController : MonoBehaviour {
 
         if (secondPhase && timeSinceSpawn >= animStart && !justSpawned)
         {
+            PauseAI();
             anim.SetBool("isHatching", true);
 
         }
@@ -61,18 +68,33 @@ public class BroodmotherController : MonoBehaviour {
             anim.SetBool("isHatching", false);
             timeSinceSpawn = 0;
             justSpawned = false;
+            ResumeAI();
+
         }
 
 
 
 	}
 
-    
+    private void PauseAI()
+    {
+        GetComponent<LMLongPatrol>().enabled = false;
+        GetComponent<LMChase>().enabled = false;
+        GetComponent<EnemyController>().enabled = false;
+    }
+
+    private void ResumeAI()
+    {
+        GetComponent<LMLongPatrol>().enabled = true;
+        GetComponent<LMChase>().enabled = true;
+        GetComponent<EnemyController>().enabled = true;
+    }
 
 
     public void WakeUp()
     {
         firstPhase = true;
         if (anim != null) anim.SetBool("PlayerInRoom", true);
+        timeSinceSpawn = 0;
     }
 }
