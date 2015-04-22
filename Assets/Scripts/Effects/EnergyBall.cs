@@ -122,6 +122,10 @@ public class EnergyBall : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
+        //do not collide with other energy balls
+        if (other.tag == "EnergyBall")
+            return;
+
         //Start bursting on hitting a thing
         StartBursting();
         
