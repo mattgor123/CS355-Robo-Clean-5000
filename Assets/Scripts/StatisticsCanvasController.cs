@@ -15,11 +15,9 @@ public class StatisticsCanvasController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (statCanvas == null) {
-			Debug.Log ("stat null");
 			statCanvas = GameObject.FindGameObjectWithTag ("StatCanvas");
 		}
 		if (elevCanvas == null) {
-			Debug.Log ("elev null");
 			elevCanvas = GameObject.FindGameObjectWithTag ("ElevatorCanvas");
 		}
 		if (statCanvas != null && elevCanvas != null) {

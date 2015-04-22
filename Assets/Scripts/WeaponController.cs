@@ -20,6 +20,9 @@ public class WeaponController : MonoBehaviour {
     private Transform owner;                        //The owner of the gun
     private WeaponBackpackController backpack_controller; // The backpack that contains this gun
 
+	private GameObject player;
+	private StatisticsRecorderController stats;
+
     private void Start()
     {
         //var collider = this.GetComponent<BoxCollider>();
@@ -44,6 +47,20 @@ public class WeaponController : MonoBehaviour {
 
 	private void Fire (bool source) {
 		if(backpack_controller.HasAmmo(ammo_per_shot)) {
+			//start code for stat tracking
+			if (player == null) {
+				player = GameObject.FindGameObjectWithTag("Player");
+			}
+			if (player != null && stats == null) {
+				stats = player.GetComponent<StatisticsRecorderController>();
+			}
+			if (stats != null) {
+				if(source) {
+					stats.fireWeapon(backpack_controller.GetWeaponName());
+					stats.fireShot();
+				}
+			}
+			//end code for stat tracking
             if (shot_sound != null)
             {
                 shot_sound.Play();

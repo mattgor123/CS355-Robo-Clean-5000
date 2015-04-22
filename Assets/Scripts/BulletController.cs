@@ -82,6 +82,8 @@ public class BulletController : MonoBehaviour {
 			if (stats != null) {
 				if (source_player) {
 					stats.dealDamage(damage);
+					stats.hitShot();
+					Debug.Log ("here");
 				} else {
 					stats.takeDamage(damage);
 				}
