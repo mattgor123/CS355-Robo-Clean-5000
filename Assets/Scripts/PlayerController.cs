@@ -125,6 +125,13 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
+        if (healthController.GetCurrentHealth() == 0)
+        {
+            GameObject.FindGameObjectWithTag("HUD").SetActive(false);
+            Application.LoadLevel("GameOver");
+            
+        }
+
         if (isStunned)
         {
             stunCountdown -= Time.deltaTime;
