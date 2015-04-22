@@ -27,24 +27,9 @@ public class BeatGameTrigger : MonoBehaviour {
         //remove any buttons that are on the panel
         if (other.gameObject.tag == "Player" && inventory.hasThorax())
         {
-
+            Application.LoadLevel("Victory");
         }
     }
 
-    private void shake(int level)
-    {
 
-        Time.timeScale = 0;
-        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
-        CameraController cc = camera.GetComponent<CameraController>();
-        cc.shake();
-
-        //start fading out
-        black.canvasRenderer.SetAlpha(0f);
-        blackScreen.SetActive(true);
-
-        //start fading to black
-        black.CrossFadeAlpha(1.0f, 2, true);
-
-    }
 }
