@@ -11,6 +11,8 @@ public class HUDController : MonoBehaviour {
   [SerializeField] private Text ammo_text;
   [SerializeField] private Text notification_text;
   [SerializeField] private Text level_text;
+  [SerializeField] private Text combo_text;
+  [SerializeField] private ComboController combo_controller;
 
   private WeaponBackpackController weapon_backpack_controller;
   private NotificationLog notification_log;
@@ -29,6 +31,7 @@ public class HUDController : MonoBehaviour {
         UpdateWeapon();
         UpdateAmmo();
         UpdateNotification();
+        UpdateCombo();
         string floor = "B" + playerC.getCurrentFloor();
 
         SetLevelText(floor);
@@ -44,6 +47,10 @@ public class HUDController : MonoBehaviour {
 
   private void UpdateNotification () {
     notification_text.text = "" + notification_log.getCurrentNotification();
+  }
+
+  private void UpdateCombo () {
+    combo_text.text = "X" + combo_controller.GetCurrentCombo().ToString();
   }
 
   public void SetLevelText (string new_text) {
