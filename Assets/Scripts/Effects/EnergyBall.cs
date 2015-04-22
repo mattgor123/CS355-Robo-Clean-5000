@@ -174,7 +174,10 @@ public class EnergyBall : MonoBehaviour {
             
             foreach (ParticleSystem p in PSs)
             {
-                p.startLifetime *= BDmodifier;
+                if (!(p.gameObject.name == burstEO.name))
+                {
+                    p.startLifetime *= BDmodifier;
+                }
             }
 
             //halt movement

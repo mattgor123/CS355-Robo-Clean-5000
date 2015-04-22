@@ -10,13 +10,14 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
     private Transform EnergyBall;   //Energy Ball prefab
 
     [SerializeField]
-    private float X = 0.43f;                //X offset from transform center
+    private float X = 0.21f;                //X offset from transform center
+    [SerializeField]
+    private float Y = 1.65f;                //Y offset
+    [SerializeField]
+    private float Z = 3.5f;                //Z offset
 
     [SerializeField]
-    private float Y = 3.1f;                //Y offset
-
-    [SerializeField]
-    private float Z = 5.1f;                //Z offset
+    private float BurstDuration = 0.5f;     //duration of finishing burst
 
     #endregion
 
@@ -43,6 +44,7 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
 
             EnergyBall eb = shot.GetComponent<EnergyBall>();
             eb.SetInitDirection(dir);
+            eb.SetBurstDuration(BurstDuration);
         }
 
         return target;
