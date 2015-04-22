@@ -8,6 +8,7 @@ using System.Collections;
 public class EnemyController : MonoBehaviour {
     [SerializeField] 
     private GameObject player;
+	private StatisticsRecorderController stats;
 
     // Internal Variables
     // Positional/Movement variables
@@ -74,6 +75,18 @@ public class EnemyController : MonoBehaviour {
         //Die if at zero hp
         if (health_controller.GetCurrentHealth() == 0)
         {
+			//start stat tracking code
+			if (player == null) {
+				player = GameObject.FindGameObjectWithTag("Player");
+			}
+			if (player != null && stats == null) {
+				stats = player.GetComponent<StatisticsRecorderController>();
+			}
+			if (stats != null) {
+				stats.killEnemy();
+			}
+			//end stat tracking code
+
             if (anim != null)
                 anim.SetBool("Dead", true);
             // need delay so enemy dying animations can show

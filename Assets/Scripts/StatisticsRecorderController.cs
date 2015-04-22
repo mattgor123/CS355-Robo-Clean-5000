@@ -7,11 +7,13 @@ public class StatisticsRecorderController : MonoBehaviour {
 	private Text timeText;
 	private Text dealtText;
 	private Text takenText;
+	private Text killedText;
 	private float timeAtStart;
 	private float timeNow;
 	private float timeElapsed;
 	private float damageDealt;
 	private float damageTaken;
+	private int enemiesKilled;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +22,7 @@ public class StatisticsRecorderController : MonoBehaviour {
 		timeElapsed = timeAtStart - timeNow;
 		damageDealt = 0;
 		damageTaken = 0;
+		enemiesKilled = 0;
 	}
 	
 	// Update is called once per frame
@@ -33,16 +36,22 @@ public class StatisticsRecorderController : MonoBehaviour {
 		if (takenText == null) {
 			takenText = GameObject.FindGameObjectWithTag ("TakenText").GetComponent<Text> ();
 		}
+		if (killedText == null) {
+			killedText = GameObject.FindGameObjectWithTag ("KilledText").GetComponent<Text> ();
+		}
 		if (timeText != null) {
 			timeNow = Time.time;
 			timeElapsed = timeNow - timeAtStart;
-			timeText.text = "Time Elapsed: " + timeElapsed.ToString();
+			timeText.text = "Time Elapsed: " + timeElapsed.ToString("0.0");
 		}
 		if (takenText != null) {
-			takenText.text = "Damage Taken: " + damageTaken.ToString();
+			takenText.text = "Damage Taken: " + damageTaken.ToString("0.0");
 		}
 		if (dealtText != null) {
-			dealtText.text = "Damage Dealt: " + damageDealt.ToString();
+			dealtText.text = "Damage Dealt: " + damageDealt.ToString("0.0");
+		}
+		if (killedText != null) {
+			killedText.text = "Enemies Killed: " + enemiesKilled.ToString();
 		}
 	}
 	public void takeDamage(float f) {
@@ -50,5 +59,8 @@ public class StatisticsRecorderController : MonoBehaviour {
 	}
 	public void dealDamage(float f) {
 		damageDealt += f;
+	}
+	public void killEnemy() {
+		enemiesKilled++;
 	}
 }
