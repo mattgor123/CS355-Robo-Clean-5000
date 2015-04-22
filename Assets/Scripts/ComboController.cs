@@ -6,10 +6,12 @@ public class ComboController : MonoBehaviour {
 
   private int current_combo;
   private float last_combo_time;
+  private StatisticsRecorderController stats;
 
   private void Start () {
     current_combo = 0;
     last_combo_time = -combo_delay;
+    stats = GameObject.FindGameObjectWithTag("Player").GetComponent<StatisticsRecorderController>();
   }
 
   private void Update () {
@@ -26,6 +28,6 @@ public class ComboController : MonoBehaviour {
   public void IncrementCombo () {
     ++current_combo;
     last_combo_time = Time.time;
-    Debug.Log(current_combo.ToString());
+    stats.setCombo(current_combo);
   }
 }
