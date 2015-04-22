@@ -237,6 +237,35 @@ public class Tile
         return exit;
     }
 
+    private GameObject CreateWictory()
+    {
+        GameObject exit = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        exit.transform.localScale = new Vector3(1, 1, 1) * StageBuilder.scale;
+        exit.transform.position = new Vector3(this.position.x, 0, this.position.z) * StageBuilder.scale;
+        exit.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+        Renderer Exrend = exit.GetComponent<Renderer>();
+        Exrend.material.color = Color.green;
+        BoxCollider exitBox = exit.AddComponent<BoxCollider>();
+        exitBox.size = new Vector3(1f, 1f, 2f);
+        GameObject lightObject = new GameObject();
+        Light light = lightObject.AddComponent<Light>();
+        light.type = LightType.Spot;
+        light.spotAngle = 60f;
+        light.intensity = 8f;
+        lightObject.transform.SetParent(exit.transform);
+
+
+        lightObject.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+
+        lightObject.transform.position = new Vector3(this.position.x, 1, this.position.z) * StageBuilder.scale;
+
+        exitBox.isTrigger = true;
+        //var exScript = exit.AddComponent<WictoryTrigger>();
+        //exScript.setLevel("RampDown");
+        exit.transform.SetParent(tile.transform);
+        return exit;
+    }
+
     private GameObject CreateExit()
     {
         GameObject exit = GameObject.CreatePrimitive(PrimitiveType.Quad);

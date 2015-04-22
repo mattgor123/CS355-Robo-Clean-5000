@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.IO;
 
 public class Stage  {
 
@@ -31,6 +32,16 @@ public class Stage  {
     private GameObject Facility;
     private Material floorMaterial;
     private Material wallMaterial;
+    private Dictionary<Char, String> parse = new Dictionary<Char, string>
+    {
+        {'R', "Rock"},
+        {'F', "Floor"},
+        {'X', "Exit"},
+        {'E', "Elevator"},
+        {'C', "Column"},
+        {'W', "Wictory"}
+
+    };
 
     private FluffBuilder FBuilder;
     #endregion
@@ -69,6 +80,42 @@ public class Stage  {
 
         spawnExit();
 
+    }
+
+    public Stage(String textfile, Material floor, Material wall, FluffBuilder fbuilder)
+    {
+        levels = new ArrayList();
+        spawnedRooms = new ArrayList();
+        grid = ParseTextStage(textfile, floor, wall);
+        this.width = grid.GetLength(0);
+        this.height = grid.GetLength(1);
+        this.floorMaterial = floor;
+        this.wallMaterial = wall;
+        this.rooms = new ArrayList();
+        AddLevel(grid, this.rooms);
+        this.FBuilder = fbuilder;
+
+    }
+
+    //Parse a text file into a grid
+    public Tile[,] ParseTextStage(String textfile, Material floor, Material wall)
+    {
+        String[] lines = textfile.Split('\n');
+        String widthSt = lines[0].TrimEnd('\n');
+        String heightSt = lines[1].TrimEnd('\n');
+        int width = int.Parse(widthSt);
+        int height = int.Parse(heightSt);
+        Tile[,] newGrid = new Tile[width, height];
+        for (int i = 2; i < height + 2; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Char[] linechar = lines[i].TrimEnd('\n').ToCharArray();
+                newGrid[j, i - 2] = new Tile(parse[linechar[j]], new Vector3(j, 0, i - 2), floor, wall);
+            }
+        }
+
+            return newGrid;
     }
 
     private int RandomizeMaterials(int size) {

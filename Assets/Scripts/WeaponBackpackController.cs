@@ -12,6 +12,7 @@ public class WeaponBackpackController : MonoBehaviour {
 	private int last_rendered_index;
 	private GameObject weapon_instance;
 	private int ammo;
+    private bool Firing = false;
 
 	private void Start () {
 		weapon_index = 0;
@@ -66,12 +67,14 @@ public class WeaponBackpackController : MonoBehaviour {
 	public void StartFiring () {
 		if(weapon_instance != null) {
 			weapon_instance.GetComponent<WeaponController>().StartFiring();
+            Firing = true;
 		}
 	}
 
 	public void StopFiring () {
 		if(weapon_instance != null) {
 			weapon_instance.GetComponent<WeaponController>().StopFiring();
+            Firing = false;
 		}
 	}
 
@@ -93,4 +96,9 @@ public class WeaponBackpackController : MonoBehaviour {
 	public void ChangeAmmo (int change) {
 		ammo += change;
 	}
+
+    public bool isFiring()
+    {
+        return this.Firing;
+    }
 }

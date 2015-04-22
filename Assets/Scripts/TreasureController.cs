@@ -37,7 +37,7 @@ public class TreasureController : MonoBehaviour {
             {
                 AudioSource.PlayClipAtPoint(pickup_sound, transform.position);
             }
-            var collected_health = Random.Range(50, 76);
+            var collected_health = Random.Range(20, 76);
             health.ChangeHealth(collected_health);
             Destroy(gameObject);
             message += "Regained " + collected_health + " health\n\n ";
