@@ -12,10 +12,9 @@ public class PlayerController : MonoBehaviour {
 	private MovementController movement_controller;
 	private WeaponBackpackController weapon_backpack_controller;
 	private HealthController healthController;
-    private bool ControlScheme;  //True for mouse-oriented (W goes to mouse, S goes away from mouse)
-                                //False for screen-oriented (W goes up, S goes down)
+    private Rigidbody RB;
 
-    private bool Drop;          //Whether to drop
+    private bool Drop = false;          //Whether to drop
     private bool TrackFace;     //Whether camera tracks facing or is map-fixed
     private Vector3 ScreenSize; //size of screen
     private ParticleSystem[] Particles;    //particle systems
@@ -32,10 +31,10 @@ public class PlayerController : MonoBehaviour {
     private float dashAccel;
 
     [SerializeField]
-    private int dashSelfDamage;
+    private float dashSelfDamage;
 
     [SerializeField]
-    private int dashOtherDamage;
+    private float dashOtherDamage;
 
     //time since dash started
     //[SerializeField]
@@ -80,13 +79,13 @@ public class PlayerController : MonoBehaviour {
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 		healthController = GetComponent<HealthController>();
+        RB = GetComponent<Rigidbody>();
 
         Flashlight = GetComponentInChildren<FlashlightController>();  //Attach the flashlight
         Particles = GetComponentsInChildren<ParticleSystem>();       //Attach the powerfists
         SetPowerfists(false);
 
 
-        ControlScheme = true;
         Drop = false;
         TrackFace = true;
         this.toggle_movement = false;
@@ -318,6 +317,22 @@ public class PlayerController : MonoBehaviour {
     }
 
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (isDashing)
+        {
+            GameObject OGO = other.gameObject;
+            if (OGO.tag == "Enemy")
+            {
+                HealthController HC = OGO.GetComponent<HealthController>();
+                HC.ChangeHealth(dashOtherDamage*RB.velocity.magnitude);
+
+                healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude);
+            }
+        }
+    }
+
+
     //Deactivate drop flag if colliding with something (the floor)
     private void OnCollisionStay(Collision other)
     {
@@ -328,6 +343,22 @@ public class PlayerController : MonoBehaviour {
             transform.position += new Vector3(0f, 0.01f, 0f);
         }
         Drop = false;
+
+
+        //deal damage to enemy when dashing
+        if (isDashing)
+        {
+            GameObject OGO = other.gameObject;
+            if (OGO.tag == "Enemy")
+            {
+                HealthController HC = OGO.GetComponent<HealthController>();
+                HC.ChangeHealth(dashOtherDamage*RB.velocity.magnitude*0.1f);
+                Debug.Log(HC.GetCurrentHealth());
+
+                healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude * 0.1f);
+            }
+        }
+
     }
 
     /*
@@ -395,7 +426,7 @@ public class PlayerController : MonoBehaviour {
         return this.isDashing;
     }
 
-    public int getDashDamage()
+    public float getDashDamage()
     {
         return this.dashOtherDamage;
     }
@@ -442,7 +473,7 @@ public class PlayerController : MonoBehaviour {
             }
             movement_controller.UpdateMovement(dashForceCurrent, 0);
             //movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);
-            healthController.ChangeHealth(-dashSelfDamage);
+            healthController.ChangeHealth(dashSelfDamage);
             //dashCountdown = dashCountdown - Time.deltaTime;
         }
         //else
