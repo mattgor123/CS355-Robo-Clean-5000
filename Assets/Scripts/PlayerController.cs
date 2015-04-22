@@ -364,7 +364,7 @@ public class PlayerController : MonoBehaviour {
             }
             else if (OGO.name.Contains("Wall"))
             {
-                Debug.Log("HIT WALL");
+             //   Debug.Log("HIT WALL");
                 healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude);
                 isStunned = true;
                 stunCountdown = stunTime;
@@ -509,12 +509,12 @@ public class PlayerController : MonoBehaviour {
                 //float dForce = 0.5f * (Mathf.Pow(dashVelocity + dashAccel, 2) - Mathf.Pow(dashVelocity, 2));
                 //dashVelocity += dashAccel;
                 dashForceCurrent = dashAccel * Mathf.Pow((Time.realtimeSinceStartup - dashStartTime), 2) + 1;
-                Debug.Log("Dash current: " + dashForceCurrent);
+               // Debug.Log("Dash current: " + dashForceCurrent);
                 //dashForceCurrent += dForce;
             }
             else
             {
-                Debug.Log("dash above 10");
+              //  Debug.Log("dash above 10");
             }
             movement_controller.UpdateMovement(dashForceCurrent, 0);
             //movement_controller.UpdateMovement(dashDirection.x, dashDirection.y);

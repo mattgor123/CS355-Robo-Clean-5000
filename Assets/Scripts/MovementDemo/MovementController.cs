@@ -24,6 +24,7 @@ public class MovementController : MonoBehaviour {
 	private float speedDampTime = 0.1f;
     private float deltaRotateDash = 0;
     private float deltaRotateHands = 5;
+    private float deltaRotateForward = 0;
 
 
 	private HealthController healthController;
@@ -37,7 +38,7 @@ public class MovementController : MonoBehaviour {
     private Transform leftForeArmTransform;
     private Transform rightUpperArmTransform;
     private Transform rightForeArmTransform;
-    private MeshRenderer bodyRenderer;
+    private Transform bodyTransform;
 
 
 	private void Awake() {
@@ -52,7 +53,7 @@ public class MovementController : MonoBehaviour {
         leftForeArmTransform = leftForeArm.GetComponent<Transform>();
         rightUpperArmTransform = rightUpperArm.GetComponent<Transform>();
         rightForeArmTransform = rightForeArm.GetComponent<Transform>();
-        bodyRenderer = body.GetComponent<MeshRenderer>();
+        bodyTransform = body.GetComponent<Transform>();
 	}
 
 	private void Start () {
@@ -84,6 +85,11 @@ public class MovementController : MonoBehaviour {
                         rightUpperArmTransform.Rotate(rot);
                         leftForeArmTransform.Rotate(-rot);
                         rightForeArmTransform.Rotate(-rot);
+                        Debug.Log("Delta rotate forward: " + deltaRotateForward);
+                        if (deltaRotateForward < 50f) {
+                            bodyTransform.Rotate(.3f, 0f, 0f);
+                            deltaRotateForward += .5f;
+                        }
                         deltaRotateDash += 5;
                         deltaRotateHands = 30;
                     }
@@ -106,11 +112,15 @@ public class MovementController : MonoBehaviour {
                 RG.velocity *= 0.5f;
 
                 Vector3 rot = new Vector3(5, 0f, 0f);
-                if (deltaRotateDash > 0) {
+                if (deltaRotateDash > 0f) {
                     leftUpperArmTransform.Rotate(rot);
                     rightUpperArmTransform.Rotate(rot);
                     leftForeArmTransform.Rotate(-rot);
                     rightForeArmTransform.Rotate(-rot);
+                    if (deltaRotateForward > 0) {
+                            bodyTransform.Rotate(-.3f, 0f, 0f);
+                            deltaRotateForward -= .5f;
+                        }
                     deltaRotateDash -= 5;
                 }
                 deltaRotateHands = 5;
