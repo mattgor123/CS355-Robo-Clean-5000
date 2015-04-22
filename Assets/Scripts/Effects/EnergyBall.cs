@@ -3,16 +3,20 @@ using System.Collections;
 
 public class EnergyBall : MonoBehaviour {
 
+    //Timers
     private float Timer = 0f;       //Life timer
     [SerializeField]
     private float TTL = 5.0f;       //Time to live: how long until energy ball dissipates
     [SerializeField]
     private float TTT = 2.0f;       //Time to track: how long after firing for tracking to activate
     [SerializeField]
-    private float TTB = 2.5f;       //Duration of burst sequence
-    [SerializeField]
     private float TTBD = 2.0f;      //Time to burst damage 
+    [SerializeField]
+    private float TBD = 0.5f;       //Time of burst damage existence
 
+    private float BDmodifier = 1.0f;
+
+    //Other params
     [SerializeField]
     private float MaxSpeed = 3.0f;  //Maximum speed
     [SerializeField]
@@ -45,6 +49,7 @@ public class EnergyBall : MonoBehaviour {
 	void Awake() {
         Player = GameObject.FindGameObjectWithTag("Player");
         RB = GetComponent<Rigidbody>();
+        BDmodifier = TBD / 0.5f;
 
         //Instantiate core & spark effects
         coreEO = Instantiate(Core);
@@ -67,7 +72,7 @@ public class EnergyBall : MonoBehaviour {
             transform.position += new Vector3(0f, 0.1f, 0f);
         
         //Destroy on burst sequence completion
-        if (Timer > TTB && bursting)        
+        if (Timer > (TTBD + TBD) && bursting)        
             GameObject.Destroy(gameObject);
         
         //At point of burst damage application, expand collider size
@@ -162,8 +167,24 @@ public class EnergyBall : MonoBehaviour {
             burstEO.eulerAngles = new Vector3(0f, 0f, 0f);
             burstEO.SetParent(this.transform);
 
+            //Adjust duration of burst to fit TBD
+            //Default durations:  Sphere 0.3,  Circle 0.5, Dust 3
+            ParticleSystem[] PSs = burstEO.GetComponentsInChildren<ParticleSystem>();
+            
+            
+            foreach (ParticleSystem p in PSs)
+            {
+                p.startLifetime *= BDmodifier;
+            }
+
             //halt movement
             RB.velocity = new Vector3(0f, 0f, 0f);
         }
+    }
+
+    public void SetBurstDuration(float duration)
+    {
+        TBD = duration;
+        BDmodifier = TBD / 0.5f;
     }
 }
