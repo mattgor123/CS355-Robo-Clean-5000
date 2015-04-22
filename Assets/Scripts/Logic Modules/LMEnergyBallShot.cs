@@ -19,6 +19,9 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
     [SerializeField]
     private float BurstDuration = 0.5f;     //duration of finishing burst
 
+    [SerializeField]
+    private float EBDamage = -50f;          //damage of EB
+
     #endregion
 
     private Vector3 OffsetY;                //vertical offset
@@ -45,8 +48,14 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
             EnergyBall eb = shot.GetComponent<EnergyBall>();
             eb.SetInitDirection(dir);
             eb.SetBurstDuration(BurstDuration);
+            eb.SetDamage(EBDamage);
         }
 
         return target;
+    }
+
+    public void SetDamage(float dmg)
+    {
+        EBDamage = dmg;
     }
 }

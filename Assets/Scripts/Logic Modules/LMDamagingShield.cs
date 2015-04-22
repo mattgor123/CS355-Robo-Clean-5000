@@ -9,15 +9,26 @@ public class LMDamagingShield : MonoBehaviour {
     private float Damage = -50f;
 
     private ShieldController Shield;
+    private bool ShieldActive;
+
 
 	// Use this for initialization
 	void Start () {
         Shield = GetComponentInChildren<ShieldController>();
 	}
 
+    void LateUpdate()
+    {
+        ShieldActive = Shield.GetActive();
+    }
+
     //Deal some damage on initial collision
     void OnCollisionEnter(Collision other)
     {
+        //No damage if shield is off
+        if (!ShieldActive)
+            return;
+
         GameObject OGO = other.gameObject;
         if (OGO.tag == "Player")
         {
@@ -29,6 +40,9 @@ public class LMDamagingShield : MonoBehaviour {
     //Deal some sustained damage on continued collision
     void OnCollisionStay(Collision other)
     {
+        if (!ShieldActive)
+            return;
+
         GameObject OGO = other.gameObject;
         if (OGO.tag == "Player")
         {

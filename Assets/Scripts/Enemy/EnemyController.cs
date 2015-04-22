@@ -226,5 +226,10 @@ public class EnemyController : MonoBehaviour {
         Stationary = state;
     }
 
+    public void SetAttackCooldown(float cd)
+    {
+        AttackCooldown = cd;
+    }
+
     #endregion
 }

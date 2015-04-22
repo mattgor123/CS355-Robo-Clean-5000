@@ -18,6 +18,9 @@ public class ShieldController : MonoBehaviour {
     [SerializeField]
     private float RegenCD;              //Cooldown on increased shield regen
 
+    [SerializeField]
+    private float DamageReduction = 1f; //Damge Reduction modifier (fraction of damage actually taken)
+
     private float CurrShield;           //Current shield value
     private float RegenTimer = 0;       //Increased regen timer
     private bool Active = true;         //Whether shields are active
@@ -25,16 +28,13 @@ public class ShieldController : MonoBehaviour {
     private HealthController ParentHC;  //Parent's shield-capable health controller
     private ParticleSystem PS;          //Shield effect system
 
-
-	// Use this for initialization
 	void Start () {
         CurrShield = MaxShield;
         ParentHC = gameObject.GetComponentInParent<HealthController>();
         PS = GetComponent<ParticleSystem>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
         Regen();
 
         //Scale number of particles by the strength of the shield
@@ -70,7 +70,7 @@ public class ShieldController : MonoBehaviour {
             return dmg;
         
 
-        float net = dmg;
+        float net = dmg * DamageReduction;
         //insufficient shields, block as much as possible
         if (CurrShield < Mathf.Abs(net))
         {
@@ -89,6 +89,17 @@ public class ShieldController : MonoBehaviour {
     public float GetShield()
     {
         return CurrShield;
+    }
+
+    //Get whether shield is active
+    public bool GetActive() {
+        return Active;
+    }
+
+    //Set shield strength fraction
+    public void SetShieldFrac(float f)
+    {
+        CurrShield = f * MaxShield;
     }
 
     //Activate shields

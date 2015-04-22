@@ -190,4 +190,9 @@ public class EnergyBall : MonoBehaviour {
         TBD = duration;
         BDmodifier = TBD / 0.5f;
     }
+
+    public void SetDamage(float dmg)
+    {
+        Damage = dmg;
+    }
 }
