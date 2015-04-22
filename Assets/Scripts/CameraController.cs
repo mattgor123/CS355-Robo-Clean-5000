@@ -100,7 +100,7 @@ public class CameraController : MonoBehaviour {
 
             //transform.position = positionBeforeShake + Random.insideUnitSphere * shakeIntensity;
             //this.shakeCountdown -= Time.deltaTime;
-            if (Time.realtimeSinceStartup > this.shakeCountdown)
+            if (!isSmallShaking && Time.realtimeSinceStartup > this.shakeCountdown)
             {
                 StopShaking();
                 //GameObject.FindObjectOfType<NewRoomTrigger>().nextLevel(); ;

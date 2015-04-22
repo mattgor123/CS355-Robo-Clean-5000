@@ -64,6 +64,13 @@ public class PlayerController : MonoBehaviour {
     //private int[] doubleTapCounts;
     private int doubleTapCount;
 
+    private bool isStunned;
+
+    private float stunCountdown;
+
+    [SerializeField]
+    private float stunTime;
+
     private int currentFloor;
     private int deepestLevelVisited;
     private int dialogueLevel;
@@ -101,6 +108,8 @@ public class PlayerController : MonoBehaviour {
         this.isDashing = false;
         dashForceCurrent = 1;
         dashStartTime = 0;
+        isStunned = false;
+        stunCountdown = 0;
 
         currentFloor = 0;
         dialogueLevel = 0;
@@ -113,6 +122,16 @@ public class PlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Drop = false;
+            return;
+        }
+
+        if (isStunned)
+        {
+            stunCountdown -= Time.deltaTime;
+            if (stunCountdown < 0)
+            {
+                isStunned = false;
+            }
             return;
         }
 
@@ -255,14 +274,9 @@ public class PlayerController : MonoBehaviour {
         else 
         {
             //isDashing
-            if (Input.GetKeyUp("w") || Input.GetKeyUp("a") || Input.GetKeyUp("s") || Input.GetKeyUp("d")
-                || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow))
+            if (Input.GetKeyUp("w") || Input.GetKeyUp(KeyCode.UpArrow))
             {
-                isDashing = false;
-                dashForceCurrent = 1;
-                dashStartTime = 0;
-                CamControl.StopShaking();
-                SetPowerfists(false);
+                EndDashing();
             }
         }
 
@@ -316,6 +330,15 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void EndDashing()
+    {
+        isDashing = false;
+        dashForceCurrent = 1;
+        dashStartTime = 0;
+        CamControl.StopShaking();
+        SetPowerfists(false);
+    }
+
 
     private void OnCollisionEnter(Collision other)
     {
@@ -333,6 +356,9 @@ public class PlayerController : MonoBehaviour {
             {
                 Debug.Log("HIT WALL");
                 healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude);
+                isStunned = true;
+                stunCountdown = stunTime;
+                EndDashing();
             }
         }
     }
@@ -454,6 +480,10 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void UpdateMovement () {
+        if (isStunned)
+        {
+            return;
+        }
         if (!isDashing)
         {
             var z_axis = Input.GetAxis("Vertical");
