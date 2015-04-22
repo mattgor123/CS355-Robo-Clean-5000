@@ -329,6 +329,11 @@ public class PlayerController : MonoBehaviour {
 
                 healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude);
             }
+            else if (OGO.name.Contains("Wall"))
+            {
+                Debug.Log("HIT WALL");
+                healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude);
+            }
         }
     }
 
