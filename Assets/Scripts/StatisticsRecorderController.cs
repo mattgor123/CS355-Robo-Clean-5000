@@ -63,4 +63,7 @@ public class StatisticsRecorderController : MonoBehaviour {
 	public void killEnemy() {
 		enemiesKilled++;
 	}
+	public void resetStats() {
+		Start ();
+	}
 }

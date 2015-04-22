@@ -33,6 +33,8 @@ public class Stage  {
     private Material floorMaterial;
     private Material wallMaterial;
     private Dictionary<Char, String> parse = new Dictionary<Char, string>
+
+
     {
         {'R', "Rock"},
         {'F', "Floor"},
@@ -44,6 +46,9 @@ public class Stage  {
     };
 
     private FluffBuilder FBuilder;
+
+	private GameObject player;
+	private StatisticsRecorderController stats;
     #endregion
 
     public Stage(Tile[,] loadedGrid, ArrayList loadedRooms, FluffBuilder fluff_builder) {
@@ -706,6 +711,18 @@ public class Stage  {
 
     public void NextLevel(int level)
     {
+		//start code for stat tracking
+		if (player == null) {
+			player = GameObject.FindGameObjectWithTag("Player");
+		}
+		if (player != null && stats == null) {
+			stats = player.GetComponent<StatisticsRecorderController>();
+		}
+		if (stats != null) {
+			stats.resetStats();
+		}
+		//end code for stat tracking
+
         //CameraShake();
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         this.currentLevel = level;
