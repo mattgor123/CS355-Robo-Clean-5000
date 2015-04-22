@@ -16,7 +16,7 @@ public class LMDamagingShield : MonoBehaviour {
 	}
 
     //Deal some damage on initial collision
-    void OnCollisionEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         GameObject OGO = other.gameObject;
         if (OGO.tag == "Player")
@@ -27,7 +27,7 @@ public class LMDamagingShield : MonoBehaviour {
     }
 
     //Deal some sustained damage on continued collision
-    void OnCollisionStay(Collider other)
+    void OnCollisionStay(Collision other)
     {
         GameObject OGO = other.gameObject;
         if (OGO.tag == "Player")
