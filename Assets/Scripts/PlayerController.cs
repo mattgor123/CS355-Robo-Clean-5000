@@ -290,6 +290,12 @@ public class PlayerController : MonoBehaviour {
         {
             transform.position += new Vector3(0f, -0.05f, 0f);
         }
+        //Shake camera if dashing
+        if (isDashing)
+            CamControl.SmallShake();
+        else 
+            CamControl.StopShaking();
+
     }
 
     //Deactivate drop flag if colliding with something (the floor)

@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour {
 
 
     private bool isShaking;
+    private bool isSmallShaking = false;
     private Vector3 positionBeforeShake;
     private int shakeIntensity;
     private float shakeTime;
@@ -36,21 +37,6 @@ public class CameraController : MonoBehaviour {
 	}
 
 	void LateUpdate () {
-        if (this.isShaking)
-        {
-            transform.position = positionBeforeShake + Random.insideUnitSphere * shakeIntensity;
-            //this.shakeCountdown -= Time.deltaTime;
-            if (Time.realtimeSinceStartup > this.shakeCountdown)
-            {
-                this.isShaking = false;
-                this.shakeCountdown = 0;
-                //GameObject.FindObjectOfType<NewRoomTrigger>().nextLevel(); ;
-                //GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
-                //stagebuilder.GetComponent<StageBuilder>().nextLevel();
-            }
-            return;
-        }
-
         offsetDC = offsetV * 0.25f;
 
         //Stay behind the player, facing in same direction
@@ -102,7 +88,27 @@ public class CameraController : MonoBehaviour {
                 Vector3 shift = 2.0f * (SC / 2 - Mathf.Abs(SC / 2 - hit.distance)) * cross;
                 transform.position += shift;
             }
-        }        
+        }
+
+        //Apply shaking effects as applicable
+        if (this.isShaking)
+        {
+            Vector3 shakemod = Random.insideUnitSphere * shakeIntensity;
+            if (isSmallShaking)
+                shakemod /= 5f;
+            transform.position += shakemod;
+
+            //transform.position = positionBeforeShake + Random.insideUnitSphere * shakeIntensity;
+            //this.shakeCountdown -= Time.deltaTime;
+            if (Time.realtimeSinceStartup > this.shakeCountdown)
+            {
+                StopShaking();
+                //GameObject.FindObjectOfType<NewRoomTrigger>().nextLevel(); ;
+                //GameObject stagebuilder = GameObject.FindGameObjectWithTag("StageBuilder");
+                //stagebuilder.GetComponent<StageBuilder>().nextLevel();
+            }
+        }
+
 	}
     
     public void shake()
@@ -110,6 +116,20 @@ public class CameraController : MonoBehaviour {
         this.positionBeforeShake = transform.position;
         this.shakeCountdown = this.shakeTime + Time.realtimeSinceStartup;
         this.isShaking = true;
+    }
+
+    //small shake for dashing
+    public void SmallShake()
+    {
+        shake();
+        this.isSmallShaking = true;
+    }
+
+    public void StopShaking()
+    {
+        this.isShaking = false;
+        this.isSmallShaking = true;
+        this.shakeCountdown = 0;
     }
         
 }
