@@ -20,6 +20,9 @@ public class BulletController : MonoBehaviour {
     private Vector3 previousPosition;
     private Rigidbody myRigidbody;
 
+	private GameObject player;
+	private StatisticsRecorderController stats;
+
 	private void Start () {
 		creation_time = Time.time;
         layerMask = 1 << LayerMask.NameToLayer("Wall");
@@ -68,6 +71,23 @@ public class BulletController : MonoBehaviour {
 			//this means you're hitting an enemy, not a wall ... if it's a laser then keep going
 			victim_health.ChangeHealth(-damage);
 			//don't let it get destroyed if it collides with an enemy and is a laser, only a wall
+
+			//start code for stat tracking
+			if (player == null) {
+				player = GameObject.FindGameObjectWithTag("Player");
+			}
+			if (player != null && stats == null) {
+				stats = player.GetComponent<StatisticsRecorderController>();
+			}
+			if (stats != null) {
+				if (source_player) {
+					stats.dealDamage(damage);
+				} else {
+					stats.takeDamage(damage);
+				}
+			}
+			//end code for stat tracking
+
 			if (is_laser) {
 				return;
 			}
