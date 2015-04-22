@@ -35,6 +35,16 @@ public class FluffBuilder : MonoBehaviour
     [SerializeField]
     private float VolumeSteamProb;
 
+    [SerializeField]
+    private Transform SmokyFire;  //smoky fire; prefab modified from FireFX Pack
+    [SerializeField]
+    private float SmokyFireProb;
+
+    [SerializeField]
+    private Transform Fire;  //simple fire; prefab modified from FireFX Pack
+    [SerializeField]
+    private float FireProb;
+
     /*
     [SerializeField]
     private Transform 
@@ -234,6 +244,20 @@ public class FluffBuilder : MonoBehaviour
             MakeVolumeSteam(pos);
         }
 
+        //SmokyFire; mutually exclusive with smoke
+        else if (Random.value <= SmokyFireProb)
+        {
+            Vector3 pos = new Vector3(i * Scale, 0f, j * Scale);
+            MakeSmokyFire(pos);
+        }
+
+        //Fire; mutually exclusive with smoke
+        else if (Random.value <= SmokyFireProb)
+        {
+            Vector3 pos = new Vector3(i * Scale, 0f, j * Scale);
+            MakeFire(pos);
+        }
+
         //Dust
         if (Random.value <= DustProb)
         {
@@ -257,6 +281,18 @@ public class FluffBuilder : MonoBehaviour
     void MakeVolumeSteam(Vector3 pos)
     {
         Transform thing = Instantiate(VolumeSteam);
+        thing.transform.position += pos;
+        thing.SetParent(Fluff.transform);
+    }
+    void MakeSmokyFire(Vector3 pos)
+    {
+        Transform thing = Instantiate(SmokyFire);
+        thing.transform.position += pos;
+        thing.SetParent(Fluff.transform);
+    }
+    void MakeFire(Vector3 pos)
+    {
+        Transform thing = Instantiate(Fire);
         thing.transform.position += pos;
         thing.SetParent(Fluff.transform);
     }
