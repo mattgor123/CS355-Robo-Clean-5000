@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour {
     private bool Drop;          //Whether to drop
     private bool TrackFace;     //Whether camera tracks facing or is map-fixed
     private Vector3 ScreenSize; //size of screen
+    private ParticleSystem[] Particles;    //particle systems
 
     //If player presses button twice within this time
     [SerializeField]
@@ -81,6 +82,9 @@ public class PlayerController : MonoBehaviour {
 		healthController = GetComponent<HealthController>();
 
         Flashlight = GetComponentInChildren<FlashlightController>();  //Attach the flashlight
+        Particles = GetComponentsInChildren<ParticleSystem>();       //Attach the powerfists
+        SetPowerfists(false);
+
 
         ControlScheme = true;
         Drop = false;
@@ -215,6 +219,10 @@ public class PlayerController : MonoBehaviour {
                     doubleTapCount = 0;
 					doubleTapCountdown = 0;
 					//dashCountdown = dashTime;
+
+                    CamControl.SmallShake();
+                    SetPowerfists(true);
+
 				}
 
 			}
@@ -254,6 +262,8 @@ public class PlayerController : MonoBehaviour {
                 isDashing = false;
                 dashForceCurrent = 1;
                 dashStartTime = 0;
+                CamControl.StopShaking();
+                SetPowerfists(false);
             }
         }
 
@@ -290,13 +300,23 @@ public class PlayerController : MonoBehaviour {
         {
             transform.position += new Vector3(0f, -0.05f, 0f);
         }
-        //Shake camera if dashing
-        if (isDashing)
-            CamControl.SmallShake();
-        else 
-            CamControl.StopShaking();
-
     }
+
+
+    //Set powerfists
+    private void SetPowerfists(bool active)
+    {
+        foreach (ParticleSystem p in Particles)
+        {
+            if (p.name == "Powerfist") {
+                if (active)
+                    p.Play();
+                else
+                    p.Stop();
+            }
+        }
+    }
+
 
     //Deactivate drop flag if colliding with something (the floor)
     private void OnCollisionStay(Collision other)
