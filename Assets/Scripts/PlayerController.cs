@@ -110,6 +110,7 @@ public class PlayerController : MonoBehaviour {
         dashStartTime = 0;
         isStunned = false;
         stunCountdown = 0;
+        SetStunElectricity(false);
 
         currentFloor = 0;
         dialogueLevel = 0;
@@ -141,6 +142,7 @@ public class PlayerController : MonoBehaviour {
             if (stunCountdown < 0)
             {
                 isStunned = false;
+                SetStunElectricity(false);
             }
             return;
         }
@@ -340,6 +342,20 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void SetStunElectricity(bool active)
+    {
+        foreach (ParticleSystem p in Particles)
+        {
+            if (p.name == "Stun")
+            {
+                if (active)
+                    p.Play();
+                else
+                    p.Stop();
+            }
+        }
+    }
+
     private void EndDashing()
     {
         isDashing = false;
@@ -367,6 +383,7 @@ public class PlayerController : MonoBehaviour {
              //   Debug.Log("HIT WALL");
                 healthController.ChangeHealth(dashSelfDamage * RB.velocity.magnitude);
                 isStunned = true;
+                SetStunElectricity(true);
                 stunCountdown = stunTime;
                 EndDashing();
             }
