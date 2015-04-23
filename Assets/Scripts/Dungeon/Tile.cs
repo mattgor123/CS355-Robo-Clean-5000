@@ -260,8 +260,7 @@ public class Tile
         lightObject.transform.position = new Vector3(this.position.x, 1, this.position.z) * StageBuilder.scale;
 
         exitBox.isTrigger = true;
-        //var exScript = exit.AddComponent<WictoryTrigger>();
-        //exScript.setLevel("RampDown");
+        var exScript = exit.AddComponent<WictoryTrigger>();
         exit.transform.SetParent(tile.transform);
         return exit;
     }

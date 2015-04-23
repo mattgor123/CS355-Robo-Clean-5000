@@ -32,7 +32,7 @@ public class Stage  {
     private GameObject Facility;
     private Material floorMaterial;
     private Material wallMaterial;
-    private Dictionary<Char, String> parse = new Dictionary<Char, string>
+    private Dictionary<Char, String> MapTexttoGrid = new Dictionary<Char, string>
 
 
     {
@@ -42,6 +42,19 @@ public class Stage  {
         {'E', "Elevator"},
         {'C', "Column"},
         {'W', "Wictory"}
+
+    };
+
+    private Dictionary<String, Char> MapGridtoText = new Dictionary<String, Char>
+
+
+    {
+        {"Rock", 'R'},
+        {"Floor", 'F'},
+        {"Exit", 'X'},
+        {"Elevator", 'E'},
+        {"Column", 'C'},
+        {"Wictory", 'W'}
 
     };
 
@@ -116,7 +129,7 @@ public class Stage  {
             for (int j = 0; j < width; j++)
             {
                 Char[] linechar = lines[i].TrimEnd('\n').ToCharArray();
-                newGrid[j, i - 2] = new Tile(parse[linechar[j]], new Vector3(j, 0, i - 2), floor, wall);
+                newGrid[j, i - 2] = new Tile(MapTexttoGrid[linechar[j]], new Vector3(j, 0, i - 2), floor, wall);
             }
         }
 
@@ -781,13 +794,13 @@ public class Stage  {
 		this.width = loadedWidth;
 		this.height = loadedHeight;
 		for (int i = 0; i < this.width; i++) {
-			for (int j = 0; j < this.height; j++) {
+			for (int j = 0; j < this.height; ++j) {
 				this.grid [i, j] = new Tile (loadedGrid [i, j]);
 			}
 		}
 		ArrayList loadedRooms = level[1] as ArrayList;
 		this.rooms = new ArrayList ();
-        for (int i = 0; i < loadedRooms.Count; i++)
+        for (int i = 0; i < loadedRooms.Count; ++i)
         {
             this.rooms.Add(new Room((Room)loadedRooms[i]));
         }
@@ -799,6 +812,22 @@ public class Stage  {
         CameraController cc = camera.GetComponent<CameraController>();
         cc.shake();
     }
+
+    public String GridToString()
+    {
+        String result = "";
+        result += this.width + '\n' + this.height + '\n';
+        for (int x = this.width - 1; x >= 0; --x)
+        {
+            for (int y = this.height - 1; y >= 0; --y)
+            {
+                result += MapGridtoText[grid[x, y].getType()];
+            }
+            result += '\n';
+        }
+        return result;
+    }
+
 
     public Tile[,] GetGrid()
     {
