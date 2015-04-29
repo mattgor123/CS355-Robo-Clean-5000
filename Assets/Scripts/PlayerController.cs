@@ -5,7 +5,7 @@ using System.Collections;
 [RequireComponent(typeof (WeaponBackpackController))]
 public class PlayerController : MonoBehaviour {
  
-	private new Camera camera;
+	
     private CameraController CamControl;
     private FlashlightController Flashlight;
 
@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour {
 	private WeaponBackpackController weapon_backpack_controller;
 	private HealthController healthController;
     private Rigidbody RB;
+    private GameObject hud;
+    private GameObject camera;
+    private GameObject player;
 
     private bool Drop = false;          //Whether to drop
     private bool TrackFace;     //Whether camera tracks facing or is map-fixed
@@ -78,9 +81,10 @@ public class PlayerController : MonoBehaviour {
     private Animator anim;
 
 	private void Start () {
-        GameObject MC = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
-        camera = MC.GetComponent<Camera>();                             //Attach camera and controller components
-        CamControl = MC.GetComponent<CameraController>();
+        camera = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
+        player = GameObject.FindGameObjectWithTag("Player");
+        hud = GameObject.FindGameObjectWithTag("HUD");
+        CamControl = camera.GetComponent<CameraController>();
         anim = GetComponent<Animator>();
 
 		movement_controller = GetComponent<MovementController>();
@@ -129,10 +133,18 @@ public class PlayerController : MonoBehaviour {
         if (healthController.GetCurrentHealth() == 0)
         {
             Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true; 
-            GameObject.FindGameObjectWithTag("HUD").SetActive(false);
-            Application.LoadLevel("GameOver");
+
+            GameObject.DestroyImmediate(hud);
+            GameObject.DestroyImmediate(camera);
+            GameObject.DestroyImmediate(player);
+
+            if (player == null && hud == null && camera == null)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                Application.LoadLevel("GameOver");
+
+            }
             
         }
 
@@ -452,6 +464,7 @@ public class PlayerController : MonoBehaviour {
         {
             deepestLevelVisited = currentFloor;
         }
+        EndDashing();
     }
 
     public void incrementDialogueLevel()

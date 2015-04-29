@@ -53,6 +53,9 @@ public class StageBuilder : MonoBehaviour
     private Material[] wallMaterials;
     [SerializeField]
     private FluffBuilder FBuilder;
+    private Transform player;
+    private Transform hudInstance;
+    private Transform cameraInstance;
     //weights of enemy. row is floor, column is weight in order of aggressive, smart, turret
     //ex: 0.3, 0.6, 1. if random float is 0-0.3, aggressive
     //if float is 0.3-0.6, smart
@@ -143,9 +146,18 @@ public class StageBuilder : MonoBehaviour
 
         var spawnableTiles = Physics.OverlapSphere(Player.position, 50 * StageBuilder.scale, 1 << LayerMask.NameToLayer("EnemySpawnable"));
         var spawnpoint = spawnableTiles[UnityEngine.Random.Range(0, spawnableTiles.Length)].transform.position;
-        Transform player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
-        Transform hudInstance = Instantiate(HUD) as Transform;
-        Transform cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
+        if (player == null)
+        {
+            player = Instantiate(Player, spawnpoint, Quaternion.identity) as Transform;
+        }
+        if (hudInstance == null)
+        {
+            hudInstance = Instantiate(HUD) as Transform;
+        }
+        if (cameraInstance == null)
+        {
+            cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
+        }
 
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
