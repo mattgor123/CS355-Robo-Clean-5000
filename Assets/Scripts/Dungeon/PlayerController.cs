@@ -5,7 +5,6 @@ using System.Collections;
 [RequireComponent(typeof (WeaponBackpackController))]
 public class PlayerController : MonoBehaviour {
  
-	private new Camera camera;
     private CameraController CamControl;
     private FlashlightController Flashlight;
     private LogScript Log;
@@ -88,12 +87,16 @@ public class PlayerController : MonoBehaviour {
     private int deepestLevelVisited;
     private int dialogueLevel;
     private bool toggle_movement;
+    private GameObject player;
+    private GameObject hud;
+    private GameObject camera;
     //private Animator anim;
 
 	private void Start () {
-        GameObject MC = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
-        camera = MC.GetComponent<Camera>();                             //Attach camera and controller components
-        CamControl = MC.GetComponent<CameraController>();
+        camera = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
+        CamControl = camera.GetComponent<CameraController>();
+        hud = GameObject.FindGameObjectWithTag("HUD");
+        player = GameObject.FindGameObjectWithTag("Player");
         //anim = GetComponent<Animator>();
 
 		movement_controller = GetComponent<MovementController>();
@@ -148,8 +151,11 @@ public class PlayerController : MonoBehaviour {
         {
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true; 
-            GameObject.FindGameObjectWithTag("HUD").SetActive(false);
+            Cursor.visible = true;
+            GameObject.DestroyImmediate(camera);
+            GameObject.DestroyImmediate(hud);
+            GameObject.DestroyImmediate(player);
+            if (camera == null && hud == null && player == null)
             Application.LoadLevel("GameOver");
             
         }
