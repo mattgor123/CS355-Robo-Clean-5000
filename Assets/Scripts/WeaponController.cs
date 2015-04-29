@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class WeaponController : MonoBehaviour {
 
+    [SerializeField]
+    private string name;
+
 	[SerializeField] private float speed;         // The speed of the bullets exiting the gun
 	[SerializeField] private float damage;        // The damage of each bullet
 	[SerializeField] private float delay;		  // The delay between shots
@@ -27,6 +30,8 @@ public class WeaponController : MonoBehaviour {
     private List<GameObject> bullets;
     private int bulletAmount = 25;
 
+    private ObjectPooling pool;
+
     private void Start()
     {
         //var collider = this.GetComponent<BoxCollider>();
@@ -36,6 +41,8 @@ public class WeaponController : MonoBehaviour {
 
         bullets = new List<GameObject>();
         StartCoroutine(makeBullets());
+
+        pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
     }
 
 	private void LateUpdate () {
@@ -73,7 +80,30 @@ public class WeaponController : MonoBehaviour {
                 shot_sound.Play();
             }
 			//var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
-            var instantiated_bullet = getBullet();
+            GameObject instantiated_bullet;
+            if (gameObject.name.Contains("Pistol"))
+            {
+                instantiated_bullet = pool.getPistolBullet();
+            }
+            else if (gameObject.name.Contains("Crazy Gun"))
+            {
+                instantiated_bullet = pool.getCrazyGunBullet();
+            }
+            else if (gameObject.name.Contains("Machine Gun"))
+            {
+                instantiated_bullet = pool.getMachineGunBullet();
+            }
+            else if (gameObject.name.Contains("Ray"))
+            {
+                instantiated_bullet = pool.getRayGunBullet();
+            }
+            else
+            {
+                return; //???
+            }
+            //{
+            //    instantiated_bullet = getBullet();
+            //}
             instantiated_bullet.transform.position = muzzle.position;
             instantiated_bullet.transform.rotation = muzzle.rotation * bullet_rotation;
             instantiated_bullet.SetActive(true);

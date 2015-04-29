@@ -20,6 +20,20 @@ public class ObjectPooling : MonoBehaviour {
     public int enemy_aggressiveAmount;
     private List<GameObject> enemy_aggressiveList;
 
+    public int bulletAmount;
+
+    public GameObject machineGunBullet;
+    private List<GameObject> machineGunBulletList;
+
+    public GameObject pistolBullet;
+    private List<GameObject> pistolBulletList;
+
+    public GameObject crazyGunBullet;
+    private List<GameObject> crazyGunBulletList;
+
+    public GameObject rayGunBullet;
+    private List<GameObject> rayGunBulletList;
+
 
 	void Awake () {
         explosionList = new List<GameObject>();
@@ -33,6 +47,18 @@ public class ObjectPooling : MonoBehaviour {
 
         enemy_aggressiveList = new List<GameObject>();
         StartCoroutine(makeEnemyAggressives());
+
+        pistolBulletList = new List<GameObject>();
+        StartCoroutine(makePistolBullets());
+
+        crazyGunBulletList = new List<GameObject>();
+        StartCoroutine(makeCrazyGunBullets());
+
+        machineGunBulletList = new List<GameObject>();
+        StartCoroutine(makeMachineGunBullets());
+
+        rayGunBulletList = new List<GameObject>();
+        StartCoroutine(makeRayGunBullets());
 	}
 
     public GameObject getExplosion()
@@ -149,4 +175,125 @@ public class ObjectPooling : MonoBehaviour {
             yield return null;
         }
     }
+
+    private IEnumerator makePistolBullets()
+    {
+        while (pistolBulletList.Count < bulletAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject b = (GameObject)Instantiate(pistolBullet);
+                b.SetActive(false);
+                pistolBulletList.Add(b);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeCrazyGunBullets()
+    {
+        while (crazyGunBulletList.Count < bulletAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject b = (GameObject)Instantiate(crazyGunBullet);
+                b.SetActive(false);
+                crazyGunBulletList.Add(b);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeMachineGunBullets()
+    {
+        while (machineGunBulletList.Count < bulletAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject b = (GameObject)Instantiate(machineGunBullet);
+                b.SetActive(false);
+                machineGunBulletList.Add(b);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeRayGunBullets()
+    {
+        while (rayGunBulletList.Count < bulletAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject b = (GameObject)Instantiate(rayGunBullet);
+                b.SetActive(false);
+                rayGunBulletList.Add(b);
+            }
+            yield return null;
+        }
+    }
+
+    public GameObject getPistolBullet()
+    {
+        for (int i = 0; i < pistolBulletList.Count; i++)
+        {
+            if (!pistolBulletList[i].activeInHierarchy)
+            {
+                return pistolBulletList[i];
+            }
+        }
+
+        GameObject t = (GameObject)Instantiate(pistolBullet);
+        t.SetActive(false);
+        pistolBulletList.Add(t);
+        return t;
+    }
+
+    public GameObject getCrazyGunBullet()
+    {
+        for (int i = 0; i < crazyGunBulletList.Count; i++)
+        {
+            if (!crazyGunBulletList[i].activeInHierarchy)
+            {
+                return crazyGunBulletList[i];
+            }
+        }
+
+        GameObject t = (GameObject)Instantiate(crazyGunBullet);
+        t.SetActive(false);
+        crazyGunBulletList.Add(t);
+        return t;
+    }
+
+    public GameObject getMachineGunBullet()
+    {
+        for (int i = 0; i < machineGunBulletList.Count; i++)
+        {
+            if (!machineGunBulletList[i].activeInHierarchy)
+            {
+                return machineGunBulletList[i];
+            }
+        }
+
+        GameObject t = (GameObject)Instantiate(machineGunBullet);
+        t.SetActive(false);
+        machineGunBulletList.Add(t);
+        return t;
+    }
+
+    public GameObject getRayGunBullet()
+    {
+        for (int i = 0; i < rayGunBulletList.Count; i++)
+        {
+            if (!rayGunBulletList[i].activeInHierarchy)
+            {
+                return rayGunBulletList[i];
+            }
+        }
+
+        GameObject t = (GameObject)Instantiate(rayGunBullet);
+        t.SetActive(false);
+        rayGunBulletList.Add(t);
+        return t;
+    }
+
 }
