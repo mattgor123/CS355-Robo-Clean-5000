@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StageBuilder : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class StageBuilder : MonoBehaviour
     private Transform enemy_aggressive;
     [SerializeField]
     private Transform turret;
+    [SerializeField]
+    private Transform zombie;
+    [SerializeField]
+    private Transform worm;
     [SerializeField]
     private GameObject hurt_canvas;
     [SerializeField]
@@ -61,12 +66,20 @@ public class StageBuilder : MonoBehaviour
     //if float is 0.3-0.6, smart
     //if float is 0.6-1, turret
     private float[,] enemyWeights;
+    private Dictionary<string, int> newEnemyWeights;
     private ObjectPooling pool;
     #endregion
 
     /*Everything related to creating the dungeon itself */
     void Awake()
     {
+        newEnemyWeights = new Dictionary<string, int>();
+        newEnemyWeights.Add("aggressive", 3);
+        newEnemyWeights.Add("smart", 3);
+        newEnemyWeights.Add("turret", 1);
+        newEnemyWeights.Add("zombie", 2);
+        newEnemyWeights.Add("worm", 2);
+
         Application.targetFrameRate = 60    ;
         QualitySettings.vSyncCount = 0;
         scale = Accessiblescale;
@@ -177,7 +190,40 @@ public class StageBuilder : MonoBehaviour
 
         int floor = Player.gameObject.GetComponent<PlayerController>().getCurrentFloor();
 
-        float chance = Random.Range(0f, 1f);
+        string enemy = WeightedRandomizer.From(newEnemyWeights).TakeOne();
+
+        switch (enemy)
+        {
+            case "aggressive":
+                GameObject ea = pool.getEnemyAggressive();
+                ea.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f;
+                ea.transform.rotation = Quaternion.identity;
+                ea.SetActive(true);
+                break;
+            case "smart":
+                GameObject es = pool.getEnemySmart();
+                es.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z);
+                es.transform.rotation = Quaternion.identity;
+                es.SetActive(true);
+                break;
+            case "turret":
+                Instantiate(turret, new Vector3(randomLocation.x, 0, randomLocation.z), Quaternion.identity);
+                break;
+            case "zombie":
+                GameObject ez = pool.getZombie();
+                ez.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z);
+                ez.transform.rotation = Quaternion.identity;
+                ez.SetActive(true);
+                break;
+            case "worm":
+                GameObject ew = pool.getWorm();
+                ew.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z);
+                ew.transform.rotation = Quaternion.identity;
+                ew.SetActive(true);
+                break;
+        }
+
+        /*float chance = Random.Range(0f, 1f);
 
         if (chance <= enemyWeights[floor, 0])
         {
@@ -199,7 +245,7 @@ public class StageBuilder : MonoBehaviour
         {
             Instantiate(turret, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
         }
-
+        */
 
 
     }

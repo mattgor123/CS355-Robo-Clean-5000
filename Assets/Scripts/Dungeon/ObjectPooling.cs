@@ -28,6 +28,15 @@ public class ObjectPooling : MonoBehaviour {
     public GameObject pistolBullet;
     private List<GameObject> pistolBulletList;
 
+    
+    public GameObject zombie;
+    public int zombie_amount;
+    private List<GameObject> zombie_list;
+
+    public GameObject worm;
+    public int worm_amount;
+    private List<GameObject> worm_list;
+
     public GameObject crazyGunBullet;
     private List<GameObject> crazyGunBulletList;
 
@@ -50,6 +59,13 @@ public class ObjectPooling : MonoBehaviour {
 
         pistolBulletList = new List<GameObject>();
         StartCoroutine(makePistolBullets());
+
+        
+        zombie_list = new List<GameObject>();
+        StartCoroutine(makeZombies());
+
+        worm_list = new List<GameObject>();
+        StartCoroutine(makeWorms());
 
         crazyGunBulletList = new List<GameObject>();
         StartCoroutine(makeCrazyGunBullets());
@@ -296,4 +312,74 @@ public class ObjectPooling : MonoBehaviour {
         return t;
     }
 
+    public GameObject getZombie()
+    {
+        for (int i = 0; i < zombie_list.Count; i++)
+        {
+            if (!zombie_list[i].activeInHierarchy)
+            {
+                return zombie_list[i];
+            }
+        }
+
+        return null;
+    }
+
+    public GameObject getWorm()
+    {
+        for (int i = 0; i < worm_list.Count; i++)
+        {
+            if (!worm_list[i].activeInHierarchy)
+            {
+                return worm_list[i];
+            }
+        }
+
+        return null;
+    }
+
+
+
+
+
+    private IEnumerator makeZombies()
+    {
+        while (zombie_list.Count < zombie_amount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject e = (GameObject)Instantiate(zombie);
+                e.SetActive(false);
+                zombie_list.Add(e);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeWorms()
+    {
+        while (worm_list.Count < worm_amount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject e = (GameObject)Instantiate(worm);
+                e.SetActive(false);
+                worm_list.Add(e);
+            }
+            yield return null;
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
