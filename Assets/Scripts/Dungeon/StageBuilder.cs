@@ -121,14 +121,15 @@ public class StageBuilder : MonoBehaviour
 	
 	/*Currently only used to ensure enemies are refreshed */
 	void Update () {
+        
         if (numEnemies < maxEnemies)
         {
             spawnEnemies();
             numEnemies++;
 
         }
-
     }
+
 
     /*Spawns player, camera, HUD and others */
     private void spawnPlayer()

@@ -22,36 +22,16 @@ public class ObjectPooling : MonoBehaviour {
 
 	void Awake () {
         explosionList = new List<GameObject>();
-        for (int i = 0; i < explosionAmount; i++)
-        {
-            GameObject e = (GameObject)Instantiate(explosion);
-            e.SetActive(false);
-            explosionList.Add(e);
-        }
+        StartCoroutine(makeExplosions());
 
         treasureList = new List<GameObject>();
-        for (int i = 0; i < treasureAmount; i++)
-        {
-            GameObject t = (GameObject)Instantiate(treasure);
-            t.SetActive(false);
-            treasureList.Add(t);
-        }
+        StartCoroutine(makeTreasures());
 
         enemy_smartList = new List<GameObject>();
-        for (int i = 0; i < enemy_smartAmount; i++)
-        {
-            GameObject es = (GameObject)Instantiate(enemy_smart);
-            es.SetActive(false);
-            enemy_smartList.Add(es);
-        }
+        StartCoroutine(makeEnemySmarts());
 
         enemy_aggressiveList = new List<GameObject>();
-        for (int i = 0; i < enemy_aggressiveAmount; i++)
-        {
-            GameObject ea = (GameObject)Instantiate(enemy_aggressive);
-            ea.SetActive(false);
-            enemy_aggressiveList.Add(ea);
-        }
+        StartCoroutine(makeEnemyAggressives());
 	}
 
     public GameObject getExplosion()
@@ -94,8 +74,11 @@ public class ObjectPooling : MonoBehaviour {
                 return enemy_smartList[i];
             }
         }
-
-        return null;
+        GameObject e = (GameObject)Instantiate(enemy_smart);
+        e.SetActive(false);
+        enemy_smartList.Add(e);
+        return e;
+        //return null;
     }
 
     public GameObject getEnemyAggressive()
@@ -109,5 +92,60 @@ public class ObjectPooling : MonoBehaviour {
         }
 
         return null;
+    }
+
+    private IEnumerator makeExplosions()
+    {
+        while (explosionList.Count < explosionAmount)
+        {
+            for (int i = 0; i < 10; i++) {
+                GameObject e = (GameObject)Instantiate(explosion);
+                e.SetActive(false);
+                explosionList.Add(e);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeTreasures()
+    {
+        while (treasureList.Count < treasureAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject t = (GameObject)Instantiate(treasure);
+                t.SetActive(false);
+                treasureList.Add(t);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeEnemySmarts()
+    {
+        while (enemy_smartList.Count < enemy_smartAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject e = (GameObject)Instantiate(enemy_smart);
+                e.SetActive(false);
+                enemy_smartList.Add(e);
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator makeEnemyAggressives()
+    {
+        while (enemy_aggressiveList.Count < enemy_aggressiveAmount)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GameObject e = (GameObject)Instantiate(enemy_aggressive);
+                e.SetActive(false);
+                enemy_aggressiveList.Add(e);
+            }
+            yield return null;
+        }
     }
 }
