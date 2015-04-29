@@ -84,17 +84,6 @@ public class WeaponController : MonoBehaviour {
 			bullet_controller.SetLaser(is_laser);
         	instantiated_bullet.GetComponent<BulletController>().SetSource(source);
 			last_fired = Time.time;
-        	instantiated_bullet.AddComponent<Light>();
-        	instantiated_bullet.GetComponent<Light>().intensity = 0.5f;
-        	instantiated_bullet.GetComponent<Light>().range = 1f;
-        	if (source)
-        	{
-        	    instantiated_bullet.GetComponent<Light>().color = Color.green;
-        	}
-        	else
-        	{
-        	    instantiated_bullet.GetComponent<Light>().color = Color.cyan;
-        	}
             
         	backpack_controller.ChangeAmmo(-ammo_per_shot);
         }
