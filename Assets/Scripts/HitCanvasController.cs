@@ -11,6 +11,9 @@ public class HitCanvasController : MonoBehaviour {
 	private float killTime;
 	private GameObject redDot;
 	private GameObject blackDot;
+	private GameObject damaged;
+	private HealthController hcontroller;
+	private float health;
 	//private RawImage redDotImage;
 	//private RawImage blackDotImage;
 
@@ -21,6 +24,7 @@ public class HitCanvasController : MonoBehaviour {
 		hitTime = 0;
 		killTime = 0;
 		displayTime = .25f;
+		health = 0;
 	}
 	
 	// Update is called once per frame
@@ -52,6 +56,17 @@ public class HitCanvasController : MonoBehaviour {
 			} else {
 				blackDot.SetActive(false);
 			}
+		}
+		if (damaged == null) {
+			damaged = GameObject.FindGameObjectWithTag("Damaged");
+		}
+		if (hcontroller == null) {
+			hcontroller = GameObject.FindGameObjectWithTag ("Player").GetComponent<HealthController> ();
+		}
+		if (damaged != null && hcontroller != null) {
+			bool dtaken = (health > hcontroller.GetCurrentHealth());
+			health = hcontroller.GetCurrentHealth();
+			damaged.SetActive(dtaken);
 		}
 	}
 
