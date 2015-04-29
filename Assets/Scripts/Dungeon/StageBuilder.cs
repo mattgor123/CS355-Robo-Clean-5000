@@ -178,7 +178,7 @@ public class StageBuilder : MonoBehaviour
         {
             //Instantiate(enemy_smart, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
             GameObject es = pool.getEnemySmart();
-            es.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f;
+            es.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up;
             es.transform.rotation = Quaternion.identity;
             es.SetActive(true);
         }
