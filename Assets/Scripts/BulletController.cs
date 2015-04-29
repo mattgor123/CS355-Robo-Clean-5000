@@ -69,7 +69,7 @@ public class BulletController : MonoBehaviour {
 		var victim_health = collision.gameObject.GetComponent<HealthController>();
 		if(victim_health != null) {
 			//this means you're hitting an enemy, not a wall ... if it's a laser then keep going
-			victim_health.ChangeHealth(-damage);
+			victim_health.ChangeHealth(-damage, transform.position);
 			//don't let it get destroyed if it collides with an enemy and is a laser, only a wall
 
 			//start code for stat tracking

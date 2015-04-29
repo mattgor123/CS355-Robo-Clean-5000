@@ -12,10 +12,12 @@ public class HealthController : MonoBehaviour {
 
     private ShieldController Shield;
     private bool HasShield = false;
+    private AttackHit AHC;
 
 	void Awake() {
 		current_health = max_health;
         Shield = GetComponentInChildren<ShieldController>();
+        AHC = GetComponentInChildren<AttackHit>();
         if (Shield != null)
             HasShield = true;
 	}
@@ -34,9 +36,20 @@ public class HealthController : MonoBehaviour {
 		return current_health;
 	}
 
-	public bool ChangeHealth (float change) {
-        float net = change;     
+    //Overload with hit position
+    //to properly place hit animation
+    public bool ChangeHealth(float change, Vector3 position)
+    {        
+        //Trigger hit indication effect on taking damage
+        if (change < 0 && AHC != null)        
+            AHC.GetHit(position);
         
+        return ChangeHealth(change);
+    }
+
+	public bool ChangeHealth (float change) {
+        float net = change;             
+
         //Block damage with shields if applicable
         if (HasShield && net < 0)
         {

@@ -25,7 +25,7 @@ public class LMStrafingRun : MonoBehaviour, LMMove, LMAttack {
         if (Strafing)
         {
             distST = (StrafeTarget - this.transform.position).magnitude;
-        }
+        }        
     }
 
     public Vector3 MoveLogic(EnemyController enemy, GameObject player)
