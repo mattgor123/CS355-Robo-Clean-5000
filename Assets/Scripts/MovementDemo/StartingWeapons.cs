@@ -32,10 +32,6 @@ public class StartingWeapons : MonoBehaviour {
 		//weapon_name = GetComponent<Text>();
 	}
 
-	private void LateUpdate () {
-		//weapon_name.text = weapon_backpack_controller.GetWeaponName();
-	}
-
 	public string RandomWeaponPickup() {
 		System.Random rnd = new System.Random ();
 		int pickupNumber = rnd.Next (1, initialNumWeapons+initialNumNullDrops); 
