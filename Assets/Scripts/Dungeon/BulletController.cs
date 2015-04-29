@@ -91,6 +91,9 @@ public class BulletController : MonoBehaviour {
 				if (source_player) {
 					stats.dealDamage(damage);
 					stats.hitShot();
+					//for hit canvas
+					player.GetComponent<HitCanvasController>().scoreHit();
+					//end hit canvas
 				} else {
 					stats.takeDamage(damage);
 				}

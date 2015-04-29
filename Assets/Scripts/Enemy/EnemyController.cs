@@ -110,6 +110,9 @@ public class EnemyController : MonoBehaviour {
 				stats.killEnemy();
 			}
 			//end stat tracking code
+			//for hit canvas
+			player.GetComponent<HitCanvasController>().scoreKill();
+			//end hit canvas
 
             //if (anim != null)
                // anim.SetBool("Dead", true);
