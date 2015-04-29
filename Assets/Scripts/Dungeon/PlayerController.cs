@@ -387,6 +387,7 @@ public class PlayerController : MonoBehaviour {
         {
             deepestLevelVisited = currentFloor;
         }
+        EndDashing();
     }
 
     public void incrementDialogueLevel()
