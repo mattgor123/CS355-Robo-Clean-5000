@@ -42,6 +42,11 @@ public class WeaponController : MonoBehaviour {
         bullets = new List<GameObject>();
         StartCoroutine(makeBullets());
 
+        //pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
+    }
+
+    private void Awake()
+    {
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
     }
 
