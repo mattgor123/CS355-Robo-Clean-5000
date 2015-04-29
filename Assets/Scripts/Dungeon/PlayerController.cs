@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	private new Camera camera;
     private CameraController CamControl;
     private FlashlightController Flashlight;
+    private LogScript Log;
 
 	private MovementController movement_controller;
 	private WeaponBackpackController weapon_backpack_controller;
@@ -99,6 +100,7 @@ public class PlayerController : MonoBehaviour {
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 		healthController = GetComponent<HealthController>();
         RB = GetComponent<Rigidbody>();
+        Log = GetComponent<LogScript>();
 
         Flashlight = GetComponentInChildren<FlashlightController>();  //Attach the flashlight
         Particles = GetComponentsInChildren<ParticleSystem>();       //Attach the powerfists
@@ -591,11 +593,13 @@ public class PlayerController : MonoBehaviour {
             case 10:
                 movement_controller.SetWalkForce(500);
                 SetLevel(10);
+                break;    
+            default:
                 break;            
         }
         AddDefense();
-        string str = "Level Up: You are now at level " + GetLevel() + "\n" + "Defense: " + ((1-GetDefense()) * 100) + "%";
-        Debug.Log(str);
+        string str = "Level Up: You are now at level " + GetLevel() + "\n" + "Defense: " + (int) ((1-GetDefense()) * 100) + "% \n";
+        Log.AddToLog(str);
         //FINISH LOG STUFF HERE
     }
 

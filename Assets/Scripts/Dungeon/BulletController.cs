@@ -33,6 +33,7 @@ public class BulletController : MonoBehaviour {
         minimumExtent = Mathf.Min(Mathf.Min(GetComponent<Collider>().bounds.extents.x, GetComponent<Collider>().bounds.extents.y), GetComponent<Collider>().bounds.extents.z);
         partialExtent = minimumExtent * (1.0f - skinWidth);
         sqrMinimumExtent = minimumExtent * minimumExtent; 
+        player = GameObject.FindGameObjectWithTag("Player");
         PC = player.GetComponent<PlayerController>();
 	}
 
