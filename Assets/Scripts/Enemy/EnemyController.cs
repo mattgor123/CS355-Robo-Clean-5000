@@ -59,8 +59,7 @@ public class EnemyController : MonoBehaviour {
     //The global combo controller
     private ComboController combo_controller;
 
-	// Use this for initialization
-	void Start () {
+	protected void StartBody () {
         //Automatically attach the player & various components
         player = GameObject.FindGameObjectWithTag("Player");
         health_controller = GetComponent<HealthController>();
@@ -73,6 +72,10 @@ public class EnemyController : MonoBehaviour {
 
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
 	}
+
+    private void Start () {
+        StartBody();
+    }
 	
 	// Update 
 	void LateUpdate () {
