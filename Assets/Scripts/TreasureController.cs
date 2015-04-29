@@ -25,7 +25,8 @@ public class TreasureController : MonoBehaviour {
 			weapon_backpack.ChangeAmmo(found_ammo);
 			var player = GameObject.FindGameObjectWithTag("StartingWeapons");
 			string pickupMessage = player.GetComponent<StartingWeapons>().RandomWeaponPickup();
-			Destroy(gameObject);
+			//Destroy(gameObject);
+            gameObject.SetActive(false);
             message += "Collected " + found_ammo + " ammo\n\n";
             message += pickupMessage + "\n";
 
@@ -39,7 +40,8 @@ public class TreasureController : MonoBehaviour {
             }
             var collected_health = Random.Range(20, 76);
             health.ChangeHealth(collected_health);
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
             message += "Regained " + collected_health + " health\n\n ";
         }
         if (inventory != null)

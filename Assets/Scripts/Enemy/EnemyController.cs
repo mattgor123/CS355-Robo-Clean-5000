@@ -48,6 +48,9 @@ public class EnemyController : MonoBehaviour {
     //Animations
     private Animator anim;
 
+    //object pool for explosions
+    private ObjectPooling pool;
+
     public void SetExplosion(GameObject new_explosion)
     {
         explosion = new_explosion;
@@ -67,6 +70,8 @@ public class EnemyController : MonoBehaviour {
         gun = transform.FindChild("Gun Location");
         combo_controller = GameObject.FindGameObjectWithTag("Combo").GetComponent<ComboController>();
         //transform.position -= new Vector3(0f, transform.position.y, 0f);
+
+        pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
 	}
 	
 	// Update 
@@ -91,8 +96,16 @@ public class EnemyController : MonoBehaviour {
             if (anim != null)
                 anim.SetBool("Dead", true);
             // need delay so enemy dying animations can show
-            var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
-            var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
+            //var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+            var explosion_i = pool.getExplosion();
+            explosion_i.transform.position = gameObject.transform.position;
+            explosion_i.transform.rotation = gameObject.transform.rotation;
+            explosion_i.SetActive(true);
+            //var treasure_instantiation = (GameObject)Instantiate(treasure_chest, gameObject.transform.position, gameObject.transform.rotation);
+            var treasure_i = pool.getTreasure();
+            treasure_i.transform.position = gameObject.transform.position;
+            treasure_i.transform.rotation = gameObject.transform.rotation;
+            treasure_i.SetActive(true);
             Destroy(gameObject);
             combo_controller.IncrementCombo();
             StageBuilder.EnemyDied();

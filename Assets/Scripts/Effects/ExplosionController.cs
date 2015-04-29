@@ -45,7 +45,8 @@ public class ExplosionController : MonoBehaviour {
 	
 	private void Update () {
 		if(Time.time - start_time > life) {
-			Destroy(gameObject);
+			//Destroy(gameObject);
+            gameObject.SetActive(false);
 		}
 		else {
 			var time_elapsed = Time.time - start_time;
