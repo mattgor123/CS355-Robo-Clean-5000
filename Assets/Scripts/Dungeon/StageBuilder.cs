@@ -57,7 +57,8 @@ public class StageBuilder : MonoBehaviour
     //ex: 0.3, 0.6, 1. if random float is 0-0.3, aggressive
     //if float is 0.3-0.6, smart
     //if float is 0.6-1, turret
-    private float[,] enemyWeights; 
+    private float[,] enemyWeights;
+    private ObjectPooling pool;
     #endregion
 
     /*Everything related to creating the dungeon itself */
@@ -103,6 +104,8 @@ public class StageBuilder : MonoBehaviour
         enemyWeights[5, 0] = 0.35f;
         enemyWeights[5, 1] = 0.35f;
         enemyWeights[5, 2] = 0.3f;
+
+        pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
     }
 
 	/*Spawning the player and game elements besides dungeon and enemies */
@@ -165,11 +168,19 @@ public class StageBuilder : MonoBehaviour
 
         if (chance <= enemyWeights[floor, 0])
         {
-            Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f, Quaternion.identity);
+            //Instantiate(enemy_aggressive, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f, Quaternion.identity);
+            GameObject ea = pool.getEnemyAggressive();
+            ea.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f;
+            ea.transform.rotation = Quaternion.identity;
+            ea.SetActive(true);
         }
         else if (chance <= enemyWeights[floor, 1])
         {
-            Instantiate(enemy_smart, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
+            //Instantiate(enemy_smart, new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up, Quaternion.identity);
+            GameObject es = pool.getEnemySmart();
+            es.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f;
+            es.transform.rotation = Quaternion.identity;
+            es.SetActive(true);
         }
         else if (chance <= enemyWeights[floor, 2])
         {
@@ -205,7 +216,8 @@ public class StageBuilder : MonoBehaviour
     {
         foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            GameObject.Destroy(enemy);
+            //GameObject.Destroy(enemy);
+            enemy.SetActive(false);
         }
         numEnemies = 0;
         stage.NextLevel(level);

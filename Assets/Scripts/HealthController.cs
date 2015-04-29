@@ -32,6 +32,11 @@ public class HealthController : MonoBehaviour {
 		}
 	}
 
+    public void resetHealth()
+    {
+        current_health = max_health;
+    }
+
 	public float GetCurrentHealth () {
 		return current_health;
 	}

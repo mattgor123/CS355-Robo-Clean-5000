@@ -22,7 +22,7 @@ public class ExplosionController : MonoBehaviour {
 	private float start_time;
 	private float max_intensity;
 
-	private void Start () {
+	private void OnEnable () {
         if (sound_effect != null) {
             AudioSource.PlayClipAtPoint(sound_effect, transform.position);
         }

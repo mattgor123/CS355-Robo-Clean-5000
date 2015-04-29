@@ -73,6 +73,16 @@ public class EnemyController : MonoBehaviour {
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
 	}
 
+    void Awake()
+    {
+        health_controller = GetComponent<HealthController>();
+    }
+
+    void OnEnable()
+    {
+        health_controller.resetHealth();
+    }
+
     private void Start () {
         StartBody();
     }
@@ -109,7 +119,8 @@ public class EnemyController : MonoBehaviour {
             treasure_i.transform.position = gameObject.transform.position;
             treasure_i.transform.rotation = gameObject.transform.rotation;
             treasure_i.SetActive(true);
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
             combo_controller.IncrementCombo();
             StageBuilder.EnemyDied();
         }
