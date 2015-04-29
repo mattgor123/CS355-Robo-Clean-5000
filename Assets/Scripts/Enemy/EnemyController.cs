@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour {
     public GameObject treasure_chest;
 
     private HealthController health_controller;
+    private PlayerController PC;
     private Vector3 PrevPos;    //previous position
     private Vector3 PrevMvt;    //distance moved in previous movement step
     private float PrevTime;     //the previous time interval
@@ -68,6 +69,7 @@ public class EnemyController : MonoBehaviour {
         RBody = GetComponent<Rigidbody>();
         gun = transform.FindChild("Gun Location");
         combo_controller = GameObject.FindGameObjectWithTag("Combo").GetComponent<ComboController>();
+        PC = player.GetComponent<PlayerController>();
         //transform.position -= new Vector3(0f, transform.position.y, 0f);
 
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
@@ -89,6 +91,7 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update 
 	void LateUpdate () {
+
         if (Time.timeScale == 0) return;
 
         if (!gameObject.activeInHierarchy) return;
@@ -108,8 +111,8 @@ public class EnemyController : MonoBehaviour {
 			}
 			//end stat tracking code
 
-            if (anim != null)
-                anim.SetBool("Dead", true);
+            //if (anim != null)
+               // anim.SetBool("Dead", true);
             // need delay so enemy dying animations can show
             //var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             var explosion_i = pool.getExplosion();
@@ -124,6 +127,8 @@ public class EnemyController : MonoBehaviour {
             //Destroy(gameObject);
             gameObject.SetActive(false);
             combo_controller.IncrementCombo();
+            // add experience to player
+            CreateExp();
             StageBuilder.EnemyDied();
         }
 
@@ -190,7 +195,6 @@ public class EnemyController : MonoBehaviour {
 			    anim.SetBool("Moving", false);
 		}
 	}
-  
 
     void OnCollisionEnter(Collision collision)
     {
@@ -273,6 +277,13 @@ public class EnemyController : MonoBehaviour {
     public void SetAttackCooldown(float cd)
     {
         AttackCooldown = cd;
+    }
+
+    private void CreateExp() {
+        string enemyName = gameObject.name;
+        enemyName = enemyName.Remove(enemyName.IndexOf('('));
+
+        PC.AddExp(combo_controller.GetCurrentCombo(), enemyName);
     }
 
     #endregion

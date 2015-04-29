@@ -4,10 +4,10 @@ using System.Collections;
 [RequireComponent(typeof (Rigidbody))]
 public class MovementController : MonoBehaviour {
 
-	[SerializeField] private float walk_force;     // The force to apply when walking
 	[SerializeField] private float run_force;      // The force to apply when running
 	[SerializeField] private float force_delay;    // How long to wait in between applications of force
 	[SerializeField] private float rotation_delay; // How long to wait in between rotations
+    private float walk_force;     // The force to apply when walking
 	[SerializeField] private Transform wheel;
 	[SerializeField] private Transform leftHand;
 	[SerializeField] private Transform rightHand;
@@ -54,11 +54,11 @@ public class MovementController : MonoBehaviour {
         rightUpperArmTransform = rightUpperArm.GetComponent<Transform>();
         rightForeArmTransform = rightForeArm.GetComponent<Transform>();
         bodyTransform = body.GetComponent<Transform>();
+        walk_force = 50;
 	}
 
 	private void Start () {
-		// The rotation is not handled by physics
-		GetComponent<Rigidbody>().freezeRotation = true;
+		RG.freezeRotation = true;
 		last_force = -force_delay;
 		last_rotation = -rotation_delay;
 	}
@@ -85,7 +85,6 @@ public class MovementController : MonoBehaviour {
                         rightUpperArmTransform.Rotate(rot);
                         leftForeArmTransform.Rotate(-rot);
                         rightForeArmTransform.Rotate(-rot);
-                        Debug.Log("Delta rotate forward: " + deltaRotateForward);
                         if (deltaRotateForward < 50f) {
                             bodyTransform.Rotate(.3f, 0f, 0f);
                             deltaRotateForward += .5f;
@@ -150,4 +149,12 @@ public class MovementController : MonoBehaviour {
 			last_rotation = Time.time;
 		}
 	}
+
+    public void SetWalkForce(int x) {
+        walk_force = x;
+    }
+
+    public float GetForce() {
+        return walk_force;
+    }
 }
