@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WeaponController : MonoBehaviour {
 
@@ -23,12 +24,18 @@ public class WeaponController : MonoBehaviour {
 	private GameObject player;
 	private StatisticsRecorderController stats;
 
+    private List<GameObject> bullets;
+    private int bulletAmount = 25;
+
     private void Start()
     {
         //var collider = this.GetComponent<BoxCollider>();
         //collider.enabled = false;
         owner = transform.parent.root;
-        backpack_controller = owner.GetComponent<WeaponBackpackController>();        
+        backpack_controller = owner.GetComponent<WeaponBackpackController>();
+
+        bullets = new List<GameObject>();
+        StartCoroutine(makeBullets());
     }
 
 	private void LateUpdate () {
@@ -65,7 +72,11 @@ public class WeaponController : MonoBehaviour {
             {
                 shot_sound.Play();
             }
-			var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
+			//var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
+            var instantiated_bullet = getBullet();
+            instantiated_bullet.transform.position = muzzle.position;
+            instantiated_bullet.transform.rotation = muzzle.rotation * bullet_rotation;
+            instantiated_bullet.SetActive(true);
             instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
 			var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
 			bullet_controller.SetDamage(damage);
@@ -84,6 +95,7 @@ public class WeaponController : MonoBehaviour {
         	{
         	    instantiated_bullet.GetComponent<Light>().color = Color.cyan;
         	}
+            
         	backpack_controller.ChangeAmmo(-ammo_per_shot);
         }
 	}
@@ -104,4 +116,30 @@ public class WeaponController : MonoBehaviour {
 	public void SetBackpackController(WeaponBackpackController new_backpack_controller) {
 		backpack_controller = new_backpack_controller;
 	}
+
+    private IEnumerator makeBullets()
+    {
+        while (bullets.Count < bulletAmount)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject b = (GameObject)Instantiate(bullet);
+                b.SetActive(false);
+                bullets.Add(b);
+            }
+            yield return null;
+        }
+    }
+
+    private GameObject getBullet()
+    {
+        for (int i = 0; i < bullets.Count; i++)
+        {
+            if (!bullets[i].activeInHierarchy)
+            {
+                return bullets[i];
+            }
+        }
+        return null;
+    }
 }

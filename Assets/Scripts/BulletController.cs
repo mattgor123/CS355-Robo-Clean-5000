@@ -36,7 +36,8 @@ public class BulletController : MonoBehaviour {
 
 	private void Update () {
 		if(Time.time - creation_time > cleanup_delay) {
-			Destroy(gameObject);
+			//Destroy(gameObject);
+            gameObject.SetActive(false);
 		}
 	}
 
@@ -93,7 +94,8 @@ public class BulletController : MonoBehaviour {
 				return;
 			}
 		}
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
 	}    
 
     void FixedUpdate()
@@ -139,7 +141,8 @@ public class BulletController : MonoBehaviour {
                }
                if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
                    myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
-               Destroy(gameObject);
+               //Destroy(gameObject);
+               gameObject.SetActive(false);
            }
 	   } 
 	   previousPosition = myRigidbody.position; 

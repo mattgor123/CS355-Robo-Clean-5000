@@ -20,6 +20,7 @@ public class ObjectPooling : MonoBehaviour {
     public int enemy_aggressiveAmount;
     private List<GameObject> enemy_aggressiveList;
 
+
 	void Awake () {
         explosionList = new List<GameObject>();
         StartCoroutine(makeExplosions());
