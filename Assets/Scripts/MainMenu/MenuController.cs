@@ -11,8 +11,8 @@ public class MenuController : MonoBehaviour {
     [SerializeField]
     private GameObject optionsScreen;
 
-    [SerializeField]
-    private GameObject playMenuScreen;
+    //[SerializeField]
+    //private GameObject playMenuScreen;
 
     [SerializeField]
     private AudioClip beep;
@@ -28,7 +28,7 @@ public class MenuController : MonoBehaviour {
         ouraudio = gameObject.GetComponent<AudioSource>();
         optionsScreen.SetActive(false);
         menuScreen.SetActive(true);
-        playMenuScreen.SetActive(false);
+        //playMenuScreen.SetActive(false);
         soundSlider.value = PlayerPrefs.GetFloat("Volume");
         AudioListener.volume = soundSlider.value;
         soundSlider.onValueChanged.AddListener((value) =>
@@ -55,7 +55,7 @@ public class MenuController : MonoBehaviour {
         //opens the options screen
         menuScreen.SetActive(false);
         optionsScreen.SetActive(true);
-        playMenuScreen.SetActive(false);
+        //playMenuScreen.SetActive(false);
     }
 
     public void OpenPlayMenu()
@@ -63,7 +63,7 @@ public class MenuController : MonoBehaviour {
         //opens the play screen
         menuScreen.SetActive(false);
         optionsScreen.SetActive(false);
-        playMenuScreen.SetActive(true);
+        //playMenuScreen.SetActive(true);
     }
 
     public void OpenMainMenu()
@@ -71,7 +71,7 @@ public class MenuController : MonoBehaviour {
         //opens main menu screen
         menuScreen.SetActive(true);
         optionsScreen.SetActive(false);
-        playMenuScreen.SetActive(false);
+        //playMenuScreen.SetActive(false);
     }
 
     public void QuitGame()
