@@ -4,10 +4,9 @@ using System.Collections;
 [RequireComponent(typeof (Rigidbody))]
 public class MovementController : MonoBehaviour {
 
-	[SerializeField] private float run_force;      // The force to apply when running
+	[SerializeField] private float Accel;      // The force to apply when running
 	[SerializeField] private float force_delay;    // How long to wait in between applications of force
 	[SerializeField] private float rotation_delay; // How long to wait in between rotations
-    private float walk_force;     // The force to apply when walking
 	[SerializeField] private Transform wheel;
 	[SerializeField] private Transform leftHand;
 	[SerializeField] private Transform rightHand;
@@ -54,7 +53,6 @@ public class MovementController : MonoBehaviour {
         rightUpperArmTransform = rightUpperArm.GetComponent<Transform>();
         rightForeArmTransform = rightForeArm.GetComponent<Transform>();
         bodyTransform = body.GetComponent<Transform>();
-        walk_force = 50;
 	}
 
 	private void Start () {
@@ -71,12 +69,14 @@ public class MovementController : MonoBehaviour {
             // if the object is not standing still, move object
             if (z_axis != 0f || x_axis != 0f)
             {
-                var force = walk_force;
+                float force = Accel;
 
-                var z_force = transform.forward * z_axis * force * Time.deltaTime * 2f;
-                var x_force = transform.right * x_axis * force * Time.deltaTime * 2f;
+                var z_force = transform.forward * z_axis;
+                var x_force = transform.right * x_axis;
 
                 resulting_force = z_force + x_force;
+                resulting_force.Normalize();
+                resulting_force *= force * Time.deltaTime;
 
                 if (z_axis > 1) {
                     Vector3 rot = new Vector3(-5, 0f, 0f);
@@ -103,6 +103,7 @@ public class MovementController : MonoBehaviour {
             	Quaternion rotate = Quaternion.LookRotation(resulting_force);
             	pelvisTransform.rotation = rotate;
 
+
                 RG.AddForce(resulting_force, ForceMode.Impulse);
                 last_force = Time.time;
             }
@@ -126,7 +127,7 @@ public class MovementController : MonoBehaviour {
             }
 
             //Keep velocity bounded
-            if (RG.velocity.magnitude >= 5.5f)
+            if (RG.velocity.magnitude >= 10f)
             {
                 RG.velocity = RG.velocity.normalized * 10f;
             }
@@ -137,24 +138,12 @@ public class MovementController : MonoBehaviour {
 		transform.eulerAngles = euler_angles;
 	}
 
-	public void LookAt (Vector3 target) {
-		if(Time.time - last_rotation > rotation_delay) {
-			var direction = new Vector3(target.x - transform.position.x, 0, target.z - transform.position.z);
-			var projected_forward = Vector3.Scale(transform.forward, new Vector3(1.0f, 0, 1.0f)).normalized;
-			var y_angle = Vector3.Angle(projected_forward, direction);
-			if(Vector3.Dot(Vector3.right, direction) <= 0) {
-				y_angle = -y_angle;
-			}
-			transform.eulerAngles += new Vector3(0, y_angle, 0);
-			last_rotation = Time.time;
-		}
-	}
 
     public void SetWalkForce(int x) {
-        walk_force = x;
+        Accel = x;
     }
 
     public float GetForce() {
-        return walk_force;
+        return Accel;
     }
 }

@@ -158,7 +158,7 @@ public class EnemyController : MonoBehaviour {
 
 
         //Face in the direction of movement
-        if (RBody.velocity.magnitude != 0)
+        if (RBody.velocity.magnitude >= 0.1)
             transform.forward = RBody.velocity;
 
         //Do not exceed maximum speed
