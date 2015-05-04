@@ -259,7 +259,7 @@ public class ObjectPooling : MonoBehaviour {
         }
 
         GameObject t = (GameObject)Instantiate(pistolBullet);
-        t.SetActive(false);
+        t.SetActive(true);
         pistolBulletList.Add(t);
         return t;
     }
@@ -275,7 +275,7 @@ public class ObjectPooling : MonoBehaviour {
         }
 
         GameObject t = (GameObject)Instantiate(crazyGunBullet);
-        t.SetActive(false);
+        t.SetActive(true);
         crazyGunBulletList.Add(t);
         return t;
     }
@@ -291,7 +291,7 @@ public class ObjectPooling : MonoBehaviour {
         }
 
         GameObject t = (GameObject)Instantiate(machineGunBullet);
-        t.SetActive(false);
+        t.SetActive(true);
         machineGunBulletList.Add(t);
         return t;
     }
@@ -307,7 +307,7 @@ public class ObjectPooling : MonoBehaviour {
         }
 
         GameObject t = (GameObject)Instantiate(rayGunBullet);
-        t.SetActive(false);
+        t.SetActive(true);
         rayGunBulletList.Add(t);
         return t;
     }

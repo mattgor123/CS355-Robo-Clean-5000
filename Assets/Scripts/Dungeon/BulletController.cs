@@ -44,6 +44,15 @@ public class BulletController : MonoBehaviour {
 		}
 	}
 
+    public void StartUp(float dmg, bool source, float delay)
+    {
+        creation_time = Time.time;
+        gameObject.SetActive(true);
+        source_player = source;
+        damage = dmg;
+        cleanup_delay = delay;
+    }
+
     public void SetSource(bool is_player)
     {
         source_player = is_player;
@@ -157,7 +166,7 @@ public class BulletController : MonoBehaviour {
                if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
                    myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
                //Destroy(gameObject);
-               gameObject.SetActive(false);
+               //gameObject.SetActive(false);
            }
 	   } 
 	   previousPosition = myRigidbody.position; 

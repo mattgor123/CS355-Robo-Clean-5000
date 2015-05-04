@@ -52,12 +52,7 @@ public class WeaponController : MonoBehaviour {
 
 	private void LateUpdate () {
 		if(firing && Time.time - last_fired > delay) {
-            // Find the source of the bullet (true for player, false for enemy)
-            bool source;            
-            if (owner.tag == "Player")            
-                source = true;        
-            else
-                source = false;
+            bool source = owner.tag == "Player";
 			Fire(source);
 		}
         //Gun position set to position of Gun Location child object
@@ -85,6 +80,7 @@ public class WeaponController : MonoBehaviour {
                 shot_sound.Play();
             }
 			//var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
+
             GameObject instantiated_bullet;
             if (gameObject.name.Contains("Pistol"))
             {
@@ -104,21 +100,19 @@ public class WeaponController : MonoBehaviour {
             }
             else
             {
-                return; //???
+                return;
             }
-            //{
-            //    instantiated_bullet = getBullet();
-            //}
+
+            //Initialize the bullet
+			BulletController BC = instantiated_bullet.GetComponent<BulletController>();
+            BC.StartUp(damage, source, cleanup_delay);
+			BC.SetLaser(is_laser);
+			last_fired = Time.time;
+
+            //setup position & velocity
             instantiated_bullet.transform.position = muzzle.position;
             instantiated_bullet.transform.rotation = muzzle.rotation * bullet_rotation;
-            instantiated_bullet.SetActive(true);
             instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
-			var bullet_controller = instantiated_bullet.AddComponent<BulletController>();
-			bullet_controller.SetDamage(damage);
-			bullet_controller.SetCleanupDelay(cleanup_delay);
-			bullet_controller.SetLaser(is_laser);
-        	instantiated_bullet.GetComponent<BulletController>().SetSource(source);
-			last_fired = Time.time;
             
         	backpack_controller.ChangeAmmo(-ammo_per_shot);
         }
