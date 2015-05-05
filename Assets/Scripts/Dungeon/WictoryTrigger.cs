@@ -25,7 +25,7 @@ public class WictoryTrigger : MonoBehaviour {
             {
                 trigger = true;
                 inventory = other.GetComponent<InventoryController>();
-                if (inventory.hasThorax())
+                if (inventory.hasKey(9))
                 {
                     Application.LoadLevel("Victory");
                 }

@@ -3,9 +3,8 @@ using System.Collections;
 
 public class InventoryController : MonoBehaviour {
 
-    private bool[] keys = new bool[] {false, false, false, false, false};
-    private bool Broodmother_Thorax = false;
-    private bool GigaTurret_Compressor = false;
+    private bool[] keys = new bool[] {true, false, false, false, false, false, false, false, false, false};
+
 
     void Awake()
     {
@@ -35,23 +34,5 @@ public class InventoryController : MonoBehaviour {
         return keys[floor];
     }
 
-    public void collectThorax()
-    {
-        this.Broodmother_Thorax = true;
-    }
 
-    public void collectCompressor()
-    {
-        this.GigaTurret_Compressor = true;
-    }
-
-    public bool hasThorax()
-    {
-        return this.Broodmother_Thorax;
-    }
-
-    public bool hasCompressor()
-    {
-        return this.GigaTurret_Compressor;
-    }
 }

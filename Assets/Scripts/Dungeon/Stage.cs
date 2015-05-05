@@ -32,6 +32,8 @@ public class Stage  {
     private GameObject Facility;
     private Material floorMaterial;
     private Material wallMaterial;
+    private List<Vector3> savedPlayerPositions;
+
     private Dictionary<Char, String> MapTexttoGrid = new Dictionary<Char, string>
 
 
@@ -95,6 +97,7 @@ public class Stage  {
                  this.floorMaterial, this.wallMaterial);
             }
         }
+        savedPlayerPositions = new List<Vector3>();
 
         spawnExit();
 
@@ -616,6 +619,8 @@ public class Stage  {
             {
                 elevatorObject = roomObject;
                 elevatorObject.transform.position = roomObject.transform.position;
+                savedPlayerPositions.Add(roomObject.transform.position);
+
             }
         }
 
@@ -744,12 +749,14 @@ public class Stage  {
             DestroyCurrentLevel();
             CreateNewLevel(); //equivalent to the constructor method when stage is first made
             pc.incrementDeepestLevelVisited();
+            MovePlayerToEntrance();
 
         }
         else //level has already been made. Must be loaded
         {
             DestroyCurrentLevel();
             LoadLevel(level);
+            
         }
 
         pc.setCurrentFloor(level);
@@ -758,7 +765,9 @@ public class Stage  {
         //Move player to the entrance
         WaitTwoSecs();
 
-        MovePlayerToEntrance();
+
+        
+        GameObject.FindGameObjectWithTag("ElevatorCanvas").GetComponent<ElevatorController>().FadeIn();
 
     }
 
@@ -804,6 +813,7 @@ public class Stage  {
         {
             this.rooms.Add(new Room((Room)loadedRooms[i]));
         }
+        player.transform.position = savedPlayerPositions[currentLevel];
 	}
 
     private void CameraShake()

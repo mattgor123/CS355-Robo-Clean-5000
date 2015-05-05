@@ -6,29 +6,28 @@ public class ButtonListController : MonoBehaviour {
 
     [SerializeField]
     private Button[] buttons;
-    [SerializeField]
-    private bool[] testKeys;
-    [SerializeField]
-    private int testFloor;
+
 
     private InventoryController inv;
     private PlayerController player;
 
 	// Use this for initialization
 	void Start () {
-	    
+        inv = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        int currentLevel = player.getCurrentFloor();
         for (int i = 0; i < buttons.Length; i++)
         {
-            if (i == testFloor) //Can't go to current floor
+            if (i == currentLevel) //Can't go to current floor
             {
                 buttons[i].interactable = false;
             }
-            else if (!testKeys[i]) //Can't go to floor without having the key
+            else if (!inv.hasKey(i)) //Can't go to floor without having the key
             {
                 buttons[i].interactable = false;
             }

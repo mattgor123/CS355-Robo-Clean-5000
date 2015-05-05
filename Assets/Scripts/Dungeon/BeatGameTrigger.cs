@@ -25,7 +25,7 @@ public class BeatGameTrigger : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         //remove any buttons that are on the panel
-        if (other.gameObject.tag == "Player" && inventory.hasThorax())
+        if (other.gameObject.tag == "Player" && inventory.hasKey(9))
         {
             Application.LoadLevel("Victory");
         }

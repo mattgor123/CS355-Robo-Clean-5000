@@ -24,17 +24,8 @@ public class NewRoomTrigger : MonoBehaviour {
     void Start()
     {
         Time.timeScale = 1;
-
-        countdown = 2;
-        nextLevelCountdown = 0;
         trigger = false;
         elevatorCanvas = GameObject.FindGameObjectWithTag("ElevatorCanvas");
-        elevatorPanel = GameObject.FindGameObjectWithTag("ElevatorPanel");
-
-
-
-        //blackScreen = GameObject.Find("BlackScreen");
-
         elevatorCanvas.SetActive(false);
     }
 
@@ -43,52 +34,30 @@ public class NewRoomTrigger : MonoBehaviour {
 
         if (!trigger)
         {
-
             //if this object hits Player
             if (other.gameObject.tag == "Player")
             {
-
-
-                //TODO pause everything maybe?
-                Time.timeScale = 0;
-                //Cursor.lockState = CursorLockMode.None;
-                //Cursor.visible = true;
                 elevatorCanvas.SetActive(true);
-                ElevatorController ec = elevatorCanvas.GetComponent<ElevatorController>();
-                ec.makeButtons();
-
                 trigger = true;
                 Time.timeScale = 0;
 
             }
+            
         }
     }
 
-    /*
-    public void cancelElevator()
-    {
-        elevatorCanvas.SetActive(false);
-        Time.timeScale = 1;
-    }
-     * */
+   
+
+
 
     void OnTriggerExit(Collider other)
     {       
         //remove any buttons that are on the panel
-        int children = elevatorPanel.transform.childCount;
-        for (int i = 0; i < children; i++)
-        {
-            GameObject.Destroy(elevatorPanel.transform.GetChild(i).gameObject);
-        }
-
-
         if (other.gameObject.tag == "Player")
         {
             //Cursor.lockState = CursorLockMode.Locked;
             trigger = false;
             elevatorCanvas.SetActive(false);
-            //Time.timeScale = 1;
-
         }
     }
 }

@@ -40,10 +40,10 @@ public class BroodmotherLair : MonoBehaviour {
         StageBuilder.scale = scale;
         stage = new Stage(lair.ToString(), floor_material, wall_material, fluff_builder);
         stage.Create();
-        var playerInstance = Instantiate(player, playerSpawn, Quaternion.Euler(0, 180, 0)) as GameObject;
-        var bossInstance = Instantiate(boss, bossSpawn, Quaternion.identity) as GameObject;
-        var hudInstance = Instantiate(hud) as GameObject;
-        var cameraInstance = Instantiate(cam, cam.transform.position, cam.transform.rotation) as GameObject;
+        Instantiate(player, playerSpawn, Quaternion.Euler(0, 180, 0));
+        Instantiate(boss, bossSpawn, Quaternion.identity);
+        Instantiate(hud);
+        Instantiate(cam, cam.transform.position, cam.transform.rotation);
         log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
 
 

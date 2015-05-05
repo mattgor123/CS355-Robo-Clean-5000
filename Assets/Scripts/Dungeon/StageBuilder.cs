@@ -196,12 +196,14 @@ public class StageBuilder : MonoBehaviour
         {
             case "aggressive":
                 GameObject ea = pool.getEnemyAggressive();
+                if (ea == null) break;
                 ea.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z) + Vector3.up * 1.5f;
                 ea.transform.rotation = Quaternion.identity;
                 ea.SetActive(true);
                 break;
             case "smart":
                 GameObject es = pool.getEnemySmart();
+                if (es == null) break;
                 es.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z);
                 es.transform.rotation = Quaternion.identity;
                 es.SetActive(true);
@@ -211,12 +213,14 @@ public class StageBuilder : MonoBehaviour
                 break;
             case "zombie":
                 GameObject ez = pool.getZombie();
+                if (ez == null) break;
                 ez.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z);
                 ez.transform.rotation = Quaternion.identity;
                 ez.SetActive(true);
                 break;
             case "worm":
                 GameObject ew = pool.getWorm();
+                if (ew == null) break;
                 ew.transform.position = new Vector3(randomLocation.x, 0, randomLocation.z);
                 ew.transform.rotation = Quaternion.identity;
                 ew.SetActive(true);
