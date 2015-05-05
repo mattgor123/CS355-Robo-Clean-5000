@@ -90,20 +90,20 @@ public class PlayerController : MonoBehaviour {
     private GameObject player;
     private GameObject hud;
     private GameObject camera;
-    //private Animator anim;
-
-	private void Start () {
+    
+    private void Start () {
         camera = GameObject.FindGameObjectWithTag("MainCamera"); //Find the camera
         CamControl = camera.GetComponent<CameraController>();
         hud = GameObject.FindGameObjectWithTag("HUD");
         player = GameObject.FindGameObjectWithTag("Player");
-        //anim = GetComponent<Animator>();
+        
+        GameObject notificationLog = GameObject.FindWithTag("Log");
+        Log = notificationLog.GetComponent<LogScript>();
 
 		movement_controller = GetComponent<MovementController>();
 		weapon_backpack_controller = GetComponent<WeaponBackpackController>();
 		healthController = GetComponent<HealthController>();
         RB = GetComponent<Rigidbody>();
-        Log = GetComponent<LogScript>();
 
         Flashlight = GetComponentInChildren<FlashlightController>();  //Attach the flashlight
         Particles = GetComponentsInChildren<ParticleSystem>();       //Attach the powerfists
@@ -176,6 +176,12 @@ public class PlayerController : MonoBehaviour {
         }
         else if(Input.GetMouseButtonUp(0)) {
             weapon_backpack_controller.StopFiring();
+        }
+
+        if (Input.GetKeyDown("z")) {
+            Log.PassMessage("Hello");
+            Log.PassMessage("You are now on some weird level and i really don't know what to say here");
+            Log.EnableNotifications();
         }
 
 
@@ -606,7 +612,7 @@ public class PlayerController : MonoBehaviour {
         }
         AddDefense();
         string str = "Level Up: You are now at level " + GetLevel() + "\n" + "Defense: " + (int) ((1-GetDefense()) * 100) + "% \n";
-        Log.AddToLog(str);
+        Log.PassMessage(str);
         //FINISH LOG STUFF HERE
     }
 
