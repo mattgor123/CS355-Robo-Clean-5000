@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class WeaponController : MonoBehaviour {
 
-    [SerializeField]
-    private string name;
-
 	[SerializeField] private float speed;         // The speed of the bullets exiting the gun
 	[SerializeField] private float damage;        // The damage of each bullet
 	[SerializeField] private float delay;		  // The delay between shots
@@ -28,7 +25,7 @@ public class WeaponController : MonoBehaviour {
 	private StatisticsRecorderController stats;
 
     private List<GameObject> bullets;
-    private int bulletAmount = 25;
+    private int bulletAmount = 10;
 
     private ObjectPooling pool;
 
@@ -82,6 +79,7 @@ public class WeaponController : MonoBehaviour {
 			//var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
 
             GameObject instantiated_bullet;
+            /*
             if (gameObject.name.Contains("Pistol"))
             {
                 instantiated_bullet = pool.getPistolBullet();
@@ -102,6 +100,8 @@ public class WeaponController : MonoBehaviour {
             {
                 return;
             }
+             * */
+            instantiated_bullet = getBullet();
 
             //Initialize the bullet
 			BulletController BC = instantiated_bullet.GetComponent<BulletController>();
@@ -158,6 +158,9 @@ public class WeaponController : MonoBehaviour {
                 return bullets[i];
             }
         }
-        return null;
+        GameObject t = (GameObject)Instantiate(bullet);
+        //t.SetActive(true);
+        bullets.Add(t);
+        return t;
     }
 }

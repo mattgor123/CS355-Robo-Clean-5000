@@ -57,8 +57,8 @@ public class ObjectPooling : MonoBehaviour {
         enemy_aggressiveList = new List<GameObject>();
         StartCoroutine(makeEnemyAggressives());
 
-        pistolBulletList = new List<GameObject>();
-        StartCoroutine(makePistolBullets());
+        //pistolBulletList = new List<GameObject>();
+        //StartCoroutine(makePistolBullets());
 
         
         zombie_list = new List<GameObject>();
@@ -67,6 +67,7 @@ public class ObjectPooling : MonoBehaviour {
         worm_list = new List<GameObject>();
         StartCoroutine(makeWorms());
 
+        /*
         crazyGunBulletList = new List<GameObject>();
         StartCoroutine(makeCrazyGunBullets());
 
@@ -75,6 +76,7 @@ public class ObjectPooling : MonoBehaviour {
 
         rayGunBulletList = new List<GameObject>();
         StartCoroutine(makeRayGunBullets());
+         * */
 	}
 
     public GameObject getExplosion()
@@ -192,6 +194,7 @@ public class ObjectPooling : MonoBehaviour {
         }
     }
 
+    /*
     private IEnumerator makePistolBullets()
     {
         while (pistolBulletList.Count < bulletAmount)
@@ -311,6 +314,7 @@ public class ObjectPooling : MonoBehaviour {
         rayGunBulletList.Add(t);
         return t;
     }
+     * */
 
     public GameObject getZombie()
     {
