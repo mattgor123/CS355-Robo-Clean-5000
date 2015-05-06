@@ -23,7 +23,7 @@ public class TurretBossRoom : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        Instantiate(Mob, ms1, Quaternion.identity);
+        Object obs = Instantiate(Mob, ms1, Quaternion.identity);
         Instantiate(Mob, ms2, Quaternion.identity);
         Instantiate(Mob, ms3, Quaternion.identity);
         Instantiate(Mob, ms4, Quaternion.identity);
