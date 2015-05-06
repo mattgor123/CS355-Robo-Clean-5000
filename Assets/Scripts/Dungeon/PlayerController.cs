@@ -179,11 +179,8 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (Input.GetKeyDown("z")) {
-            Log.PassMessage("Hello");
-            Log.PassMessage("You are now on some weird level and i really don't know what to say here");
             Log.EnableNotifications();
         }
-
 
 		if(Input.GetKeyDown("r")) {
 			weapon_backpack_controller.NextWeapon();
@@ -191,7 +188,7 @@ public class PlayerController : MonoBehaviour {
 
         //Flashlight Toggle
         if (Input.GetKeyDown("f"))
-        {
+        {  
             Flashlight.ToggleFlashlight();
         }
 

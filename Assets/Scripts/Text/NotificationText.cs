@@ -9,7 +9,6 @@ public class NotificationText : MonoBehaviour {
 	private LogScript log;
 	//private GUIText weapon_name;
 	private Text currentNotification;
-	private bool showString;
 	
 	// Use this for initialization
 	void Start () {
@@ -22,6 +21,11 @@ public class NotificationText : MonoBehaviour {
 	
 	void Update() {	
 		currentNotification.text = "" + log.getNotifications();
-		Debug.Log(currentNotification.text);
+		Image image = GetComponentInParent<Image>();
+		if (log.GetShowString()) {	
+			image.fillCenter = true;
+		} else {
+			image.fillCenter = false;
+		}
 	}
 }
