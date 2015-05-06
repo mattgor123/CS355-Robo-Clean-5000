@@ -27,7 +27,7 @@ public class WeaponController : MonoBehaviour {
     private List<GameObject> bullets;
     private int bulletAmount = 10;
 
-    private ObjectPooling pool;
+    //private ObjectPooling pool;
 
     private void Start()
     {
@@ -42,10 +42,12 @@ public class WeaponController : MonoBehaviour {
         //pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
     }
 
+    /*
     private void Awake()
     {
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
     }
+     * */
 
 	private void LateUpdate () {
 		if(firing && Time.time - last_fired > delay) {
@@ -113,7 +115,9 @@ public class WeaponController : MonoBehaviour {
             instantiated_bullet.transform.position = muzzle.position;
             instantiated_bullet.transform.rotation = muzzle.rotation * bullet_rotation;
             instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
-            
+            instantiated_bullet.GetComponent<Rigidbody>().WakeUp();
+            instantiated_bullet.SetActive(true);
+
         	backpack_controller.ChangeAmmo(-ammo_per_shot);
         }
 	}
