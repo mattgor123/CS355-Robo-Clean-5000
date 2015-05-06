@@ -37,7 +37,7 @@ public class LMEnergyBallShot : MonoBehaviour, LMAttack
         Vector3 target = LMHelper.BaseMoveLogic(enemy, player);
 
         // Fire a shot if timer elapsed and in range
-        if (LMHelper.CheckAttackTimer(enemy) && LMHelper.CanShoot(enemy, player))
+        if (LMHelper.CheckAttackTimer(enemy) && LMHelper.IsInRange(enemy, player))
         {
             //instantiate the shot & position at the end of barrel
             Transform shot = Instantiate(EnergyBall);
