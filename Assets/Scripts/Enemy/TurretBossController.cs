@@ -47,7 +47,7 @@ public class TurretBossController : MonoBehaviour {
         //On reaching 20% hp, shoot faster and deal more damage
         if (!Enrage && HC.GetCurrentHealth() < HC.GetMaxHealth()*0.2f) {
             Enrage = true;
-            EC.SetAttackCooldown(1.0f);
+            EC.SetAttackCooldown(0.75f);
             EBS.SetDamage(-75f);
         }
 	}

@@ -27,11 +27,7 @@ public class LMHelper {
     public static bool IsInRange(EnemyController enemy, GameObject player)
     {
         float dist = GetDistance(enemy, player);
-        if (dist <= enemy.GetAggroRadius())
-        {
-            return true;
-        }
-        return false;
+        return dist <= enemy.GetAggroRadius();
     }
 
     //Checks whether target can be shot
@@ -71,7 +67,7 @@ public class LMHelper {
     // if so, resets attack timer
     // otherwise, increments attack timer
     public static bool CheckAttackTimer(EnemyController enemy)
-    {
+    {        
         float CD = enemy.GetAttackCD();
         float timer = enemy.GetAttackTimer();
         if (timer >= CD)
