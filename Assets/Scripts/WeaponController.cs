@@ -24,8 +24,8 @@ public class WeaponController : MonoBehaviour {
 	private GameObject player;
 	private StatisticsRecorderController stats;
 
-    private List<GameObject> bullets;
-    private int bulletAmount = 10;
+    //private List<GameObject> bullets;
+    //private int bulletAmount = 10;
 
     //private ObjectPooling pool;
 
@@ -36,8 +36,8 @@ public class WeaponController : MonoBehaviour {
         owner = transform.parent.root;
         backpack_controller = owner.GetComponent<WeaponBackpackController>();
 
-        bullets = new List<GameObject>();
-        StartCoroutine(makeBullets());
+        //bullets = new List<GameObject>();
+        //StartCoroutine(makeBullets());
 
         //pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
     }
@@ -80,7 +80,7 @@ public class WeaponController : MonoBehaviour {
             }
 			//var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
 
-            GameObject instantiated_bullet;
+            GameObject instantiated_bullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation); ;
             /*
             if (gameObject.name.Contains("Pistol"))
             {
@@ -103,7 +103,7 @@ public class WeaponController : MonoBehaviour {
                 return;
             }
              * */
-            instantiated_bullet = getBullet();
+            //instantiated_bullet = getBullet();
 
             //Initialize the bullet
 			BulletController BC = instantiated_bullet.GetComponent<BulletController>();
@@ -139,6 +139,7 @@ public class WeaponController : MonoBehaviour {
 		backpack_controller = new_backpack_controller;
 	}
 
+    /*
     private IEnumerator makeBullets()
     {
         while (bullets.Count < bulletAmount)
@@ -167,4 +168,5 @@ public class WeaponController : MonoBehaviour {
         bullets.Add(t);
         return t;
     }
+     * */
 }

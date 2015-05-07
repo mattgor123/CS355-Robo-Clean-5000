@@ -39,12 +39,14 @@ public class BulletController : MonoBehaviour {
 
 	private void Update () {
 		if(Time.time - creation_time > cleanup_delay) {
-			//Destroy(gameObject);
+			Destroy(gameObject);
             
+            /*
             gameObject.GetComponent<Rigidbody>().Sleep();
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             gameObject.SetActive(false);
+             * */
 		}
 	}
 
@@ -117,12 +119,14 @@ public class BulletController : MonoBehaviour {
 				return;
 			}
 		}
-        //Destroy(gameObject);
+        Destroy(gameObject);
         
-        gameObject.GetComponent<Rigidbody>().Sleep();
+        
+        /*gameObject.GetComponent<Rigidbody>().Sleep();
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         gameObject.SetActive(false);
+         * */
 	}    
      
     void FixedUpdate()
@@ -133,7 +137,7 @@ public class BulletController : MonoBehaviour {
 	   Vector3 movementThisStep = myRigidbody.position - previousPosition; 
 	   float movementSqrMagnitude = movementThisStep.sqrMagnitude;
 
-       Debug.Log("HELLOOOOOO");
+       //Debug.Log("HELLOOOOOO");
  
 	   if (movementSqrMagnitude > sqrMinimumExtent)
        {
@@ -143,7 +147,7 @@ public class BulletController : MonoBehaviour {
            //check for obstructions we might have missed 
            if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude))
            {
-               Debug.Log("HIITTTT");
+               //Debug.Log("HIITTTT");
                myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
 
                GameObject other = hitInfo.collider.gameObject;
@@ -202,15 +206,20 @@ public class BulletController : MonoBehaviour {
                //if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
                //{
                //    myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
-               Debug.Log("other tag: " + other.tag);
-               Debug.Log("other name: " + other.name);
+               //Debug.Log("other tag: " + other.tag);
+               //Debug.Log("other name: " + other.name);
+               
                if (other.tag == "Player" || other.tag == "Enemy" || other.name.Contains("Wall"))
                {
+                   /*
                    gameObject.GetComponent<Rigidbody>().Sleep();
                    gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                    gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
                    gameObject.SetActive(false);
+                    * */
+                   Destroy(gameObject);
                }
+               
                //}
                    //myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
                //Destroy(gameObject);
