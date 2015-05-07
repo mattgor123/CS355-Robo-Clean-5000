@@ -76,6 +76,10 @@ public class BulletController : MonoBehaviour {
 		is_laser = laser;
 	}
 
+    public bool IsLaser()  {
+        return is_laser;
+    }
+
 	void OnCollisionEnter(Collision collision) {
         //Player-fired bullets do not hit the player
         if (source_player && collision.gameObject.tag == "Player")        
@@ -88,11 +92,11 @@ public class BulletController : MonoBehaviour {
 		var victim_health = collision.gameObject.GetComponent<HealthController>();
 		if(victim_health != null) {
 			//this means you're hitting an enemy, not a wall ... if it's a laser then keep going
-      if (gameObject.tag == "Player") {
-          victim_health.ChangeHealth(PC.GetDefense() * -damage, transform.position);  
-      } else {
-          victim_health.ChangeHealth(-damage, transform.position);
-      }
+            if (gameObject.tag == "Player") {
+                victim_health.ChangeHealth(PC.GetDefense() * -damage, transform.position);  
+            } else {
+                victim_health.ChangeHealth(-damage, transform.position);
+            }
 			//don't let it get destroyed if it collides with an enemy and is a laser, only a wall
 
 			//start code for stat tracking
@@ -115,9 +119,10 @@ public class BulletController : MonoBehaviour {
 			}
 			//end code for stat tracking
 
+            /*
 			if (is_laser) {
 				return;
-			}
+			}*/ //laser not stopping leads to very screwy behavior given visible bolt
 		}
         Destroy(gameObject);
         
@@ -127,7 +132,13 @@ public class BulletController : MonoBehaviour {
         gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         gameObject.SetActive(false);
          * */
-	}    
+	}
+
+    void OnCollisionStay()
+    {
+        Debug.Log("STUCK");
+        Destroy(gameObject);
+    }
      
     void FixedUpdate()
     {
@@ -137,8 +148,6 @@ public class BulletController : MonoBehaviour {
 	   Vector3 movementThisStep = myRigidbody.position - previousPosition; 
 	   float movementSqrMagnitude = movementThisStep.sqrMagnitude;
 
-       //Debug.Log("HELLOOOOOO");
- 
 	   if (movementSqrMagnitude > sqrMinimumExtent)
        {
            float movementMagnitude = Mathf.Sqrt(movementSqrMagnitude);
@@ -147,7 +156,6 @@ public class BulletController : MonoBehaviour {
            //check for obstructions we might have missed 
            if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude))
            {
-               //Debug.Log("HIITTTT");
                myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
 
                GameObject other = hitInfo.collider.gameObject;

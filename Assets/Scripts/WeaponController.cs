@@ -79,8 +79,6 @@ public class WeaponController : MonoBehaviour {
                 shot_sound.Play();
             }
 			//var instantiated_bullet = (GameObject) Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
-
-            GameObject instantiated_bullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation); ;
             /*
             if (gameObject.name.Contains("Pistol"))
             {
@@ -103,24 +101,37 @@ public class WeaponController : MonoBehaviour {
                 return;
             }
              * */
-            //instantiated_bullet = getBullet();
+            //instantiated_bullet = getBullet();           		
 
-            //Initialize the bullet
-			BulletController BC = instantiated_bullet.GetComponent<BulletController>();
-            BC.StartUp(damage, source, cleanup_delay);
-			BC.SetLaser(is_laser);
-			last_fired = Time.time;
-
-            //setup position & velocity
-            instantiated_bullet.transform.position = muzzle.position;
-            instantiated_bullet.transform.rotation = muzzle.rotation * bullet_rotation;
-            instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
-            instantiated_bullet.GetComponent<Rigidbody>().WakeUp();
-            instantiated_bullet.SetActive(true);
-
-        	backpack_controller.ChangeAmmo(-ammo_per_shot);
+            SpawnBullet(source);
+            backpack_controller.ChangeAmmo(-ammo_per_shot);
+            
         }
 	}
+
+    //spawn a bullet; return whether it's a laser
+    private void SpawnBullet(bool source)
+    {
+        //Initialize the bullet
+        GameObject instantiated_bullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation * bullet_rotation);
+        BulletController BC = instantiated_bullet.GetComponent<BulletController>();
+        BC.StartUp(damage, source, cleanup_delay);
+        BC.SetLaser(is_laser);
+        last_fired = Time.time;
+
+        //setup position & velocity
+        instantiated_bullet.transform.position = muzzle.position;
+        instantiated_bullet.transform.rotation = muzzle.rotation * bullet_rotation;
+        instantiated_bullet.GetComponent<Rigidbody>().velocity = muzzle.TransformDirection(Vector3.forward * speed);
+        instantiated_bullet.GetComponent<Rigidbody>().WakeUp();
+        instantiated_bullet.SetActive(true);
+
+        if (BC.IsLaser())
+        {
+            instantiated_bullet.GetComponent<Rigidbody>().velocity += Vector3.up * 40f;
+        }
+
+    }
 
 	public void StartFiring () {
 		firing = true;

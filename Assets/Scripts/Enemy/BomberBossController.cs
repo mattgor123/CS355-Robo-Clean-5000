@@ -17,9 +17,7 @@ public class BomberBossController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(LaunchDelay);
-
-        if (Core.position.y > 4)        
+        if (Core.position.y > 3)        
             ResumeAI();        
         if (LaunchDelay < 0)        
             Core.position += Delta * Time.deltaTime;        
