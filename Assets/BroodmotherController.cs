@@ -20,6 +20,9 @@ public class BroodmotherController : MonoBehaviour {
     private float phaseTransition = 2.5f;
     private bool justSpawned;
 
+    private InventoryController IC;
+    private PlayerController P;
+
 	// Use this for initialization
 	void Awake () {
         boss = GameObject.FindGameObjectWithTag("Broodmother");
@@ -30,6 +33,9 @@ public class BroodmotherController : MonoBehaviour {
         animTimer = 0;
         justSpawned = false;
         PauseAI();
+
+        IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
+        P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 	}
 	
 
@@ -72,6 +78,12 @@ public class BroodmotherController : MonoBehaviour {
 
         }
 
+        //Give player key to current floor on death
+        if (health.GetCurrentHealth() <= 0)
+        {
+            IC.collectKey(P.getCurrentFloor());
+        }
+        
 
 
 	}

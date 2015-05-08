@@ -126,7 +126,7 @@ public class WeaponController : MonoBehaviour {
         instantiated_bullet.GetComponent<Rigidbody>().WakeUp();
         instantiated_bullet.SetActive(true);
 
-        if (BC.IsLaser())
+        if (BC.IsLaser() && Random.value < 0.5)
         {
             instantiated_bullet.GetComponent<Rigidbody>().velocity += Vector3.up * 40f;
         }

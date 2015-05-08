@@ -4,7 +4,10 @@ using System.Collections;
 //Bomber Boss auxiliary logic
 public class BomberBossController : MonoBehaviour {
 
-    Transform Core;
+    private Transform Core;
+    private HealthController HC;
+    private InventoryController IC;
+    private PlayerController P;
     private float LaunchDelay = 1.0f;
     private Vector3 Delta = new Vector3(0f, 1f, 0f);
 
@@ -12,17 +15,26 @@ public class BomberBossController : MonoBehaviour {
 	void Awake () {
         Core = gameObject.GetComponent<Transform>();
         PauseAI();
+        HC = GetComponent<HealthController>();
+        IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
+        P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 	}
 	
-
-	// Update is called once per frame
 	void Update () {
-        if (Core.position.y > 3)        
-            ResumeAI();        
-        if (LaunchDelay < 0)        
+        if (Core.position.y > 3)
+        {
+            ResumeAI();
+        } else if (LaunchDelay < 0)        
             Core.position += Delta * Time.deltaTime;        
         else 
-            LaunchDelay -= Time.deltaTime;      
+            LaunchDelay -= Time.deltaTime;
+
+        //Give player key to current floor on death
+        if (HC.GetCurrentHealth() <= 0)
+        {
+            IC.collectKey(P.getCurrentFloor());
+        }
+        
 	}
 
     private void PauseAI()
@@ -37,7 +49,6 @@ public class BomberBossController : MonoBehaviour {
         GetComponent<LMLongPatrol>().enabled = true;
         GetComponent<LMStrafingRun>().enabled = true;
         GetComponent<EnemyController>().enabled = true;
-        gameObject.GetComponent<BomberBossController>().enabled = false;
     }
 
     public void SetLaunchDelay(float dl)

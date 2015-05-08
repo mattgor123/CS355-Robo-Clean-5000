@@ -10,6 +10,9 @@ public class TurretBossController : MonoBehaviour {
     private HealthController HC;
     private LMEnergyBallShot EBS;
 
+    private InventoryController IC;
+    private PlayerController P;
+
     [SerializeField]
     private float ShieldActiveCD = 15f;     //Cooldown before shields restart
     
@@ -21,6 +24,9 @@ public class TurretBossController : MonoBehaviour {
         Shield = GetComponentInChildren<ShieldController>();
         HC = GetComponent<HealthController>();
         EBS = GetComponent<LMEnergyBallShot>();
+
+        IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
+        P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 	}
 	
 	void Update () {
@@ -49,6 +55,12 @@ public class TurretBossController : MonoBehaviour {
             Enrage = true;
             EC.SetAttackCooldown(0.75f);
             EBS.SetDamage(-75f);
+        }
+
+        //Give player key to current floor on death
+        if (HC.GetCurrentHealth() <= 0)
+        {
+            IC.collectKey(P.getCurrentFloor());
         }
 	}
 }

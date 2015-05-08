@@ -97,7 +97,7 @@ public class EnemyController : MonoBehaviour {
         if (!gameObject.activeInHierarchy) return;
 
         //Die if at zero hp
-        if (health_controller.GetCurrentHealth() == 0)
+        if (health_controller.GetCurrentHealth() <= 0)
         {
 			//start stat tracking code
 			if (player == null) {
@@ -133,6 +133,7 @@ public class EnemyController : MonoBehaviour {
             // add experience to player
             CreateExp();
             StageBuilder.EnemyDied();
+
         }
 
         //Movement
