@@ -151,33 +151,35 @@ public class BulletController : MonoBehaviour {
         //logic from http://wiki.unity3d.com/index.php?title=DontGoThroughThings
 
         //have we moved more than our minimum extent? 
-	   Vector3 movementThisStep = myRigidbody.position - previousPosition; 
-	   float movementSqrMagnitude = movementThisStep.sqrMagnitude;
+	    Vector3 movementThisStep = myRigidbody.position - previousPosition; 
+        float movementSqrMagnitude = movementThisStep.sqrMagnitude;
 
-	   if (movementSqrMagnitude > sqrMinimumExtent)
-       {
-           float movementMagnitude = Mathf.Sqrt(movementSqrMagnitude);
-           RaycastHit hitInfo; 
+	    if (movementSqrMagnitude > sqrMinimumExtent)
+        {
+            float movementMagnitude = Mathf.Sqrt(movementSqrMagnitude);
+            RaycastHit hitInfo; 
  
            //check for obstructions we might have missed 
-           if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude))
-           {
-               myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
+            if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude))
+            {
+                //Ignore if it is a trigger
+                if (hitInfo.collider.isTrigger)
+                    return;
 
-               GameObject other = hitInfo.collider.gameObject;
+                myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent;
+
+                GameObject other = hitInfo.collider.gameObject;
 
                //Player-fired bullets do not hit the player
-               if (source_player && other.tag == "Player")
-                   return;
+                if (source_player && other.tag == "Player")
+                    return;
 
                //Enemy-fired bullets do not hit enemies
                //if (!source_player && other.tag != "Player")
-               if (!source_player && other.tag == "Enemy")
-               {
-                   return;
-               }
+                if (!source_player && other.tag == "Enemy")               
+                    return;              
                
-               var victim_health = other.GetComponent<HealthController>();
+                var victim_health = other.GetComponent<HealthController>();
                if (victim_health != null)
                {
                    if (other.tag == "Player") {
