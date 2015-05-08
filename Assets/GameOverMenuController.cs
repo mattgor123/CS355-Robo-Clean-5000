@@ -27,6 +27,9 @@ public class GameOverMenuController : MonoBehaviour
         GameOverMenuScreen.SetActive(true);
         ContinueMenuScreen.SetActive(false);
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
     }
 
 

@@ -136,9 +136,15 @@ public class BulletController : MonoBehaviour {
 
     void OnCollisionStay()
     {
-        Debug.Log("STUCK");
         Destroy(gameObject);
     }
+
+    //Avoid getting stuck in triggers
+    void OnTriggerStay()
+    {
+        gameObject.transform.position += gameObject.transform.forward;
+    }
+
      
     void FixedUpdate()
     {
