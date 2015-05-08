@@ -61,6 +61,18 @@ public class StageBuilder : MonoBehaviour
     private Transform player;
     private Transform hudInstance;
     private Transform cameraInstance;
+    private GameObject RedCanvas;
+    private GameObject elevator;
+    private GameObject PauseCanvas;
+    private GameObject damageCanvas;
+    private GameObject statisticsCanvas;
+    private GameObject eventsystem;
+    private GameObject log;
+    private GameObject dungeonaudio;
+    private GameObject minimap;
+    private GameObject blackscreenCanvas;
+    private GameObject Fluffbuilder;
+    private GameObject objectPool;
     //weights of enemy. row is floor, column is weight in order of aggressive, smart, turret
     //ex: 0.3, 0.6, 1. if random float is 0-0.3, aggressive
     //if float is 0.3-0.6, smart
@@ -172,10 +184,36 @@ public class StageBuilder : MonoBehaviour
             cameraInstance = Instantiate(Camera, Camera.position, Camera.rotation) as Transform;
         }
 
+        RedCanvas = GameObject.FindGameObjectWithTag("RedDot");
+        elevator = GameObject.FindGameObjectWithTag("ElevatorCanvas") ;
+        PauseCanvas = GameObject.FindGameObjectWithTag("Pause") ;
+        damageCanvas = GameObject.FindGameObjectWithTag("Damaged") ;
+        statisticsCanvas = GameObject.FindGameObjectWithTag("StatCanvas") ;
+        eventsystem = GameObject.FindGameObjectWithTag("Ramp") ;
+        log = GameObject.FindGameObjectWithTag("Log");
+        dungeonaudio = GameObject.FindGameObjectWithTag("audio") ;
+        minimap =  GameObject.FindGameObjectWithTag("minimap") ;
+        blackscreenCanvas  = GameObject.FindGameObjectWithTag("BlackDot")  ;
+        Fluffbuilder =  GameObject.FindGameObjectWithTag("fluff") ;
+        objectPool =  GameObject.FindGameObjectWithTag("pool") ;
+
+
         //so player will persist even when new scene is loaded
         DontDestroyOnLoad(player);
         DontDestroyOnLoad(hudInstance);
         DontDestroyOnLoad(cameraInstance);
+        DontDestroyOnLoad(RedCanvas);
+        DontDestroyOnLoad(elevator);
+        DontDestroyOnLoad(PauseCanvas);
+        DontDestroyOnLoad(damageCanvas);
+        DontDestroyOnLoad(statisticsCanvas);
+        DontDestroyOnLoad(eventsystem);
+        DontDestroyOnLoad(log);
+        DontDestroyOnLoad(dungeonaudio);
+        DontDestroyOnLoad(minimap);
+        DontDestroyOnLoad(blackscreenCanvas);
+        DontDestroyOnLoad(Fluffbuilder);
+        DontDestroyOnLoad(objectPool);
     }
 
 
