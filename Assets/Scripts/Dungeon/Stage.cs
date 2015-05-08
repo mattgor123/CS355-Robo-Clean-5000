@@ -663,7 +663,7 @@ public class Stage  {
     public void DestroyCurrentLevel() {
         //Destroy Facility
         GameObject.Destroy(Facility);
-        GameObject.Destroy(GameObject.FindGameObjectWithTag("Facility"));
+        GameObject.Destroy(GameObject.FindGameObjectWithTag("facility"));
         //Destroy Rooms
         rooms.Clear();
         //Destroy all rooms except for the elevator we are standing in (in this case spawnedRooms(0)
