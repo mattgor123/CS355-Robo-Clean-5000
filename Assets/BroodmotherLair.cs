@@ -19,12 +19,7 @@ public class BroodmotherLair : MonoBehaviour {
     private TextAsset lair;
     [SerializeField]
     private FluffBuilder fluff_builder;
-    [SerializeField]
     private GameObject player;
-    [SerializeField]
-    private GameObject hud;
-    [SerializeField]
-    private GameObject cam;
     [SerializeField]
     private GameObject triggerTile;
     private NotificationLog log;
@@ -40,10 +35,9 @@ public class BroodmotherLair : MonoBehaviour {
         StageBuilder.scale = scale;
         stage = new Stage(lair.ToString(), floor_material, wall_material, fluff_builder);
         stage.Create();
-        Instantiate(player, playerSpawn, Quaternion.Euler(0, 180, 0));
+        player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = playerSpawn;
         Instantiate(boss, bossSpawn, Quaternion.identity);
-        Instantiate(hud);
-        Instantiate(cam, cam.transform.position, cam.transform.rotation);
         log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
 
 

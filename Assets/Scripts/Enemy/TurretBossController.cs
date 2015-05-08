@@ -60,7 +60,7 @@ public class TurretBossController : MonoBehaviour {
         //Give player key to current floor on death
         if (HC.GetCurrentHealth() <= 0)
         {
-            IC.collectKey(P.getCurrentFloor());
+            IC.collectKey(4);
         }
 	}
 }

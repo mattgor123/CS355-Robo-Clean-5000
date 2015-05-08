@@ -146,6 +146,7 @@ public class ObjectPooling : MonoBehaviour {
             for (int i = 0; i < 10; i++) {
                 GameObject e = (GameObject)Instantiate(explosion);
                 e.SetActive(false);
+                DontDestroyOnLoad(e);
                 explosionList.Add(e);
             }
             yield return null;
@@ -161,6 +162,8 @@ public class ObjectPooling : MonoBehaviour {
                 GameObject t = (GameObject)Instantiate(treasure);
                 t.SetActive(false);
                 treasureList.Add(t);
+                DontDestroyOnLoad(t);
+
             }
             yield return null;
         }
@@ -174,6 +177,8 @@ public class ObjectPooling : MonoBehaviour {
             {
                 GameObject e = (GameObject)Instantiate(enemy_smart);
                 e.SetActive(false);
+                DontDestroyOnLoad(e);
+
                 enemy_smartList.Add(e);
             }
             yield return null;
@@ -188,6 +193,8 @@ public class ObjectPooling : MonoBehaviour {
             {
                 GameObject e = (GameObject)Instantiate(enemy_aggressive);
                 e.SetActive(false);
+                DontDestroyOnLoad(e);
+
                 enemy_aggressiveList.Add(e);
             }
             yield return null;
@@ -355,6 +362,8 @@ public class ObjectPooling : MonoBehaviour {
                 GameObject e = (GameObject)Instantiate(zombie);
                 e.SetActive(false);
                 zombie_list.Add(e);
+                DontDestroyOnLoad(e);
+
             }
             yield return null;
         }
@@ -369,6 +378,8 @@ public class ObjectPooling : MonoBehaviour {
                 GameObject e = (GameObject)Instantiate(worm);
                 e.SetActive(false);
                 worm_list.Add(e);
+                DontDestroyOnLoad(e);
+
             }
             yield return null;
         }

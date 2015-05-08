@@ -35,7 +35,7 @@ public class ElevatorController : MonoBehaviour {
     public void LoadBoss(string boss)
     {
         FadeIn();
-        Application.LoadLevel(boss);
+        Application.LoadLevelAdditive(boss);
     }
 
     //Fade from invisible to Black

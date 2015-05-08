@@ -193,7 +193,7 @@ public class StageBuilder : MonoBehaviour
         log = GameObject.FindGameObjectWithTag("Log");
         dungeonaudio = GameObject.FindGameObjectWithTag("audio") ;
         minimap =  GameObject.FindGameObjectWithTag("minimap") ;
-        blackscreenCanvas  = GameObject.FindGameObjectWithTag("BlackDot")  ;
+        blackscreenCanvas  = GameObject.FindGameObjectWithTag("blackCanvas")  ;
         Fluffbuilder =  GameObject.FindGameObjectWithTag("fluff") ;
         objectPool =  GameObject.FindGameObjectWithTag("pool") ;
 
@@ -214,6 +214,7 @@ public class StageBuilder : MonoBehaviour
         DontDestroyOnLoad(blackscreenCanvas);
         DontDestroyOnLoad(Fluffbuilder);
         DontDestroyOnLoad(objectPool);
+        DontDestroyOnLoad(this);
     }
 
 
