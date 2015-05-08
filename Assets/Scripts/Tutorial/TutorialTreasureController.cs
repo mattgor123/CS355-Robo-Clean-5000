@@ -11,7 +11,7 @@ public class TutorialTreasureController : MonoBehaviour {
 		var weapon_backpack = collision.collider.GetComponent<WeaponBackpackController>();
         GameObject nlog = GameObject.FindWithTag("Log");
         string message = "";
-        NotificationLog log = nlog.GetComponent<NotificationLog>(); 
+        LogScript log = nlog.GetComponent<LogScript>(); 
 		if(weapon_backpack != null) {
 			if (pickup_sound != null)
             {

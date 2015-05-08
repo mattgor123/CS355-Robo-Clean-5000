@@ -11,7 +11,7 @@ public class EnemyTrigger1 : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		if(!triggered) {
 			Instantiate(enemy, spawn_point, Quaternion.identity);
-			var log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
+			var log = GameObject.FindWithTag("Log").GetComponent<LogScript>();
 			log.PassMessage("Click the left mouse\nbutton to shoot\n");
 			triggered = true;
 		}

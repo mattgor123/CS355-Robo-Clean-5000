@@ -15,7 +15,7 @@ public class TreasureController : MonoBehaviour {
         var inventory = collision.collider.GetComponent<InventoryController>();
         GameObject nlog = GameObject.FindWithTag("Log");
         string message = "";
-        NotificationLog log = nlog.GetComponent<NotificationLog>(); 
+        LogScript log = nlog.GetComponent<LogScript>(); 
 		if(weapon_backpack != null) {
             if (pickup_sound != null)
             {
@@ -27,7 +27,7 @@ public class TreasureController : MonoBehaviour {
 			string pickupMessage = player.GetComponent<StartingWeapons>().RandomWeaponPickup();
 			//Destroy(gameObject);
             gameObject.SetActive(false);
-            message += "Collected " + found_ammo + " ammo\n\n";
+            message += "Collected " + found_ammo + " ammo\n";
             message += pickupMessage + "\n";
 
 		}
@@ -42,7 +42,7 @@ public class TreasureController : MonoBehaviour {
             health.ChangeHealth(collected_health);
             //Destroy(gameObject);
             gameObject.SetActive(false);
-            message += "Regained " + collected_health + " health\n\n ";
+            message += "Regained " + collected_health + " health\n";
         }
         if (inventory != null)
         {
@@ -51,9 +51,10 @@ public class TreasureController : MonoBehaviour {
             if (!inventory.hasKey(currentLevel + 1)) //&& Random.Range(0, 1f) < 0.25f
             {
                 inventory.collectKey(currentLevel + 1); //because array of keys is 0-based, this unlocks the floor above
-                message += "Collected B" + (currentLevel + 1) + " Access Card\n\n";
+                message += "Collected B" + (currentLevel + 1) + " Access Card\n";
             }
         }
+        Debug.Log(message);
         log.PassMessage(message);
 
 	}
