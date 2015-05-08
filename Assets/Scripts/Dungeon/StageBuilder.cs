@@ -325,4 +325,9 @@ public class StageBuilder : MonoBehaviour
         stage.NextLevel(level);
         maxEnemies = (Player.gameObject.GetComponent<PlayerController>().getCurrentFloor() + 1) * enemiesPerLevel;
     }
+
+    public void destroycurrentlevel()
+    {
+        stage.DestroyCurrentLevel();
+    }
 }

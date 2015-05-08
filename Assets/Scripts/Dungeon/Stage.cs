@@ -659,7 +659,7 @@ public class Stage  {
         return result;
     }
 
-    private void DestroyCurrentLevel() {
+    public void DestroyCurrentLevel() {
         //Destroy Facility
         GameObject.Destroy(Facility);
 

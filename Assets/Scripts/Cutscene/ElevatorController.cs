@@ -35,6 +35,7 @@ public class ElevatorController : MonoBehaviour {
     public void LoadBoss(string boss)
     {
         FadeIn();
+        stagebuilder.destroycurrentlevel();
         Application.LoadLevelAdditive(boss);
     }
 
