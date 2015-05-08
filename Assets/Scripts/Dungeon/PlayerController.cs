@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
-        if (healthController.GetCurrentHealth() == 0)
+        if (healthController.GetCurrentHealth() == 0 || transform.position.y < -10)
         {
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
