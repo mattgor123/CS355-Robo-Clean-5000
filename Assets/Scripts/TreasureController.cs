@@ -54,8 +54,9 @@ public class TreasureController : MonoBehaviour {
                 message += "Collected B" + (currentLevel + 1) + " Access Card\n";
             }
         }
-        Debug.Log(message);
-        log.PassMessage(message);
+        if (message != "") {
+            log.PassMessage(message);
+        }
 
 	}
 }
