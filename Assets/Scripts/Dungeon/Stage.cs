@@ -576,6 +576,7 @@ public class Stage  {
         //The empty gameobject that all the tiles are hidden inside (besides rooms)
         Facility = new GameObject(); 
         Facility.name = "Research Facility";
+        Facility.tag = "facility";
         //The collider that spans the floor of the dungeon (saves memory over the floor tiles having them each)
         BoxCollider ground  = Facility.AddComponent<BoxCollider>();
         ground.size = new Vector3(this.width * StageBuilder.scale, 0.25f, this.height * StageBuilder.scale);
@@ -662,7 +663,7 @@ public class Stage  {
     public void DestroyCurrentLevel() {
         //Destroy Facility
         GameObject.Destroy(Facility);
-
+        GameObject.Destroy(GameObject.FindGameObjectWithTag("Facility"));
         //Destroy Rooms
         rooms.Clear();
         //Destroy all rooms except for the elevator we are standing in (in this case spawnedRooms(0)

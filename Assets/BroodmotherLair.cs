@@ -40,13 +40,13 @@ public class BroodmotherLair : MonoBehaviour {
         Instantiate(boss, bossSpawn, Quaternion.identity);
         log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
 
-
 	}
 
 
 
 	// Update is called once per frame
 	void Update () {
+        
 	
 	}
 }
