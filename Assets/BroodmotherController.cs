@@ -23,6 +23,7 @@ public class BroodmotherController : MonoBehaviour {
 
     private InventoryController IC;
     private PlayerController P;
+    private int floor;
 
 	// Use this for initialization
 	void Awake () {
@@ -37,6 +38,7 @@ public class BroodmotherController : MonoBehaviour {
 
         IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
         P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        floor = P.getCurrentFloor() + 1;
 	}
 	
 
@@ -80,11 +82,10 @@ public class BroodmotherController : MonoBehaviour {
         }
 
         //Give player key to current floor on death
-        if (health.GetCurrentHealth() <= 0 && !keygiven)
+        if (health.GetCurrentHealth() <= 0 && !IC.hasKey(floor))
         {
-            IC.collectKey(P.getCurrentFloor());
+            IC.collectKey(floor);
             GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
-            keygiven = true;
         }
         
 

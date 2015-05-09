@@ -10,6 +10,7 @@ public class BomberBossController : MonoBehaviour {
     private PlayerController P;
     private float LaunchDelay = 1.0f;
     private Vector3 Delta = new Vector3(0f, 1f, 0f);
+    private int floor;
 
     //Start with bomber deactivated at rest
 	void Awake () {
@@ -18,6 +19,7 @@ public class BomberBossController : MonoBehaviour {
         HC = GetComponent<HealthController>();
         IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
         P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        floor = P.getCurrentFloor() + 1;
 	}
 	
 	void Update () {
@@ -30,9 +32,9 @@ public class BomberBossController : MonoBehaviour {
             LaunchDelay -= Time.deltaTime;
 
         //Give player key to current floor on death
-        if (HC.GetCurrentHealth() <= 0)
+        if (HC.GetCurrentHealth() <= 0 && !IC.hasKey(floor))
         {
-            IC.collectKey(P.getCurrentFloor());
+            IC.collectKey(floor);
             GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
         }
         
