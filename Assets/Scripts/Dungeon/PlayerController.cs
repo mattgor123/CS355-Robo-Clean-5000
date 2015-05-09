@@ -161,6 +161,10 @@ public class PlayerController : MonoBehaviour {
             GameObject.DestroyImmediate(camera);
             GameObject.DestroyImmediate(hud);
             GameObject.DestroyImmediate(player);
+            GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+            foreach (GameObject o in objects) {
+                Destroy(o);
+            }
             if (camera == null && hud == null && player == null)
             Application.LoadLevel("GameOver");
             
