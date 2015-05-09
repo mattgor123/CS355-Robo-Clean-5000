@@ -6,4 +6,9 @@ public class LeaveTutorial : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		Application.LoadLevel("Game");
 	}
+
+    public void StartGame()
+    {
+        Application.LoadLevel("Game");
+    }
 }

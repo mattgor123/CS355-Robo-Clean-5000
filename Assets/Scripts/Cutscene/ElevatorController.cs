@@ -20,7 +20,7 @@ public class ElevatorController : MonoBehaviour
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         blackImage = blackScreen.GetComponent<Image>();
-        currentFloor.text = "B0";
+        //currentFloor.text = "B0";
         FadeIn();
 
     }
