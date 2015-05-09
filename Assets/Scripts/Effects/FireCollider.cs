@@ -24,7 +24,7 @@ public class FireCollider : MonoBehaviour {
             if (OGO.tag == "Player")
             {
                 HealthController HC = OGO.GetComponent<HealthController>();
-                HC.ChangeHealth(Damage * 0.1f);
+                HC.ChangeHealth(Damage * 0.3f);
             }
         }
     }
