@@ -18,9 +18,11 @@ public class TutorialController : MonoBehaviour {
 	private NotificationLog log;
 
     private GameObject playerInstance;
+    private HealthController health_controller;
 
 	void Awake () {
 		playerInstance = Instantiate(player, spawn_point, Quaternion.identity) as GameObject;
+		health_controller = playerInstance.GetComponent<HealthController>();
         var hudInstance = Instantiate(hud) as GameObject;
         var cameraInstance = Instantiate(camera, camera.transform.position, camera.transform.rotation) as GameObject;
         BuildGridAndRooms();
@@ -54,10 +56,15 @@ public class TutorialController : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetKeyUp(KeyCode.Space))
-		{
+		if (Input.GetKeyUp(KeyCode.Space)) {
 			Application.LoadLevel("Game");
-		} 
+		}
+		var current_health = health_controller.GetCurrentHealth();
+		var half_max_health = 0.5f * health_controller.GetMaxHealth();
+		if(current_health < half_max_health) {
+			var difference = half_max_health - current_health;
+			health_controller.ChangeHealth(difference);
+		}
 	}
 
 }
