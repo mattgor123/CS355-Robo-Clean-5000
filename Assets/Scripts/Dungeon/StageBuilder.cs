@@ -316,11 +316,14 @@ public class StageBuilder : MonoBehaviour
 
     public void nextLevel(int level)
     {
+        /*
         foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
             //GameObject.Destroy(enemy);
             enemy.SetActive(false);
         }
+         * */
+        emptyEnemies();
         numEnemies = 0;
         stage.NextLevel(level);
         maxEnemies = (Player.gameObject.GetComponent<PlayerController>().getCurrentFloor() + 1) * enemiesPerLevel;
@@ -329,5 +332,13 @@ public class StageBuilder : MonoBehaviour
     public void destroycurrentlevel()
     {
         stage.DestroyCurrentLevel();
+    }
+
+    public void emptyEnemies()
+    {
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            enemy.SetActive(false);
+        }
     }
 }

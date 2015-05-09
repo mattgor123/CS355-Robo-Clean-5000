@@ -45,6 +45,7 @@ public class ElevatorController : MonoBehaviour
     {
         FadeIn();
         stagebuilder.destroycurrentlevel();
+        stagebuilder.emptyEnemies();
         Application.LoadLevelAdditive(boss);
         int floor = 3;
         switch (boss)
