@@ -23,8 +23,8 @@ public class ElevatorController : MonoBehaviour
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         blackImage = blackScreen.GetComponent<Image>();
         //currentFloor.text = "B0";
-        //FadeIn();
-        blackImage.CrossFadeAlpha(0, 2f, true);
+        FadeIn();
+        //blackImage.CrossFadeAlpha(0, 2f, true);
     }
 
     // Update is called once per frame
@@ -37,11 +37,23 @@ public class ElevatorController : MonoBehaviour
 
     public void NextLevel(int level)
     {
-        FadeOut();
+        //FadeOut();
         //blackImage.CrossFadeAlpha(1, 2f, true);
+        //stagebuilder.nextLevel(level);
+        //currentFloor.text = "B" + level;
+        StartCoroutine(nextLevelHelper(level));
+
+    }
+
+    private IEnumerator nextLevelHelper(int level)
+    {
+        FadeOut();
+        Time.timeScale = 0.000001f; //hack to make WaitForSeconds run while have practically 0 timeScale
+        yield return new WaitForSeconds(1 * Time.timeScale);
+        Time.timeScale = 0;
         stagebuilder.nextLevel(level);
         currentFloor.text = "B" + level;
-
+        FadeIn();
     }
 
     public void LoadBoss(string boss)
@@ -70,19 +82,22 @@ public class ElevatorController : MonoBehaviour
     //Fade from invisible to Black
     public void FadeOut()
     {
-        StartCoroutine(Fade(1f));
+        //StartCoroutine(Fade(1f));
+        blackImage.CrossFadeAlpha(1, 1f, true);
     }
 
     //Fade from Black to invisible
     public void FadeIn()
     {
-        StartCoroutine(Fade(0f));
-
+        //StartCoroutine(Fade(0f));
+        blackImage.CrossFadeAlpha(0, 1f, true);
 
     }
 
+    /*
     private IEnumerator Fade(float value)
     {
+        
         bool done = false;
         while (!done)
         {
@@ -92,7 +107,9 @@ public class ElevatorController : MonoBehaviour
         yield return null;
 
 
+
     }
+*/
 
     public void CloseWindow()
     {
@@ -104,7 +121,7 @@ public class ElevatorController : MonoBehaviour
     {
         //coming from Tutorial
         //FadeOut();
-        blackImage.CrossFadeAlpha(255f, 2f, true);
+        //blackImage.CrossFadeAlpha(255f, 2f, true);
         Color c = blackImage.color;
         c.a = 1;
         blackImage.color = c;
