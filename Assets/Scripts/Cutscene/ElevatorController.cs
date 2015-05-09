@@ -20,20 +20,24 @@ public class ElevatorController : MonoBehaviour
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         blackImage = blackScreen.GetComponent<Image>();
+        currentFloor.text = "B0";
         FadeIn();
 
     }
 
     // Update is called once per frame
+    /*
     void Update()
     {
         currentFloor.text = "B" + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().getCurrentFloor().ToString();
     }
+     * */
 
     public void NextLevel(int level)
     {
         FadeOut();
         stagebuilder.nextLevel(level);
+        currentFloor.text = "B" + level;
 
     }
 
