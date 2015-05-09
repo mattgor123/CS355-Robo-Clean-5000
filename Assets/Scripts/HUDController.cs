@@ -25,7 +25,6 @@ public class HUDController : MonoBehaviour {
     playerC = player.GetComponent<PlayerController>();
     weapon_backpack_controller = player.GetComponent<WeaponBackpackController>();
     GameObject log = GameObject.FindWithTag("Log");
-    //notification_log = log.GetComponent<NotificationLog>();
     notification_log = log.GetComponent<LogScript>();
   }
     
@@ -56,7 +55,6 @@ public class HUDController : MonoBehaviour {
   }
 
   private void UpdateNotification () {
-    //notification_text.text = "" + notification_log.getCurrentNotification();
     notification_text.text = "" + notification_log.getNotifications();
   }
 

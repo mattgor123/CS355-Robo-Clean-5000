@@ -70,8 +70,6 @@ public class EnemyController : MonoBehaviour {
         gun = transform.FindChild("Gun Location");
         combo_controller = GameObject.FindGameObjectWithTag("Combo").GetComponent<ComboController>();
         PC = player.GetComponent<PlayerController>();
-        //transform.position -= new Vector3(0f, transform.position.y, 0f);
-
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPooling>();
 	}
 
@@ -113,11 +111,6 @@ public class EnemyController : MonoBehaviour {
 			//for hit canvas
 			player.GetComponent<HitCanvasController>().scoreKill();
 			//end hit canvas
-
-            //if (anim != null)
-               // anim.SetBool("Dead", true);
-            // need delay so enemy dying animations can show
-            //var explosion_instantiation = (GameObject)Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             var explosion_i = pool.getExplosion();
             explosion_i.transform.position = gameObject.transform.position;
             explosion_i.transform.rotation = gameObject.transform.rotation;
@@ -127,7 +120,6 @@ public class EnemyController : MonoBehaviour {
             treasure_i.transform.position = gameObject.transform.position;
             treasure_i.transform.rotation = gameObject.transform.rotation;
             treasure_i.SetActive(true);
-            //Destroy(gameObject);
             gameObject.SetActive(false);
             combo_controller.IncrementCombo();
             // add experience to player
@@ -287,7 +279,7 @@ public class EnemyController : MonoBehaviour {
         string enemyName = gameObject.name;
         enemyName = enemyName.Remove(enemyName.IndexOf('('));
 
-        PC.AddExp(combo_controller.GetCurrentCombo(), enemyName);
+        PC.AddExp(combo_controller.GetCurrentCombo() + 1, enemyName);
     }
 
     #endregion
