@@ -9,8 +9,6 @@ public class GameOverMenuController : MonoBehaviour
     [SerializeField]
     private GameObject GameOverMenuScreen;
 
-    [SerializeField]
-    private GameObject ContinueMenuScreen;
 
     [SerializeField]
     private AudioClip beep;
@@ -25,7 +23,6 @@ public class GameOverMenuController : MonoBehaviour
         AudioListener.volume = PlayerPrefs.GetFloat("Volume");
 
         GameOverMenuScreen.SetActive(true);
-        ContinueMenuScreen.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -40,25 +37,12 @@ public class GameOverMenuController : MonoBehaviour
         Application.LoadLevel(level);
     }
 
-    public void ContinueGame()
-    {
-        //TODO: Load up Player and his gear, Stage, etc
-    }
 
-
-
-    public void OpenContinueMenu()
-    {
-        //opens the play screen
-        GameOverMenuScreen.SetActive(false);
-        ContinueMenuScreen.SetActive(true);
-    }
 
     public void OpenGameOverMenu()
     {
         //opens main menu screen
         GameOverMenuScreen.SetActive(true);
-        ContinueMenuScreen.SetActive(false);
     }
 
 
