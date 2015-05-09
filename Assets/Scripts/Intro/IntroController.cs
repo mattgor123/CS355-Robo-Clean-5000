@@ -8,6 +8,8 @@ public class IntroController : MonoBehaviour {
 	[SerializeField] private float thought_delay;
 	[SerializeField] private Light spotlight;
 	[SerializeField] private Light flashlight;
+	[SerializeField] private AudioClip intro_music;
+	[SerializeField] private AudioSource audio;
 
 	private int last_message;
 	private float last_message_time;
@@ -21,6 +23,9 @@ public class IntroController : MonoBehaviour {
 	void Start () {
 		last_message_time = -thought_delay;
 		last_message = -1;
+		audio.clip = intro_music;
+        audio.loop = true;
+        audio.Play();
 	}
 
 	void Update () {
