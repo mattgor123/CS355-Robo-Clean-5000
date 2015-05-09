@@ -28,8 +28,9 @@ public class TreasureController : MonoBehaviour {
 			//Destroy(gameObject);
             gameObject.SetActive(false);
             message += "Collected " + found_ammo + " ammo\n";
-            message += pickupMessage + "\n";
-
+            if(pickupMessage != "") {
+                message += pickupMessage + "\n";
+            }
 		}
         var health = collision.collider.GetComponent<HealthController>();
         if (health != null)
