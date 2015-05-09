@@ -16,7 +16,7 @@ public class Stage  {
     private ArrayList rooms; //List containing Room objects. The rooms placed in dungeon
     private int currentRegion;  //the color of the region being carved
     private Vector2[] CARDINAL = { Vector2.up, Vector2.up * -1, Vector2.right, Vector2.right * -1 };
-    private int currentLevel;                         //B0   //B1   //B2   //B3   //B4   //B5 
+    public int currentLevel;                         //B0   //B1   //B2   //B3   //B4   //B5 
     private int[] Winding = new             int[]   {   60,     30,    30,    30,    30,    30,    30,    30,    30} ;
     private int[] RoomAttempts = new        int[]   {    20,    20,    20,    20,    20,    20,    20,    20,    20};
     private int[] RoomExtraSize = new       int[]   {    0,      3,     3,     3,    3,      3,     3,     3,    3};
