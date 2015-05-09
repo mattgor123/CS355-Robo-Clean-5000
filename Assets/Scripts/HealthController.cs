@@ -41,6 +41,12 @@ public class HealthController : MonoBehaviour {
 		return current_health;
 	}
 
+    public void IncreaseMaxHealth(float increase)
+    {
+        max_health += increase;
+        current_health += increase;
+    }
+
     //Overload with hit position
     //to properly place hit animation
     public bool ChangeHealth(float change, Vector3 position)
