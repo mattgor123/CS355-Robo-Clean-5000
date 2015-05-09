@@ -524,7 +524,6 @@ public class PlayerController : MonoBehaviour {
             default:
                 break;    
         }
-        Debug.Log("Added exp for: " + enemyName + " with exp: " + exp);
     }
 
     public int GetExp() {

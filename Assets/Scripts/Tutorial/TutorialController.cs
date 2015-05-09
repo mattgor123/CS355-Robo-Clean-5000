@@ -49,10 +49,6 @@ public class TutorialController : MonoBehaviour {
 
 	void Start () {
         playerInstance.GetComponent<PlayerController>().decrementCurrentFloor(); //to distinguish as tutorial level
-        //var black_screen = GameObject.Find("BlackScreenCanvas");
-		//if(black_screen != null) {
-		//	black_screen.SetActive(false);
-		//}
 		log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
 		log.PassMessage("Press WASD to move with\nrespect to the mouse\n\nDouble tap a direction\nto dash\n\nPress space to skip anytime\n");
 	}
