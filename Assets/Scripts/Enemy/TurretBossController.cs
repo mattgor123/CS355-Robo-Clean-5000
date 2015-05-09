@@ -18,6 +18,7 @@ public class TurretBossController : MonoBehaviour {
     
     private float SATimer = 0;              //timer for ^
     private bool Enrage = false;            //enrage status
+    private int floor;
 
 	void Start () {
         EC = GetComponent<EnemyController>();
@@ -27,6 +28,7 @@ public class TurretBossController : MonoBehaviour {
 
         IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
         P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        floor = P.getCurrentFloor() + 1;
 	}
 	
 	void Update () {
@@ -58,9 +60,9 @@ public class TurretBossController : MonoBehaviour {
         }
 
         //Give player key to current floor on death
-        if (HC.GetCurrentHealth() <= 0)
+        if (HC.GetCurrentHealth() <= 0 && !IC.hasKey(floor))
         {
-            IC.collectKey(4);
+            IC.collectKey(floor);
             GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
         }
 	}

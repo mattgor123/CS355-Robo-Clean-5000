@@ -8,8 +8,11 @@ public class BomberBossController : MonoBehaviour {
     private HealthController HC;
     private InventoryController IC;
     private PlayerController P;
+    private Rigidbody RB;
     private float LaunchDelay = 1.0f;
     private Vector3 Delta = new Vector3(0f, 1f, 0f);
+    private int floor;
+    private RigidbodyConstraints Constraints;
 
     //Start with bomber deactivated at rest
 	void Awake () {
@@ -18,6 +21,10 @@ public class BomberBossController : MonoBehaviour {
         HC = GetComponent<HealthController>();
         IC = GameObject.FindGameObjectWithTag("Player").GetComponent<InventoryController>();
         P = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        RB = GetComponent<Rigidbody>();
+        floor = P.getCurrentFloor() + 1;
+        Constraints = RB.constraints;
+        RB.constraints = RigidbodyConstraints.FreezeAll;
 	}
 	
 	void Update () {
@@ -30,10 +37,16 @@ public class BomberBossController : MonoBehaviour {
             LaunchDelay -= Time.deltaTime;
 
         //Give player key to current floor on death
-        if (HC.GetCurrentHealth() <= 0)
+        if (HC.GetCurrentHealth() <= 0 && !IC.hasKey(floor))
         {
-            IC.collectKey(P.getCurrentFloor());
+            IC.collectKey(floor);
             GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
+        }
+
+        //Destroy if no on the proper boss floor
+        if (P.getCurrentFloor() != 6)
+        {
+            Destroy(gameObject);
         }
         
 	}
@@ -50,6 +63,7 @@ public class BomberBossController : MonoBehaviour {
         GetComponent<LMLongPatrol>().enabled = true;
         GetComponent<LMStrafingRun>().enabled = true;
         GetComponent<EnemyController>().enabled = true;
+        RB.constraints = Constraints;
     }
 
     public void SetLaunchDelay(float dl)
