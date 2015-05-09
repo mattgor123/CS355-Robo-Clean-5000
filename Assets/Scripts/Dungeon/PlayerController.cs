@@ -515,9 +515,16 @@ public class PlayerController : MonoBehaviour {
             case "warriorenemy":
                 exp += 15 * comboNum;
                 break;
+            case "zombie":
+                exp += 10 * comboNum; 
+                break;
+            case "worm":
+                exp += 15 * comboNum;
+                break;          
             default:
                 break;    
         }
+        Debug.Log("Added exp for: " + enemyName + " with exp: " + exp);
     }
 
     public int GetExp() {
