@@ -17,15 +17,17 @@ public class TutorialController : MonoBehaviour {
 	private ArrayList loadedRooms;
 	private NotificationLog log;
 
+    private GameObject playerInstance;
+
 	void Awake () {
-		var playerInstance = Instantiate(player, spawn_point, Quaternion.identity) as GameObject;
+		playerInstance = Instantiate(player, spawn_point, Quaternion.identity) as GameObject;
         var hudInstance = Instantiate(hud) as GameObject;
         var cameraInstance = Instantiate(camera, camera.transform.position, camera.transform.rotation) as GameObject;
         BuildGridAndRooms();
         StageBuilder.scale = scale;
 		stage = new Stage(loadedGrid, loadedRooms, fluff_builder);
 		stage.Create();
-	}
+    }
 
 	void BuildGridAndRooms () {
 		loadedGrid = new Tile[17, 17];
@@ -46,7 +48,8 @@ public class TutorialController : MonoBehaviour {
 	}
 
 	void Start () {
-		var black_screen = GameObject.Find("BlackScreenCanvas");
+        playerInstance.GetComponent<PlayerController>().decrementCurrentFloor(); //to distinguish as tutorial level
+        var black_screen = GameObject.Find("BlackScreenCanvas");
 		if(black_screen != null) {
 			black_screen.SetActive(false);
 		}

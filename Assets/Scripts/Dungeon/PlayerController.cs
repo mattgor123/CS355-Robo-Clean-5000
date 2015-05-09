@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour {
         stunCountdown = 0;
         SetStunElectricity(false);
 
-        currentFloor = 0;
+        //currentFloor = 0;
         dialogueLevel = 0;
         deepestLevelVisited = 0;
         currLevel = 0;
@@ -137,6 +137,12 @@ public class PlayerController : MonoBehaviour {
 
         defense = 1f;
 	}
+
+    private void Awake()
+    {
+        //So it could be changed in Start of TutorialController
+        currentFloor = 0;
+    }
 
 	private void Update () {
         if (Time.timeScale == 0)

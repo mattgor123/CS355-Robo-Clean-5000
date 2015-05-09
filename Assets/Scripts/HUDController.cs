@@ -34,7 +34,15 @@ public class HUDController : MonoBehaviour {
         UpdateAmmo();
         UpdateNotification();
         UpdateCombo();
-        string floor = "B" + playerC.getCurrentFloor();
+        string floor;
+        if (playerC.getCurrentFloor() == -1)
+        {
+            floor = "Training";
+        }
+        else
+        {
+            floor = "B" + playerC.getCurrentFloor();
+        }
 
         SetLevelText(floor);
      }
