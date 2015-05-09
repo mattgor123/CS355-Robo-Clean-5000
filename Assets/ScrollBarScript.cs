@@ -34,6 +34,11 @@ public class ScrollBarScript : MonoBehaviour {
 			}
 			scroll.size = (float) 1/(log.Size() + offset); // +1 to avoid division by 0 error
 			scrollValue = (float) 1/(log.Size() + offset) + (scroll.size/2);
+			if (log.JustAddedValue()) {
+				scroll.value = 1 - (scrollValue*log.Size());
+				log.ResetNewValue();
+				log.SetScrollValue();
+			}
 
 			if (Input.GetKeyDown("m")) {
 				if (scroll.value > 0) {
