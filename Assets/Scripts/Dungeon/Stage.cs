@@ -664,6 +664,7 @@ public class Stage  {
         //Destroy Facility
         GameObject.Destroy(Facility);
         GameObject.Destroy(GameObject.FindGameObjectWithTag("facility"));
+        GameObject.Destroy(GameObject.FindGameObjectWithTag("fluff"));
         //Destroy Rooms
         rooms.Clear();
         //Destroy all rooms except for the elevator we are standing in (in this case spawnedRooms(0)
@@ -745,7 +746,7 @@ public class Stage  {
         //CameraShake();
         PlayerController pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         this.currentLevel = level;
-        if (level == levels.Count) //level is exactly one deeper than previous depth
+        if (level >= levels.Count) //level is exactly one deeper than previous depth
         {
             DestroyCurrentLevel();
             CreateNewLevel(); //equivalent to the constructor method when stage is first made
@@ -794,9 +795,13 @@ public class Stage  {
 
     public void LoadLevel(int toLoad)
     {
+
         //Load previous level's grid
         currentLevel = toLoad;
-        ArrayList level = levels[toLoad] as ArrayList;
+        if (toLoad > 3) currentLevel--;
+        if (toLoad > 6) currentLevel--;
+        Debug.Log(currentLevel);
+        ArrayList level = levels[currentLevel] as ArrayList;
 		Tile[,] loadedGrid =  level[0] as Tile[,];
 		int loadedWidth = loadedGrid.GetLength(0);
 		int loadedHeight = loadedGrid.GetLength (1);

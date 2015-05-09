@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class ElevatorController : MonoBehaviour {
+public class ElevatorController : MonoBehaviour
+{
 
     [SerializeField]
     private StageBuilder stagebuilder;
@@ -10,26 +11,30 @@ public class ElevatorController : MonoBehaviour {
     private GameObject blackScreen;
     private CameraController cam;
     private Image blackImage;
+    [SerializeField]
+    private Text currentFloor;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         blackImage = blackScreen.GetComponent<Image>();
         FadeIn();
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        currentFloor.text = "B" + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().getCurrentFloor().ToString();
+    }
 
     public void NextLevel(int level)
     {
         FadeOut();
         stagebuilder.nextLevel(level);
-        
+
     }
 
     public void LoadBoss(string boss)
@@ -37,10 +42,25 @@ public class ElevatorController : MonoBehaviour {
         FadeIn();
         stagebuilder.destroycurrentlevel();
         Application.LoadLevelAdditive(boss);
+        int floor = 3;
+        switch (boss)
+        {
+            case "TurretBoss":
+                floor = 3;
+                break;
+            case "BomberBoss":
+                floor = 6;
+                break;
+            case "Broodmother":
+                floor = 9;
+                break;
+
+        }
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().setCurrentFloor(floor);
     }
 
     //Fade from invisible to Black
-    public void FadeOut() 
+    public void FadeOut()
     {
         StartCoroutine(Fade(255f));
     }
@@ -50,10 +70,11 @@ public class ElevatorController : MonoBehaviour {
     {
         StartCoroutine(Fade(0f));
 
-        
+
     }
 
-    private IEnumerator Fade(float value) {
+    private IEnumerator Fade(float value)
+    {
         bool done = false;
         while (!done)
         {
@@ -70,5 +91,5 @@ public class ElevatorController : MonoBehaviour {
         Time.timeScale = 1;
         gameObject.SetActive(false);
     }
-    
+
 }

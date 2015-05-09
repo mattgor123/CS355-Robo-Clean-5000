@@ -39,6 +39,7 @@ public class BroodmotherLair : MonoBehaviour {
         player.transform.position = playerSpawn;
         Instantiate(boss, bossSpawn, Quaternion.identity);
         log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
+        fluff_builder.DestroyFluff();
 
 	}
 

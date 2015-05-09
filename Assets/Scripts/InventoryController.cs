@@ -3,7 +3,7 @@ using System.Collections;
 
 public class InventoryController : MonoBehaviour {
 
-    private bool[] keys = new bool[] {true, false, false, false, false, false, false, false, false, false};
+    public bool[] keys = new bool[] {true, false, false, false, false, false, false, false, false, false};
 
 
     void Awake()
