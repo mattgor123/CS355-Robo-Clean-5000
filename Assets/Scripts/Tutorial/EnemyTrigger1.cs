@@ -14,6 +14,7 @@ public class EnemyTrigger1 : MonoBehaviour {
 			var log = GameObject.FindWithTag("Log").GetComponent<LogScript>();
 			log.PassMessage("Click the left mouse\nbutton to shoot\n");
 			triggered = true;
+            Destroy(gameObject);
 		}
 	}
 }

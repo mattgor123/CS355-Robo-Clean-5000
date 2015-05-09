@@ -28,6 +28,7 @@ public class EnemyTrigger2 : MonoBehaviour {
 			var log = GameObject.FindWithTag("Log").GetComponent<NotificationLog>();
 			log.PassMessage("Watch your health!\nDon't let it run out!\n");
 			triggered = true;
+            Destroy(gameObject);
 		}
 	}
 }
