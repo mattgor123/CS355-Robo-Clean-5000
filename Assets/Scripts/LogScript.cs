@@ -14,6 +14,7 @@ public class LogScript : MonoBehaviour {
 	private int scrollValue;
 	private float scrollSize;
 	private bool showString;
+	private bool addedNewValue;
 	
 	void Awake () {
 		Log = new string[LOG_LENGTH];
@@ -23,10 +24,11 @@ public class LogScript : MonoBehaviour {
 		tail = 0;
 		scrollValue = 0;
 		scrollSize = 1;
-		showString = true;
+		showString = false;
+		addedNewValue = false;
 	}
 
-    void Start()
+	void Start()
     {
         PassMessage("Log Initializiation Cmpl...");
         PassMessage("Use 'z' to toggle on/off");
@@ -75,6 +77,7 @@ public class LogScript : MonoBehaviour {
 			head++;
 		}
 		CheckValues();
+		addedNewValue = true;
  	}
 
  	private void CheckValues() {
@@ -99,11 +102,26 @@ public class LogScript : MonoBehaviour {
 		return showString;
 	}
 
-	public bool CheckScrollValue() {
-		return scrollValue > 0 && scrollValue < (Log.Length - 1); 
-	}
-
 	public int GetCapacity() {
 		return LOG_LENGTH;
+	}
+
+	public bool JustAddedValue() {
+		return addedNewValue;
+	}
+
+	public void ResetNewValue() {
+		addedNewValue = false;
+	}
+
+	public void SetScrollValue() {
+		int i, j;
+		j = head;
+		i = 0;
+		while (j != tail) {
+			i++;
+			j = (j + 1) % Log.Length;
+		}
+		scrollValue = i-1;
 	}
 }
