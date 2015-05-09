@@ -13,16 +13,18 @@ public class ElevatorController : MonoBehaviour
     private Image blackImage;
     [SerializeField]
     private Text currentFloor;
+    private Canvas blackCanvas;
 
 
     // Use this for initialization
     void Start()
     {
+        var blackCanvas = GameObject.Find("BlackScreenCanvas");
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         blackImage = blackScreen.GetComponent<Image>();
         //currentFloor.text = "B0";
-        FadeIn();
-
+        //FadeIn();
+        blackImage.CrossFadeAlpha(0, 2f, true);
     }
 
     // Update is called once per frame
@@ -36,6 +38,7 @@ public class ElevatorController : MonoBehaviour
     public void NextLevel(int level)
     {
         FadeOut();
+        //blackImage.CrossFadeAlpha(1, 2f, true);
         stagebuilder.nextLevel(level);
         currentFloor.text = "B" + level;
 
@@ -67,7 +70,7 @@ public class ElevatorController : MonoBehaviour
     //Fade from invisible to Black
     public void FadeOut()
     {
-        StartCoroutine(Fade(255f));
+        StartCoroutine(Fade(1f));
     }
 
     //Fade from Black to invisible
@@ -95,6 +98,17 @@ public class ElevatorController : MonoBehaviour
     {
         Time.timeScale = 1;
         gameObject.SetActive(false);
+    }
+
+    public void StartGame()
+    {
+        //coming from Tutorial
+        //FadeOut();
+        blackImage.CrossFadeAlpha(255f, 2f, true);
+        Color c = blackImage.color;
+        c.a = 1;
+        blackImage.color = c;
+        Application.LoadLevel("Game");
     }
 
 }
