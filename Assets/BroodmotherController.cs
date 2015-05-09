@@ -82,7 +82,7 @@ public class BroodmotherController : MonoBehaviour {
         if (health.GetCurrentHealth() <= 0)
         {
             IC.collectKey(P.getCurrentFloor());
-            GameObject.FindGameObjectWithTag("Log").GetComponent<NotificationLog>().PassMessage("Boss Defeated: Picked up key to next floor");
+            GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
         }
         
 

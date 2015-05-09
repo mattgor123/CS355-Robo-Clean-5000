@@ -61,7 +61,7 @@ public class TurretBossController : MonoBehaviour {
         if (HC.GetCurrentHealth() <= 0)
         {
             IC.collectKey(4);
-            GameObject.FindGameObjectWithTag("Log").GetComponent<NotificationLog>().PassMessage("Boss Defeated: Picked up key to next floor");
+            GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
         }
 	}
 }
