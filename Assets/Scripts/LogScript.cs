@@ -23,8 +23,15 @@ public class LogScript : MonoBehaviour {
 		tail = 0;
 		scrollValue = 0;
 		scrollSize = 1;
-		showString = false;
+		showString = true;
 	}
+
+    void Start()
+    {
+        PassMessage("Log Initializiation Cmpl...");
+        PassMessage("Use 'z' to toggle on/off");
+        PassMessage("Use n/m to scroll \n");
+    }
 
 	public string getNotifications() {
 		string str = "";

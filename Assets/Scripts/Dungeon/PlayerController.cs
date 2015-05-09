@@ -565,43 +565,43 @@ public class PlayerController : MonoBehaviour {
     private void UpdateStats(int currlvl) {
         switch (currlvl) {
             case 1:
-                movement_controller.SetWalkForce(95 + 400);
+                movement_controller.SetWalkForce(50 + 400);
                 SetLevel(1);
                 break;
             case 2:
-                movement_controller.SetWalkForce(140 + 400);
+                movement_controller.SetWalkForce(60 + 400);
                 SetLevel(2);
                 break;   
             case 3:
-                movement_controller.SetWalkForce(185 + 400);
+                movement_controller.SetWalkForce(70 + 400);
                 SetLevel(3);
                 break;     
             case 4:
-                movement_controller.SetWalkForce(230 + 400);
+                movement_controller.SetWalkForce(80 + 400);
                 SetLevel(4);
                 break;    
             case 5:
-                movement_controller.SetWalkForce(275 + 400);
+                movement_controller.SetWalkForce(90 + 400);
                 SetLevel(5);
                 break;
             case 6:
-                movement_controller.SetWalkForce(320 + 400);
+                movement_controller.SetWalkForce(100 + 400);
                 SetLevel(6);
                 break;    
             case 7:
-                movement_controller.SetWalkForce(365 + 400);
+                movement_controller.SetWalkForce(110 + 400);
                 SetLevel(7);
                 break;  
             case 8:
-                movement_controller.SetWalkForce(410 + 400);
+                movement_controller.SetWalkForce(120 + 400);
                 SetLevel(8);
                 break;    
             case 9:
-                movement_controller.SetWalkForce(455 + 400);
+                movement_controller.SetWalkForce(130 + 400);
                 SetLevel(9);
                 break;    
             case 10:
-                movement_controller.SetWalkForce(500);
+                movement_controller.SetWalkForce(140 + 400);
                 SetLevel(10);
                 break;    
             default:

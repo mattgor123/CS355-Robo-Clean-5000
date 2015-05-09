@@ -68,6 +68,7 @@ public class ElevatorController : MonoBehaviour {
     public void CloseWindow()
     {
         Time.timeScale = 1;
+        gameObject.SetActive(false);
     }
     
 }
