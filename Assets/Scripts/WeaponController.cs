@@ -74,7 +74,7 @@ public class WeaponController : MonoBehaviour {
 				}
 			}
 			//end code for stat tracking
-            if (shot_sound != null)
+            if (shot_sound != null && (player.transform.position - this.transform.position).magnitude < 10)
             {
                 shot_sound.Play();
             }
