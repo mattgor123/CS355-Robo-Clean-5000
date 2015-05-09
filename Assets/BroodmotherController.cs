@@ -19,6 +19,7 @@ public class BroodmotherController : MonoBehaviour {
     private float animEnd = 6.0f; //When hatching animation is finished
     private float phaseTransition = 2.5f;
     private bool justSpawned;
+    private bool keygiven = false;
 
     private InventoryController IC;
     private PlayerController P;
@@ -79,10 +80,11 @@ public class BroodmotherController : MonoBehaviour {
         }
 
         //Give player key to current floor on death
-        if (health.GetCurrentHealth() <= 0)
+        if (health.GetCurrentHealth() <= 0 && !keygiven)
         {
             IC.collectKey(P.getCurrentFloor());
             GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
+            keygiven = true;
         }
         
 
