@@ -82,11 +82,11 @@ public class BroodmotherController : MonoBehaviour {
         }
 
         //Give player key to current floor on death
-        if (health.GetCurrentHealth() <= 0 && !IC.hasKey(floor))
+        /*if (health.GetCurrentHealth() <= 0 && !IC.hasKey(floor))
         {
             IC.collectKey(floor);
             GameObject.FindGameObjectWithTag("Log").GetComponent<LogScript>().PassMessage("Boss Defeated: Picked up key to next floor");
-        }
+        }*/
         
 
 

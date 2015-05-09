@@ -49,7 +49,7 @@ public class TreasureController : MonoBehaviour {
         {
             
             int currentLevel = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().getCurrentFloor();
-            if (!inventory.hasKey(currentLevel + 1)) //&& Random.Range(0, 1f) < 0.25f
+            if (!inventory.hasKey(currentLevel + 1) && Random.value < 0.20f)
             {
                 inventory.collectKey(currentLevel + 1); //because array of keys is 0-based, this unlocks the floor above
                 message += "Collected B" + (currentLevel + 1) + " Access Card\n";
