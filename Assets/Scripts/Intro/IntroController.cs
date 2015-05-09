@@ -45,5 +45,8 @@ public class IntroController : MonoBehaviour {
 			thought_text.text = thoughts[last_message];
 			last_message_time = Time.time;
 		}
+		if (Input.GetKeyUp(KeyCode.Space)) {
+			Application.LoadLevel("Tutorial");
+		}
 	}
 }
