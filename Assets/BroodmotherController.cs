@@ -90,6 +90,7 @@ public class BroodmotherController : MonoBehaviour {
 
         if (health.GetCurrentHealth() <= 0)
         {
+            Time.timeScale = 0;
             Application.LoadLevel("Victory");
         }
         
@@ -100,15 +101,15 @@ public class BroodmotherController : MonoBehaviour {
     private void PauseAI()
     {
         GetComponent<LMLongPatrol>().enabled = false;
-        GetComponent<LMChase>().enabled = false;
-        GetComponent<EnemyController>().enabled = false;
+        GetComponent<LMHoldRange>().enabled = false;
+        //GetComponent<EnemyController>().enabled = false;
     }
 
     private void ResumeAI()
     {
         GetComponent<LMLongPatrol>().enabled = true;
-        GetComponent<LMChase>().enabled = true;
-        GetComponent<EnemyController>().enabled = true;
+        GetComponent<LMHoldRange>().enabled = true;
+        //GetComponent<EnemyController>().enabled = true;
     }
 
 
