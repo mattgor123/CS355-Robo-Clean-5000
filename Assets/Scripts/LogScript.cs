@@ -24,8 +24,8 @@ public class LogScript : MonoBehaviour {
 		tail = 0;
 		scrollValue = 0;
 		scrollSize = 1;
-		showString = false;
-		addedNewValue = false;
+		showString = true;
+		addedNewValue = true;
 	}
 
 	void Start()
