@@ -42,7 +42,6 @@ public class ElevatorController : MonoBehaviour
         //stagebuilder.nextLevel(level);
         //currentFloor.text = "B" + level;
         StartCoroutine(nextLevelHelper(level));
-
     }
 
     private IEnumerator nextLevelHelper(int level)
@@ -56,9 +55,12 @@ public class ElevatorController : MonoBehaviour
         FadeIn();
     }
 
-    public void LoadBoss(string boss)
+    private IEnumerator loadBossHelper(string boss)
     {
-        FadeIn();
+        FadeOut();
+        Time.timeScale = 0.0000001f;
+        yield return new WaitForSeconds(1 * Time.timeScale);
+        Time.timeScale = 0;
         stagebuilder.destroycurrentlevel();
         stagebuilder.emptyEnemies();
         Application.LoadLevelAdditive(boss);
@@ -77,6 +79,33 @@ public class ElevatorController : MonoBehaviour
 
         }
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().setCurrentFloor(floor);
+        FadeIn();
+    }
+
+    public void LoadBoss(string boss)
+    {
+        StartCoroutine(loadBossHelper(boss));
+        /*
+        stagebuilder.destroycurrentlevel();
+        stagebuilder.emptyEnemies();
+        Application.LoadLevelAdditive(boss);
+        int floor = 3;
+        switch (boss)
+        {
+            case "TurretBoss":
+                floor = 3;
+                break;
+            case "BomberBoss":
+                floor = 6;
+                break;
+            case "Broodmother":
+                floor = 9;
+                break;
+
+        }
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().setCurrentFloor(floor);
+        FadeIn();
+         * */
     }
 
     //Fade from invisible to Black
