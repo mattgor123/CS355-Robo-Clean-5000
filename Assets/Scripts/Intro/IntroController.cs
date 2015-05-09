@@ -17,7 +17,7 @@ public class IntroController : MonoBehaviour {
 								  "ROOT: Starting System...",
 								  "!! New directive loaded: Id: 1003399k98",
 								  "INFO: Military research bot systems have failed in the basement subsystems.",
-								  "MISSION: Descend to the control facility to disable the rougue bots.",
+								  "MISSION: Descend to the control facility to eliminate the rogues.",
 								  "END TRANSMISSION" };
 
 	void Start () {
